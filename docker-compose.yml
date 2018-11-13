@@ -1,0 +1,89 @@
+version: "2.1"
+services:
+  postgres:
+    image: 'postgres:alpine'
+    volumes:
+      - ${PWD-.}/data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      # PGDATA: /var/lib/postgresql/data
+      PGDATA: /tmp
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: 'redis:alpine'
+    volumes:
+      - ${PWD-.}/data/redis:/data
+    ports:
+      - '6379:6379'
+
+  app:
+    extends:
+      file: docker-compose-common.yml
+      service: pyapp
+    # Launch gunicorn only in production
+    # Otherwise built-in django server is more convenient
+    # command: /bin/bash bin/gunicorn.sh
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - app_setup
+
+  app_setup:
+    extends:
+      file: docker-compose-common.yml
+      service: pyapp
+    command: /bin/sh bin/setup.sh
+    depends_on:
+      - postgres
+      - redis
+
+  # https://medium.com/@yehandjoe/celery-4-periodic-task-in-django-9f6b5a8c21c7
+#  worker:
+#    extends:
+#      file: docker-compose-common.yml
+#      service: pyapp
+#    # command: celery -A iconx worker -l info -B
+#    command: celery -A iconx worker -l debug -c 1
+#    depends_on:
+#    - app
+#
+#  worker_beat:
+#    extends:
+#      file: docker-compose-common.yml
+#      service: pyapp
+#    command: celery -A iconx beat -l debug
+#    depends_on:
+#    - app
+#
+  fe:
+    build: ${PWD-.}/fe
+    volumes:
+      - ${PWD-.}/fe:/usr/src/app
+    environment:
+      APP_ENV: "development"
+      API_BASE_URL: "http://localhost:8000"
+      IS_MAIN_NET: "false"
+      AWS_BUCKET: 'signals'
+      HEAD_TITLE: 'Signals Title'
+      HEAD_DESCRIPTION: 'Signals Description'
+    command: npm run dev
+#    command: bash -c "npm run build && npm run start"
+    ports:
+      - "8080:3000"
+#
+#  admin_panel:
+#    build: ${PWD-.}/admin_panel
+#    volumes:
+#      - ${PWD-.}/admin_panel:/usr/src/app
+#    environment:
+#       NODE_ENV: "development"
+#       API_BASE_URL: "http://localhost:8000/"
+#       BITCOIN_EXPLORER_URL: "https://www.blockchain.com/btc/tx/"
+#    ports:
+#      - "4000:4000"
+#    depends_on:
+#      - app

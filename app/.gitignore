@@ -1,0 +1,13 @@
+venv/*
+.DS_Store
+.idea/
+.vscode/
+data/
+npm-debug.log
+log/*
+tmp/*
+__pycache__
+.env
+celerybeat-schedule
+celerybeat.pid
+.coverage

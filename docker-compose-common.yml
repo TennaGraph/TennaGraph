@@ -1,0 +1,55 @@
+version: '2.1'
+services:
+
+  pyapp:
+    build: ./app
+    environment:
+      # Put commented vars to .env file in app folder
+      DATABASE_NAME: "signals_development"
+      DATABASE_USER: "postgres"
+      DATABASE_PASSWORD: ""
+      DATABASE_HOST: "postgres"
+      DATABASE_PORT: "5432"
+      DEBUG: 'True'
+      REDIS_HOST: 'redis'
+      REDIS_PORT: 6379
+      # SECRET_KEY: ''
+      # Admin
+      ADMIN_LOGIN: 'admin'
+      ADMIN_EMAIL: 'admin@example.com'
+      ADMIN_PASSWORD: '123456789'
+      # Email Settings
+      EMAIL_USE_TLS: 'false'
+      # EMAIL_HOST: ''
+      # EMAIL_HOST_USER: ''
+      # EMAIL_HOST_PASSWORD: ''
+      EMAIL_PORT: '2525'
+      DEFAULT_FROM_EMAIL: 'noreply@example.com'
+      # General
+      SITE_NAME: 'Eth Signals'
+      SITE_URL: 'http://localhost:8080'
+      BASE_URL: 'http://localhost:8000'
+      # JWT TOKEN
+      JWT_EXPIRATION_DELTA_DAYS: 1
+      # Git Hub
+      # GITHUB_USERNAME: ''
+      # GITHUB_PASSWORD: ''
+      # AWS
+      AWS_DEFAULT_REGION: 'eu-west-1'
+      AWS_BUCKET: 'eth-signals'
+      # AWS_ACCESS_KEY_ID: ''
+      # AWS_SECRET_ACCESS_KEY: ''
+      S3_FILEPATH: ''
+      S3_HTTP_PREFIX: 'https://s3-eu-west-1.amazonaws.com/eth-signals'
+      # Logstash
+      LOGSTASH_HOST: "logstash"
+      LOGSTASH_PORT: "5000"
+      LOGSTASH_ENABLED: "False"
+      ALLOWED_HOSTS: "localhost, app,"
+      # Raven
+      RAVEN_ENABLED: "False"
+      # RAVEN_DSN: ""
+      APP_ENV: 'development'
+      GUNICORN_SERVE_STATIC: 'True'
+    volumes:
+      - ${PWD-.}/app:/usr/src/app
