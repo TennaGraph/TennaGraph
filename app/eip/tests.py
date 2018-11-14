@@ -3,6 +3,8 @@ from rest_framework.test import APITestCase
 
 # App imports
 from .services import GitHubEIP
+from .utils import parse_eip_details
+from .models import EIP
 
 
 
@@ -42,10 +44,77 @@ class EIPsClientAPITestCase(APITestCase):
         self.assertTrue(assets_folder_exist, "No folder with all assets")
 
     def test_should_exist_eips_in_eip_folder(self):
-        eips_content = self.gh.eips_content()
+        eips_list = self.gh.eips_list()
 
-        self.assertTrue(isinstance(eips_content, list))
-        self.assertGreater(len(eips_content), 0)
+        self.assertTrue(isinstance(eips_list, list))
+        self.assertGreater(len(eips_list), 0)
+
+        content_file = eips_list[0]
+
+        # print("CONTENT_FILE html_url: {}".format(content_file.html_url))
+        # print("CONTENT_FILE git_url: {}".format(content_file.git_url))
+        # print("CONTENT_FILE download_url: {}".format(content_file.download_url))
+        # print("CONTENT_FILE name: {}".format(content_file.name))
+        # print("CONTENT_FILE url: {}".format(content_file.url))
+        # print("CONTENT_FILE content: {}".format(content_file.content))
+
+        self.assertIsNotNone(content_file)
+
+    def test_should_parse_eip_details(self):
+        content = "--- \n" \
+                  "eip: 1 \n" \
+                  "title: EIP Purpose and Guidelines \n" \
+                  "status: Active \n" \
+                  "type: Meta \n" \
+                  "author: Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others \n" \
+                  "created: 2015-10-27, 2017-02-01 \n" \
+                  "--- \n"
+
+        eip, title, status, category, authors, created = parse_eip_details(content)
+
+        self.assertEqual(eip, "1")
+        self.assertEqual(title, "EIP Purpose and Guidelines")
+        self.assertEqual(status, EIP.ACTIVE)
+        self.assertEqual(category, EIP.META)
+        self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
+        self.assertEqual(created, "2015-10-27, 2017-02-01")
+
+
+    def test_should_parse_eip_details_with_other_category(self):
+        content = "--- \n" \
+                  "eip: 1 \n" \
+                  "title: EIP Purpose and Guidelines \n" \
+                  "status: draft \n" \
+                  "type: Something wrong \n" \
+                  "author: Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others \n" \
+                  "created: 2015-10-27, 2017-02-01 \n" \
+                  "--- \n"
+
+        eip, title, status, category, authors, created = parse_eip_details(content)
+
+        self.assertEqual(eip, "1")
+        self.assertEqual(title, "EIP Purpose and Guidelines")
+        self.assertEqual(status, EIP.DRAFT)
+        self.assertEqual(category, EIP.OTHER)
+        self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
+        self.assertEqual(created, "2015-10-27, 2017-02-01")
+
+    def test_should_load_and_store_first_eip(self):
+        eips_list = self.gh.eips_list()
+        content_file = eips_list[0]
+
+        eip = self.gh.load_eip(content_file)
+
+        self.assertEqual(eip.eip_num, "1")
+        self.assertEqual(title, "EIP Purpose and Guidelines")
+        self.assertEqual(status, EIP.DRAFT)
+        self.assertEqual(category, EIP.OTHER)
+        self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
+        self.assertEqual(created, "2015-10-27, 2017-02-01")
+
+
+
+
 
 
 
