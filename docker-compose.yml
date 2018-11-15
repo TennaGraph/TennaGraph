@@ -74,16 +74,3 @@ services:
 #    command: bash -c "npm run build && npm run start"
     ports:
       - "8080:3000"
-#
-#  admin_panel:
-#    build: ${PWD-.}/admin_panel
-#    volumes:
-#      - ${PWD-.}/admin_panel:/usr/src/app
-#    environment:
-#       NODE_ENV: "development"
-#       API_BASE_URL: "http://localhost:8000/"
-#       BITCOIN_EXPLORER_URL: "https://www.blockchain.com/btc/tx/"
-#    ports:
-#      - "4000:4000"
-#    depends_on:
-#      - app

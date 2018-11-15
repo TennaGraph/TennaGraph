@@ -14,3 +14,4 @@ python-dotenv==0.7.1
 raven==6.8.0
 django-cleanup==2.1.0
 PyGithub==1.43.3
+redis==2.10.6

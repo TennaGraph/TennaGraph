@@ -217,8 +217,8 @@ CELERY_TIMEZONE = TIME_ZONE
 
 RUN_BEAT_EVERY_5_MINUTES = 300
 CELERY_BEAT_SCHEDULE = {
-    'name_of_task': {
-        'task': 'app.tasks.name_of_task',
+    'fetch_eips_from_official_repo': {
+        'task': 'eip.tasks.fetch_eips_from_official_repo',
         'schedule': schedule(run_every=RUN_BEAT_EVERY_5_MINUTES),
     },
 }

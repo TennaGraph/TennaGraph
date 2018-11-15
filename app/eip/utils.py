@@ -55,7 +55,7 @@ def parse_eip_details(content):
                 status = EIP.DEFERRED
 
         if "type: " in line_lower:
-            if 'standards track' in line:
+            if 'standards track' in line_lower:
                 eip_type = EIP.CORE
             elif 'informational' in line_lower:
                 eip_type = EIP.INFORMATIONAL
