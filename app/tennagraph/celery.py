@@ -36,7 +36,7 @@ app = Celery('signals')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django app configs.
-# app.autodiscover_tasks(['users',])
+app.autodiscover_tasks(['eip',])
 
 
 @app.task(bind=True)

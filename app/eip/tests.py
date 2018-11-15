@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase
 from .services import GitHubEIP
 from .utils import parse_eip_details
 from .models import EIP
+from .tasks import fetch_eips_from_official_repo
 
 
 
@@ -70,12 +71,13 @@ class EIPsClientAPITestCase(APITestCase):
                   "created: 2015-10-27, 2017-02-01 \n" \
                   "--- \n"
 
-        eip, title, status, category, authors, created = parse_eip_details(content)
+        eip, title, status, eip_type, category, authors, created = parse_eip_details(content)
 
+        self.assertIsNone(category)
         self.assertEqual(eip, "1")
         self.assertEqual(title, "EIP Purpose and Guidelines")
         self.assertEqual(status, EIP.ACTIVE)
-        self.assertEqual(category, EIP.META)
+        self.assertEqual(eip_type, EIP.META)
         self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
         self.assertEqual(created, "2015-10-27, 2017-02-01")
 
@@ -90,27 +92,42 @@ class EIPsClientAPITestCase(APITestCase):
                   "created: 2015-10-27, 2017-02-01 \n" \
                   "--- \n"
 
-        eip, title, status, category, authors, created = parse_eip_details(content)
+        eip, title, status, eip_type, category, authors, created = parse_eip_details(content)
 
+        self.assertIsNone(category)
         self.assertEqual(eip, "1")
         self.assertEqual(title, "EIP Purpose and Guidelines")
         self.assertEqual(status, EIP.DRAFT)
-        self.assertEqual(category, EIP.OTHER)
+        self.assertEqual(eip_type, EIP.OTHER)
         self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
         self.assertEqual(created, "2015-10-27, 2017-02-01")
 
     def test_should_load_and_store_first_eip(self):
         eips_list = self.gh.eips_list()
         content_file = eips_list[0]
+        self.assertEqual(EIP.objects.count(), 0)
 
         eip = self.gh.load_eip(content_file)
 
+        self.assertEqual(EIP.objects.count(), 0)
+        eip.save()
+
+        self.assertEqual(EIP.objects.count(), 1)
+        self.assertIsNotNone(eip.file_sha)
+        self.assertIsNone(eip.eip_category)
         self.assertEqual(eip.eip_num, "1")
-        self.assertEqual(title, "EIP Purpose and Guidelines")
-        self.assertEqual(status, EIP.DRAFT)
-        self.assertEqual(category, EIP.OTHER)
-        self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
-        self.assertEqual(created, "2015-10-27, 2017-02-01")
+        self.assertEqual(eip.eip_title, "EIP Purpose and Guidelines")
+        self.assertEqual(eip.eip_status, EIP.ACTIVE)
+        self.assertEqual(eip.eip_type, EIP.META)
+        self.assertEqual(eip.eip_authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
+        self.assertEqual(eip.eip_created, "2015-10-27, 2017-02-01")
+
+    def test_sould_fetch_eips_from_official_repo(self):
+        self.assertEqual(EIP.objects.count(), 0)
+
+        fetch_eips_from_official_repo()
+
+        self.assertGreater(EIP.objects.count(), 0)
 
 
 

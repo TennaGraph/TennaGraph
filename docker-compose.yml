@@ -42,23 +42,23 @@ services:
       - redis
 
   # https://medium.com/@yehandjoe/celery-4-periodic-task-in-django-9f6b5a8c21c7
-#  worker:
-#    extends:
-#      file: docker-compose-common.yml
-#      service: pyapp
-#    # command: celery -A iconx worker -l info -B
-#    command: celery -A iconx worker -l debug -c 1
-#    depends_on:
-#    - app
-#
-#  worker_beat:
-#    extends:
-#      file: docker-compose-common.yml
-#      service: pyapp
-#    command: celery -A iconx beat -l debug
-#    depends_on:
-#    - app
-#
+  worker:
+    extends:
+      file: docker-compose-common.yml
+      service: pyapp
+    # command: celery -A tennagraph worker -l info -B
+    command: celery -A tennagraph worker -l debug -c 1
+    depends_on:
+    - app
+
+  worker_beat:
+    extends:
+      file: docker-compose-common.yml
+      service: pyapp
+    command: celery -A tennagraph beat -l debug
+    depends_on:
+    - app
+
   fe:
     build: ${PWD-.}/fe
     volumes:
