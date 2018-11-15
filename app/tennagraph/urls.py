@@ -29,5 +29,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('system/', include('system.urls', namespace='system')),
+    path('eip/', include('eip.urls', namespace='eip')),
 ]
 
