@@ -44,4 +44,15 @@ export const actions = {
       throw e;
     }
   },
+
+  async loadEIP({commit}, id) {
+    try {
+      const endpoint = 'eip/' + id + '/';
+      const data = await this.$axios.$get(endpoint);
+      return data;
+    } catch (e) {
+      console.error(e); // 💩
+      throw e;
+    }
+  },
 };

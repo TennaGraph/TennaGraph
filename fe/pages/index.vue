@@ -24,13 +24,11 @@
     ],
     data() {
       return {
-        email: "",
-        password: "",
       }
     },
     head() {
       return {
-        title: 'Log In'
+        title: 'Ethereum Improvement Proposals'
       }
     },
     methods: {
@@ -42,9 +40,3 @@
 
   };
 </script>
-
-<style scoped>
-  .ferror {
-    color: red;
-  }
-</style>

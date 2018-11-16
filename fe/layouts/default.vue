@@ -1,7 +1,7 @@
 <template>
   <v-app>
 
-    <div class="holder" v-cloak @click="emitGlobalClickEvent($event)">
+    <div class="holder" v-cloak>
       <maintenance v-if="isMaintenance"></maintenance>
       <div class="page column d-flex" v-else>
 

@@ -5,5 +5,6 @@ from . import views
 app_name = 'eip'
 
 urlpatterns = [
-    path('', views.EIPAPIView.as_view(), name='eip'),
+    path('', views.EIPsAPIView.as_view(), name='eip'),
+    path('<str:pk>/', views.EIPAPIView.as_view(), name='eip_retrieve')
 ]

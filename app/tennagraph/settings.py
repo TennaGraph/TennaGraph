@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
     'system',
     'eip',
+    'stance',
     'corsheaders',
     'django_cleanup',
 ]

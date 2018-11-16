@@ -1,16 +1,19 @@
 # Pip imports
-from rest_framework import serializers
+import six
+from rest_framework.fields import ChoiceField
 
 
-class ChoicesSerializerField(serializers.SerializerMethodField):
-    """
-    A read-only field that return the representation of a model field with choices.
-    """
+class ChoiceDisplayField(ChoiceField):
+    def __init__(self, *args, **kwargs):
+        super(ChoiceDisplayField, self).__init__(*args, **kwargs)
+        self.choice_strings_to_display = {
+            six.text_type(key): value for key, value in self.choices.items()
+        }
 
     def to_representation(self, value):
-        # sample: 'get_XXXX_display'
-        method_name = 'get_{field_name}_display'.format(field_name=self.field_name)
-        # retrieve instance method
-        method = getattr(value, method_name)
-        # finally use instance method to return result of get_XXXX_display()
-        return method()
+        if value is None:
+            return value
+        return {
+            'key': self.choice_strings_to_values.get(six.text_type(value), value),
+            'display': self.choice_strings_to_display.get(six.text_type(value), value),
+        }

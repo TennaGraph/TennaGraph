@@ -54,7 +54,7 @@ class EIP(TimeStampedModel):
     """
     DEFERRED = 'DEFERRED'
 
-    PROPOSAL_STATUS = (
+    PROPOSAL_STATUSES = (
         (DRAFT, 'draft'),
         (ACTIVE, 'active'),
         (LAST_CALL, 'last call'),
@@ -140,7 +140,7 @@ class EIP(TimeStampedModel):
 
     eip_num         = models.CharField(max_length=10)
     eip_title       = models.CharField(max_length=225)
-    eip_status      = models.CharField(max_length=30, choices=PROPOSAL_STATUS)
+    eip_status      = models.CharField(max_length=30, choices=PROPOSAL_STATUSES)
     eip_type        = models.CharField(max_length=30, choices=TYPES)
 
     # only required for Standard Track

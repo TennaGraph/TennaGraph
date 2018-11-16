@@ -165,21 +165,52 @@ class EIPsClientAPITestCase(APITestCase):
 
         eip_response = response.data[0]
 
-        self.assertEqual(eip_response['eip_num'],           eip_dict['eip_num'])
-        self.assertEqual(eip_response['eip_title'],         eip_dict['eip_title'])
-        self.assertEqual(eip_response['eip_status'],        eip_dict['eip_status'])
-        self.assertEqual(eip_response['eip_type'],          eip_dict['eip_type'])
-        self.assertEqual(eip_response['eip_category'],      eip_dict['eip_category'])
-        self.assertEqual(eip_response['eip_authors'],       eip_dict['eip_authors'])
-        self.assertEqual(eip_response['eip_created'],       eip_dict['eip_created'])
-        self.assertEqual(eip_response['file_name'],         eip_dict['file_name'])
-        self.assertEqual(eip_response['file_download_url'], eip_dict['file_download_url'])
-        self.assertEqual(eip_response['file_content'],      eip_dict['file_content'])
-        self.assertEqual(eip_response['file_sha'],          eip_dict['file_sha'])
+        self.assertEqual(eip_response['eip_num'],               eip_dict['eip_num'])
+        self.assertEqual(eip_response['eip_title'],             eip_dict['eip_title'])
+        self.assertEqual(eip_response['eip_status']['key'],     eip_dict['eip_status'])
+        self.assertEqual(eip_response['eip_type']['key'],       eip_dict['eip_type'])
+        self.assertEqual(eip_response['eip_category']['key'],   eip_dict['eip_category'])
+        self.assertEqual(eip_response['eip_authors'],           eip_dict['eip_authors'])
+        self.assertEqual(eip_response['eip_created'],           eip_dict['eip_created'])
+        self.assertEqual(eip_response['file_name'],             eip_dict['file_name'])
+        self.assertEqual(eip_response['file_download_url'],     eip_dict['file_download_url'])
+        self.assertEqual(eip_response['file_content'],          eip_dict['file_content'])
+        self.assertEqual(eip_response['file_sha'],              eip_dict['file_sha'])
 
+    def test_should_retrieve_the_eip(self):
+        eip_dict = {
+            'eip_num': '12',
+            'eip_title': 'Title of EIP',
+            'eip_status': EIP.ACTIVE,
+            'eip_type': EIP.INFORMATIONAL,
+            'eip_category': EIP.ERC,
+            'eip_authors': 'Authors here',
+            'eip_created': '12.33.2344',
 
+            'file_name': 'File name here',
+            'file_download_url': 'https://google.com.ua/',
+            'file_content': 'Here markdown text from md file',
+            'file_sha': '0xjsfidsfseuiui34893hbsfo2i2ifeg',
+        }
+        eip = EIP.objects.create(**eip_dict)
 
+        url = reverse("eip:eip_retrieve", kwargs={'pk': eip.id})
 
+        response = self.client.get(url, format='json')
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(isinstance(response.data, dict))
 
+        eip_response = response.data
 
+        self.assertEqual(eip_response['eip_num'],               eip_dict['eip_num'])
+        self.assertEqual(eip_response['eip_title'],             eip_dict['eip_title'])
+        self.assertEqual(eip_response['eip_status']['key'],     eip_dict['eip_status'])
+        self.assertEqual(eip_response['eip_type']['key'],       eip_dict['eip_type'])
+        self.assertEqual(eip_response['eip_category']['key'],   eip_dict['eip_category'])
+        self.assertEqual(eip_response['eip_authors'],           eip_dict['eip_authors'])
+        self.assertEqual(eip_response['eip_created'],           eip_dict['eip_created'])
+        self.assertEqual(eip_response['file_name'],             eip_dict['file_name'])
+        self.assertEqual(eip_response['file_download_url'],     eip_dict['file_download_url'])
+        self.assertEqual(eip_response['file_content'],          eip_dict['file_content'])
+        self.assertEqual(eip_response['file_sha'],              eip_dict['file_sha'])

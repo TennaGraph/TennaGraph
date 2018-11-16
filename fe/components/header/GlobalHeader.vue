@@ -8,8 +8,8 @@
       </v-toolbar-title>
       <v-layout class="flex xs-10 ml-auto justify-end fill-height">
         <v-toolbar-items class="hidden-sm-and-down list ml-auto">
-          <nuxt-link to="" active-class="nav__signin" class="v-btn v-btn--flat body-1 white--text" exact>PROPOSALS</nuxt-link>
-          <nuxt-link to="" active-class="nav__signin" class="v-btn v-btn--flat body-1 white--text" exact>ABOUT</nuxt-link>
+          <nuxt-link to="/" active-class="nav__signin" class="v-btn v-btn--flat body-1 white--text" exact>PROPOSALS</nuxt-link>
+          <nuxt-link to="/about" active-class="nav__signin" class="v-btn v-btn--flat body-1 white--text" exact>ABOUT</nuxt-link>
         </v-toolbar-items>
       </v-layout>
     </v-toolbar>

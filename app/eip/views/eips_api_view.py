@@ -7,9 +7,8 @@ from ..serializers import EIPSerializer
 from ..models import EIP
 
 
-class EIPAPIView(generics.RetrieveAPIView):
+class EIPsAPIView(generics.ListAPIView):
 
-    lookup_field = 'pk'
     permission_classes = [permissions.AllowAny]
     serializer_class = EIPSerializer
     queryset = EIP.objects.all()
