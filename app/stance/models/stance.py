@@ -3,6 +3,7 @@ from django.db import models
 
 # Project imports
 from base.models import TimeStampedModel
+from eip.models import EIP
 
 
 class Stance(TimeStampedModel):
@@ -20,28 +21,30 @@ class Stance(TimeStampedModel):
     """
     All new stances will be with pending status
     """
-    PENDING     = 'PENDING'
+    PENDING = 'PENDING'
 
     """
     All inappropriate stances will be with rejected status
     """
-    REJECTED    = 'REJECTED'
+    REJECTED = 'REJECTED'
 
     """
     Reviewed and appropriate stance wil be calculated in general statistics
     """
-    APPROVED    = 'APPROVED'
+    APPROVED = 'APPROVED'
 
     STATUSES = (
-        (PENDING, 'pending'),
+        (PENDING,  'pending'),
         (REJECTED, 'rejected'),
         (APPROVED, 'approved'),
     )
 
     author      = models.CharField(max_length=255)
-    post_url    = models.URLField(unique=True)
+    proof_url   = models.URLField()
     choice      = models.CharField(choices=CHOICES, max_length=7)
     status      = models.CharField(choices=STATUSES, max_length=8, default=PENDING)
+    eip         = models.ForeignKey(EIP, on_delete=models.CASCADE)
+
 
 
 

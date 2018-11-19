@@ -17,7 +17,7 @@
             <v-card-title class="title mb-4 mt-2 py-0 px-0">
               Add a stance
             </v-card-title>
-            <add-stance></add-stance>
+            <add-stance :eipId="eipId"></add-stance>
           </v-card>
         </v-layout>
       </v-flex>
@@ -40,6 +40,7 @@
       return {
         eip: undefined,
         isEIPLoading: false,
+        eipId: this.$route.params.id,
       }
     },
     created() {
@@ -47,10 +48,9 @@
     },
     methods: {
       async loadEIP() {
-        let eipId = this.$route.params.id;
         this.isEIPLoading = true;
         try {
-          this.eip = await this.$store.dispatch('eip/loadEIP', eipId)
+          this.eip = await this.$store.dispatch('eip/loadEIP', this.eipId)
         } catch (e) {
           this.setResponseErrors(e);
         }

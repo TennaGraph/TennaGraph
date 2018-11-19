@@ -48,7 +48,7 @@
             ></v-select>
         </v-flex>
         <v-flex xs3>
-          <v-btn class="mx-2" color="primary" @click="addNewOpinion">Add</v-btn>
+          <v-btn class="mx-2" color="primary" :disabled="isStanceSending" @click="addNewOpinion">Add</v-btn>
         </v-flex>
     </v-layout>
   </v-form>
@@ -63,9 +63,16 @@
     mixins: [
       commonErrorsMixin,
     ],
+    props: {
+      eipId: {
+        type: [String, Number],
+        required: true
+      },
+    },
     data() {
       return {
         valid: false,
+        isStanceSending: false,
         author: '',
         authorRules: [
           v => !!v || 'Twitter username is required',
@@ -91,21 +98,22 @@
     },
     methods: {
       async addNewOpinion() {
-        this.$refs.form.reset();
         if (!this.$refs.form.validate()) { return; }
 
         let data = {
           'author':   this.author,
-          'post_url': this.link,
+          'proof_url': this.link,
           'choice':   this.choice,
+          'eip_id':   this.eipId,
         };
-
+        this.isStanceSending = true;
         try {
-          await this.$store.dispatch('stance/createStance', data)
+          await this.$store.dispatch('stance/createStance', data);
+          this.$refs.form.reset();
         } catch (e) {
           this.setResponseErrors(e, ['author', 'post_url', 'choice']);
         }
-
+        this.isStanceSending = false;
       }
     }
   }

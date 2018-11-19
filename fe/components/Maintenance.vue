@@ -1,10 +1,10 @@
 <template>
   <article>
-  <h1 v-html="$t('pages.maintenance.coming_back_soon')"></h1>
+  <h1>We&rsquo;ll be back soon!</h1>
   <div>
-    <p v-html="$t('pages.maintenance.message', {'supportEmail': email})"></p>
+    <p>Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always <a href='{supportEmail}'>contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>
     <br/>
-    <p>&mdash; {{ $t('pages.maintenance.team') }} {{ siteName }}</p>
+    <p>&mdash; Team {{ siteName }}</p>
   </div>
 </article>
 </template>

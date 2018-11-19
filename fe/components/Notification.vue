@@ -13,7 +13,7 @@
         v-if="dismissible"
        @click="hide(identifier)"
       >
-        {{ $t('notification.dismiss_action') }}
+        Close
       </v-btn>
     </v-snackbar>
 </template>
