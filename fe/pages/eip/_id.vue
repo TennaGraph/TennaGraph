@@ -11,6 +11,8 @@
             <v-card-title class="title mb-4 mt-2 py-0 px-0 primary--text">
               Influencer Stances
             </v-card-title>
+            <activity-chart></activity-chart>
+            <stances-list></stances-list>
           </v-card>
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
@@ -29,9 +31,15 @@
 
   import AddStance from "~/components/AddStance";
   import commonErrorsMixin from "~/mixins/commonErrorsMixin";
+  import ActivityChart from "~/components/ActivityChart";
+  import StancesList from "~/components/StancesList";
 
   export default {
-    components: {AddStance},
+    components: {
+      StancesList,
+      ActivityChart,
+      AddStance
+    },
     name: "eip-details",
     mixins: [
       commonErrorsMixin,

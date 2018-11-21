@@ -1,20 +1,9 @@
 <template>
   <v-form ref="form" v-model="valid" @submit.prevent="addNewOpinion" lazy-validation>
-    <v-layout row wrap>
-        <v-flex xs3 class="px-2">
-          <span>Influencer stance</span>
-        </v-flex>
-        <v-flex xs3 class="px-2">
-          <span>Link to source</span>
-        </v-flex>
-        <v-flex xs3 class="px-2">
-          <span>Status</span>
-        </v-flex>
-        <v-flex xs3 class="px-2">
-          <span></span>
-        </v-flex>
+    <v-layout row wrap justify-space-between>
 
-        <v-flex xs3 class="px-2">
+        <v-flex xs12 sm3 class="px-2">
+          <label for="" class="label--text body-1 mb-1 d-block">Influencer stance</label>
           <v-text-field
             v-model="author"
             :rules="authorRules"
@@ -25,7 +14,9 @@
             required
           ></v-text-field>
         </v-flex>
-        <v-flex xs3 class="px-2">
+
+        <v-flex xs12 sm3 class="px-2">
+          <label for="" class="label--text body-1 mb-1 d-block">Link to source</label>
           <v-text-field
             v-model="link"
             :rules="linkRules"
@@ -36,7 +27,9 @@
             required
           ></v-text-field>
         </v-flex>
-        <v-flex xs3 class="px-2">
+
+        <v-flex xs12 sm3 class="px-2">
+          <label for="" class="label--text body-1 mb-1 d-block">Status</label>
           <v-select
               v-model="choice"
               :items="choiceOptions"
@@ -47,8 +40,9 @@
               required
             ></v-select>
         </v-flex>
-        <v-flex xs3>
-          <v-btn class="mx-2" color="primary" :disabled="isStanceSending" @click="addNewOpinion">Add</v-btn>
+
+        <v-flex xs12 sm3 class="px-2 pt-3">
+          <v-btn class="mx-2 mt-3" color="primary" :disabled="isStanceSending" @click="addNewOpinion">Add</v-btn>
         </v-flex>
     </v-layout>
   </v-form>
@@ -101,10 +95,10 @@
         if (!this.$refs.form.validate()) { return; }
 
         let data = {
-          'author':   this.author,
+          'author':    this.author,
           'proof_url': this.link,
-          'choice':   this.choice,
-          'eip_id':   this.eipId,
+          'choice':    this.choice,
+          'eip_id':    this.eipId,
         };
         this.isStanceSending = true;
         try {
