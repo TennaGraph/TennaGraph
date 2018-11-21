@@ -1,5 +1,5 @@
 <template>
-    <v-container class="dashboard">
+  <v-container class="dashboard">
     <v-layout row mt-2>
       <v-flex xs12>
         <v-layout class="d-block" px-2>
@@ -9,7 +9,15 @@
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0 primary--text">
-              Influencer Stances
+              Influencer Stances &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <v-btn-toggle v-model="viewType">
+                <v-btn flat value="0">
+                  <span>By stance</span>
+                </v-btn>
+                <v-btn flat value="1">
+                  <span>By rank</span>
+                </v-btn>
+              </v-btn-toggle>
             </v-card-title>
             <activity-chart></activity-chart>
             <stances-list></stances-list>
@@ -49,6 +57,7 @@
         eip: undefined,
         isEIPLoading: false,
         eipId: this.$route.params.id,
+        viewType: "0",
       }
     },
     created() {
@@ -64,7 +73,7 @@
         }
         this.isEIPLoading = false;
       }
-    }
+    },
   }
 </script>
 
