@@ -30,7 +30,7 @@ def fetch_eips_from_official_repo():
         file_sha = eip.sha
 
         # Check weather this EIP exists in out db
-        if EIP.objects.filter(file_name=file_name).count() == 0:
+        if not EIP.objects.filter(file_name=file_name).exists():
             try:
                 with transaction.atomic():
                     gh.load_eip(eip).save()

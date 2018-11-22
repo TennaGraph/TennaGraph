@@ -49,6 +49,8 @@ services:
       # Raven
       RAVEN_ENABLED: "False"
       # RAVEN_DSN: ""
+      # Hive One
+      HIVE_ONE_API_URL: "https://hive.one/api"
       APP_ENV: 'development'
       GUNICORN_SERVE_STATIC: 'True'
     volumes:

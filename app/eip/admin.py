@@ -6,5 +6,5 @@ from .models import EIP
 
 
 @admin.register(EIP)
-class TransferSettingsAdmin(admin.ModelAdmin):
+class EIPAdmin(admin.ModelAdmin):
     list_display = ('file_name',)

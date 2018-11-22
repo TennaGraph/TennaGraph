@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'system',
     'eip',
     'stance',
+    'influencer',
     'corsheaders',
     'django_cleanup',
 ]
@@ -217,10 +218,15 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 RUN_BEAT_EVERY_5_MINUTES = 300
+RUN_BEAT_EVERY_MINUTE = 60
 CELERY_BEAT_SCHEDULE = {
     'fetch_eips_from_official_repo': {
         'task': 'eip.tasks.fetch_eips_from_official_repo',
-        'schedule': schedule(run_every=RUN_BEAT_EVERY_5_MINUTES),
+        'schedule': schedule(run_every=RUN_BEAT_EVERY_MINUTE),
+    },
+    'fetch_influencers_from_hive_one': {
+        'task': 'influencer.tasks.fetch_influencers_from_hive_one',
+        'schedule': schedule(run_every=RUN_BEAT_EVERY_MINUTE),
     },
 }
 
@@ -308,3 +314,7 @@ APP_ENV = os.environ.get('APP_ENV')
 # Site name & url
 SITE_NAME = os.environ.get('SITE_NAME')
 SITE_URL = os.environ.get('SITE_URL')
+
+# Hive One API Url
+HIVE_ONE_API_URL = os.environ.get('HIVE_ONE_API_URL')
+

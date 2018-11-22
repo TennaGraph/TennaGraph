@@ -16,3 +16,4 @@ django-cleanup==2.1.0
 PyGithub==1.43.3
 redis==2.10.6
 django-filter==2.0.0
+requests==2.20.1

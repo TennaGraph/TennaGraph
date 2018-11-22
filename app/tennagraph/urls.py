@@ -31,5 +31,6 @@ urlpatterns = [
     path('system/', include('system.urls', namespace='system')),
     path('eip/', include('eip.urls', namespace='eip')),
     path('stance/', include('stance.urls', namespace='stance')),
+    path('influencer/', include('influencer.urls', namespace='influencer')),
 ]
 

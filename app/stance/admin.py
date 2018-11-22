@@ -6,5 +6,5 @@ from .models import Stance
 
 
 @admin.register(Stance)
-class TransferSettingsAdmin(admin.ModelAdmin):
+class StanceAdmin(admin.ModelAdmin):
     list_display = ('author',)
