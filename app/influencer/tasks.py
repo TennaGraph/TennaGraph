@@ -1,11 +1,15 @@
 # Stdlib imports
 import logging
+from decimal import Decimal
 
 # Django imports
 from django.db import transaction
 
 # Pip imports
 from celery import task
+
+# Project imports
+from system.models import SystemSettings
 
 # App imports
 from .services import HiveOne
@@ -23,34 +27,22 @@ def fetch_influencers_from_hive_one():
     :return:
     """
 
-    """
-    {
-      "rankedAt": "2018-11-22T01:53:23.395793+00:00",
-      "influencersData": [
-        {
-          "twitterId": "295218901",
-          "score": 909.108104040976,
-          "name": "Vitalik Non-giver of Ether",
-          "screenName": "VitalikButerin",
-          "friendsCount": 163,
-          "followersCount": 822257,
-          "clusters": [
-            {
-              "abbr": "BCH",
-              "display": "Bitcoin Cash",
-              "score": 676.747951670349
-            }
-          ],
-          "changeWeek": -0.028517707088099087,
-          "changeMonth": -3.587503012500065
-        },
-        ....
-      ]
-    }
-    
-    """
+    system_settings = SystemSettings.objects.first()
+    if not system_settings:
+        logger.critical("No SystemSettings in db")
+
     gh = HiveOne()
-    influencers = gh.load_influencers()
+    influencers, ranked_at = gh.load_influencers()
+
+    """ If we have already actual information about influencers we skip it """
+    last_ranked_at = system_settings.last_update_influencers
+    if last_ranked_at and last_ranked_at == last_ranked_at:
+        return
+
+    system_settings.last_update_influencers = ranked_at
+    system_settings.save()
+
+    Influencer.objects.update(score=Decimal('0'))
 
     for influencer in influencers:
         influencer_twitter_id = influencer.twitter_id

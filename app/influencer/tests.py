@@ -6,6 +6,9 @@ from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
 from rest_framework import status
 
+# Project imports
+from bin.create_settings_seeds import create_system_settings_if_needed
+
 # App imports
 from .services import HiveOne
 from .models import Influencer
@@ -18,9 +21,10 @@ class HiveOneServiceTestCase(APITestCase):
 
     def setUp(self):
         self.ho = HiveOne()
+        create_system_settings_if_needed()
 
     def test_should_load_influencers(self):
-        influencers = self.ho.load_influencers()
+        influencers, ranked_at = self.ho.load_influencers()
 
         self.assertTrue(isinstance(influencers, list))
         self.assertGreater(len(influencers), 0)
@@ -41,6 +45,21 @@ class HiveOneServiceTestCase(APITestCase):
         fetch_influencers_from_hive_one()
 
         self.assertEqual(Influencer.objects.count(), 300)
+
+    def test_should_not_fetch_influencers_from_hive_one_if_rank_at_not_changed(self):
+        self.assertEqual(Influencer.objects.count(), 0)
+
+        # load and store influencers
+        fetch_influencers_from_hive_one()
+        self.assertEqual(Influencer.objects.count(), 300)
+
+        # Delete all influencers
+        Influencer.objects.all().delete()
+        self.assertEqual(Influencer.objects.count(), 0)
+
+        # should not load and store influencers
+        fetch_influencers_from_hive_one()
+        self.assertEqual(Influencer.objects.count(), 0)
 
 
 class EIPsClientAPITestCase(APITestCase):

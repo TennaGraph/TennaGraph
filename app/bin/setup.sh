@@ -15,6 +15,6 @@ python manage.py migrate
 # Run database seeds
 python manage.py adminuser --username $ADMIN_LOGIN --password $ADMIN_PASSWORD --noinput --email $ADMIN_EMAIL --preserve
 
-# Run crowdsale stages seeds
+# Create system settings seed
 python manage.py shell < bin/create_settings_seeds.py
 
