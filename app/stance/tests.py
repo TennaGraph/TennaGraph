@@ -1,3 +1,6 @@
+# Stdlib imports
+from decimal import Decimal
+
 # Pip imports
 from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
@@ -5,6 +8,7 @@ from rest_framework import status
 
 # Project imports
 from eip.models import EIP
+from influencer.models import Influencer
 
 # App imports
 from .models import Stance
@@ -45,8 +49,17 @@ class StancesClientAPITestCase(APITestCase):
             'file_content': 'Here markdown text from md file 2',
             'file_sha': '0xjsfidsfseuiui34893hbsfo2i2ifeg2',
         }
+        influencer = {
+            'twitter_id':       '12345',
+            'score':            Decimal('123.452435400000000000'),
+            'name':             'The best influencer on myself =)',
+            'screen_name':      'malkevych',
+            'friends_count':    124987,
+            'followers_count':  3456,
+        }
         self.eip = EIP.objects.create(**eip_dict)
         self.eip2 = EIP.objects.create(**eip2_dict)
+        self.influencer = Influencer.objects.create(**influencer)
 
     def test_should_return_empty_list_of_stances(self):
         url = reverse("stance:stance")
@@ -57,7 +70,7 @@ class StancesClientAPITestCase(APITestCase):
 
     def test_should_return_list_of_stances(self):
         stance_dict = {
-            'author': '@author',
+            'author': 'malkevych',
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
             'eip': self.eip
@@ -72,15 +85,15 @@ class StancesClientAPITestCase(APITestCase):
 
         stance_response = response.data[0]
 
-        self.assertEqual(stance_response['author'],         stance_dict['author'])
-        self.assertEqual(stance_response['proof_url'],       stance_dict['proof_url'])
+        self.assertEqual(stance_response['author'],         'malkevych')
+        self.assertEqual(stance_response['proof_url'],      stance_dict['proof_url'])
         self.assertEqual(stance_response['choice']['key'],  stance_dict['choice'])
         self.assertEqual(stance_response['status']['key'],  'PENDING')
 
 
     def test_should_retrieve_the_stance(self):
         stance_dict = {
-            'author': '@author',
+            'author': 'malkevych',
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
             'eip': self.eip
@@ -96,20 +109,20 @@ class StancesClientAPITestCase(APITestCase):
 
         stance_response = response.data
 
-        self.assertEqual(stance_response['author'],         stance_dict['author'])
+        self.assertEqual(stance_response['author'],         'malkevych')
         self.assertEqual(stance_response['proof_url'],      stance_dict['proof_url'])
         self.assertEqual(stance_response['choice']['key'],  stance_dict['choice'])
         self.assertEqual(stance_response['status']['key'],  'PENDING')
 
     def test_should_retrieve_the_stances_of_eip(self):
         stance_dict = {
-            'author': '@author',
+            'author': 'malkevych',
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
             'eip': self.eip
         }
         stance2_dict = {
-            'author': '@author2',
+            'author': 'malkevych2',
             'proof_url': 'https://google.com/2/',
             'choice': Stance.NAY,
             'eip': self.eip2
@@ -130,14 +143,14 @@ class StancesClientAPITestCase(APITestCase):
         self.assertEqual(len(stance_response), 1)
 
         stance = stance_response[0]
-        self.assertEqual(stance['author'],         stance_dict['author'])
+        self.assertEqual(stance['author'],         'malkevych')
         self.assertEqual(stance['proof_url'],      stance_dict['proof_url'])
         self.assertEqual(stance['choice']['key'],  stance_dict['choice'])
         self.assertEqual(stance['status']['key'],  'PENDING')
 
     def test_should_create_new_stance(self):
         stance_dict = {
-            'author': '@author',
+            'author': '@malkevych',
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
             'eip_id': self.eip.id,
@@ -153,7 +166,31 @@ class StancesClientAPITestCase(APITestCase):
 
         stance_response = response.data
 
-        self.assertEqual(stance_response['author'],         stance_dict['author'])
-        self.assertEqual(stance_response['proof_url'],      stance_dict['proof_url'])
-        self.assertEqual(stance_response['choice']['key'],  stance_dict['choice'])
-        self.assertEqual(stance_response['status']['key'],  'PENDING')
+        self.assertEqual(stance_response['author'], 'malkevych')
+        self.assertEqual(stance_response['proof_url'], stance_dict['proof_url'])
+        self.assertEqual(stance_response['choice']['key'], stance_dict['choice'])
+        self.assertEqual(stance_response['status']['key'], 'PENDING')
+
+    def test_should_create_new_stance_with_influencer(self):
+        stance_dict = {
+            'author': '@maLkEvyCh',
+            'proof_url': 'https://google.com',
+            'choice': Stance.YAY,
+            'eip_id': self.eip.id,
+        }
+
+        url = reverse("stance:stance")
+        response = self.client.post(url, data=stance_dict, format='json')
+
+        # print("RESPONSE: {}".format(response.data))
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(isinstance(response.data, dict))
+
+        stance_response = response.data
+
+        self.assertEqual(stance_response['author'],                     'maLkEvyCh')
+        self.assertEqual(stance_response['influencer']['screen_name'],  self.influencer.screen_name)
+        self.assertEqual(stance_response['proof_url'],                  stance_dict['proof_url'])
+        self.assertEqual(stance_response['choice']['key'],              stance_dict['choice'])
+        self.assertEqual(stance_response['status']['key'],              'PENDING')

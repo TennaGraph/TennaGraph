@@ -4,6 +4,8 @@ from rest_framework import serializers
 # Project imports
 from base.utils import ChoiceDisplayField
 from eip.models import EIP
+from influencer.models import Influencer
+from influencer.serializers import InfluencerSerializer
 
 # App imports
 from ..models import Stance
@@ -17,24 +19,29 @@ class StanceSerializer(serializers.ModelSerializer):
 
     eip_id = serializers.IntegerField(write_only=True)
 
+    influencer = InfluencerSerializer(read_only=True, required=False)
+
     class Meta:
         model = Stance
-        fields = ['id', 'author', 'proof_url', 'choice', 'status', 'eip_id']
+        fields = ['id', 'author', 'proof_url', 'choice', 'status', 'eip_id', 'influencer']
 
     """
     Validators
     """
 
-    def validate_eip_id(self, eip_id):
-        if not EIP.objects.filter(id=eip_id).exists():
-            raise serializers.ValidationError("No EIP with such id")
-        return  eip_id
+    def validate_author(self, author):
+        return author.replace('@', '')
 
     def validate(self, attrs):
+        author_twitter_username = attrs.get('author')
         proof_url = attrs.get('proof_url', None)
         eip_id = attrs.get('eip_id', None)
         if Stance.objects.filter(eip_id=eip_id, proof_url=proof_url).exists():
             raise serializers.ValidationError("This url already submitted")
+
+        influencers = Influencer.objects.filter(screen_name__icontains=author_twitter_username)
+        if influencers.exists():
+            attrs['influencer'] = influencers.first()
 
         return attrs
 

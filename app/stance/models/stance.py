@@ -4,6 +4,7 @@ from django.db import models
 # Project imports
 from base.models import TimeStampedModel
 from eip.models import EIP
+from influencer.models import Influencer
 
 
 class Stance(TimeStampedModel):
@@ -39,10 +40,18 @@ class Stance(TimeStampedModel):
         (APPROVED, 'approved'),
     )
 
+
     author      = models.CharField(max_length=255)
+
+    """ This field filled if the author above is influencer """
+    influencer  = models.ForeignKey(Influencer, on_delete=models.SET_NULL, null=True, blank=True)
+
     proof_url   = models.URLField()
+
     choice      = models.CharField(choices=CHOICES, max_length=7)
+
     status      = models.CharField(choices=STATUSES, max_length=8, default=PENDING)
+
     eip         = models.ForeignKey(EIP, on_delete=models.CASCADE)
 
 
