@@ -4,7 +4,7 @@
 # docker hub username
 USERNAME=organization-name
 # image name
-IMAGE=tennapp
+IMAGE=tennagraph-app
 
 # ensure we're up to date
 git pull
