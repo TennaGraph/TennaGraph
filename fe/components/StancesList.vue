@@ -5,10 +5,12 @@
             <span class="text-truncate">Yay ({{ yayStances.length }})</span>
           </v-flex>
           <v-flex xs10>
-            <chip v-for="stance in yayStances"
+            <chip-stance v-for="(stance, index) in yayStances"
                   v-bind:key="stance.id"
-                  :stance="stance">
-            </chip>
+                  :stance="stance"
+                  v-if="index <4">
+            </chip-stance>
+            <chip-more-stances v-if="yayStances.length > 4" :stances="yayStances"></chip-more-stances>
           </v-flex>
         </v-layout>
 
@@ -17,10 +19,12 @@
             <span class="text-truncate">Nay ({{ nayStances.length }})</span>
           </v-flex>
           <v-flex xs10>
-            <chip v-for="stance in nayStances"
+            <chip-stance v-for="(stance, index) in nayStances"
                   v-bind:key="stance.id"
-                  :stance="stance">
-            </chip>
+                  :stance="stance"
+                  v-if="index <3">
+            </chip-stance>
+            <chip-more-stances v-if="nayStances.length > 4" :stances="nayStances"></chip-more-stances>
           </v-flex>
         </v-layout>
 
@@ -29,22 +33,26 @@
             <span class="text-truncate">Abstain ({{ abstainStances.length }})</span>
           </v-flex>
           <v-flex xs10>
-            <chip v-for="stance in abstainStances"
+            <chip-stance v-for="(stance, index) in abstainStances"
                   v-bind:key="stance.id"
-                  :stance="stance">
-            </chip>
+                  :stance="stance"
+                  v-if="index <3">
+            </chip-stance>
+            <chip-more-stances v-if="abstainStances.length > 4" :stances="abstainStances"></chip-more-stances>
           </v-flex>
         </v-layout>
       </v-layout>
 </template>
 
 <script>
-  import Chip from "~/components/Chip";
+  import ChipStance from "~/components/ChipStance";
+  import ChipMoreStances from "~/components/ChipMoreStances";
 
   export default {
     name: "stances-list",
     components: {
-      Chip
+      ChipMoreStances,
+      ChipStance
     },
     props: {
       yayStances: {

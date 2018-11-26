@@ -26,12 +26,20 @@
               :nayStances="nayStances"
               :abstainStances="abstainStances">
             </activity-chart>
+
             <stances-list
-              v-if="isStancesLoaded"
+              v-if="isStancesLoaded && isStancesExists"
               :yayStances="yayStances"
               :nayStances="nayStances"
               :abstainStances="abstainStances">
             </stances-list>
+            <v-card
+              v-else
+              class="secondary pa-0 primary--text secondary_light mt-4 br-5 shadow-none">
+              <v-card-text  class="secondary text-xs-center py-2 px-2 noresult">
+                There are no submitted stances yet
+              </v-card-text>
+            </v-card>
           </v-card>
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
@@ -131,6 +139,9 @@
       },
       isStancesLoaded() {
         return this.yayStances && this.nayStances && this.abstainStances;
+      },
+      isStancesExists() {
+        return this.yayStances.length != 0 || this.nayStances.length != 0 || this.abstainStances.length != 0
       }
     },
     watch: {

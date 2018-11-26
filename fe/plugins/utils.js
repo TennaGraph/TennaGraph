@@ -6,5 +6,10 @@ import moment from 'moment';
 
 Vue.filter('formatDate', function (value) {
   if (!value) return '';
+  return moment(String(value)).format('YYYY/MM/DD');
+});
+
+Vue.filter('formatDateTime', function (value) {
+  if (!value) return '';
   return moment(String(value)).format('YYYY/MM/DD hh:mm');
 });

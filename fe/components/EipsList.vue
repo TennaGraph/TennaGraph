@@ -61,7 +61,7 @@
                 </v-card>
 
                 <v-card flat dark class="text-xs-center"
-                        color="green"
+                        color="breeze"
                         v-if="props.item.eip_status.key == 'ACTIVE' ||
                               props.item.eip_status.key == 'LAST_CALL' ||
                               props.item.eip_status.key == 'FINAL' ||
