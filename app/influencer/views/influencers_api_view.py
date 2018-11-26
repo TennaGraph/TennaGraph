@@ -11,4 +11,4 @@ class InfluencersAPIView(generics.ListAPIView):
 
     permission_classes = [permissions.AllowAny]
     serializer_class = InfluencerSerializer
-    queryset = Influencer.objects.all()
+    queryset = Influencer.objects.order_by('-score').all()

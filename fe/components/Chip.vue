@@ -1,13 +1,15 @@
 <template>
   <v-chip color="chip" style="height: 39px">
-    <v-avatar>
-      <img :src="avatarUrl" :alt="name">
-    </v-avatar>
-    <v-flex column>
-      <label class="body-2 chipTitle--text">{{ name }}</label>
-      <label class="caption chipSubtitle--text">{{ date }}</label>
+    <!--<v-avatar>-->
+      <!--<img :src="avatarUrl" :alt="name">-->
+    <!--</v-avatar>-->
+    <v-flex column class="mx-2">
+      <label class="body-2 chipTitle--text">{{ stance.author }}</label>
+      <label class="caption chipSubtitle--text">{{ stance.created_at | formatDate }}</label>
     </v-flex>
-    <img src="/icons/chip_link.svg" right/>
+    <a :href="stance.proof_url" target="_blank">
+      <img src="/icons/chip_link.svg" right/>
+    </a>
   </v-chip>
 </template>
 
@@ -15,18 +17,10 @@
   export default {
     name: "Chip",
     props: {
-      name: {
-        type: String,
-        required: true,
-      },
-      avatarUrl: {
-        type: String,
-        required: true,
-      },
-      date: {
-        type: Date,
+      stance: {
+        type: Object,
         required: true
-      },
+      }
     }
   }
 </script>

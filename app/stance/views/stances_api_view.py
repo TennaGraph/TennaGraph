@@ -12,7 +12,7 @@ class StancesAPIView(generics.ListCreateAPIView):
 
     permission_classes = [permissions.AllowAny]
     serializer_class = StanceSerializer
-    queryset = Stance.objects.all()
+    queryset = Stance.objects.filter(status=Stance.APPROVED)
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('eip_id',)
 

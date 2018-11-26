@@ -9,7 +9,7 @@
             width="12" height="12"
             x="0" :y="itemIndex * 15"
             rx="2" ry="2"
-            fill="#ebedf0"
+            :fill="item.color"
             data-count="0" data-date="2017-11-19">
           </rect>
         </g>
@@ -21,12 +21,26 @@
 <script>
   export default {
     name: "activity-canvas",
+    props: {
+      yayStances: {
+        type: Array,
+        required: true
+      },
+      nayStances: {
+        type: Array,
+        required: true
+      },
+      abstainStances: {
+        type: Array,
+        required: true
+      },
+    },
     data() {
       return {
         countOfItemsOnDashboard: 300,
         board: [],
         width: 0,
-        height: 0
+        height: 0,
       }
     },
     created() {
@@ -44,34 +58,68 @@
       },
       rowsCountPerPage() {
         return this.countOfItemsOnDashboard / this.colsCountPerPage
+      },
+      cachedMapPositions() {
+        return this.$store.getters['influencer/cachedMapPositions'];
+      },
+      isStancesLoaded() {
+        return this.yayStances && this.nayStances && this.abstainStances;
       }
     },
     methods: {
       createBoard() {
+        let vm = this;
+        let yayIndexes = this.yayStances.filter(s => s.influencer).map(s => vm.cachedMapPositions[s.influencer.id])
+        let nayIndexes = this.nayStances.filter(s => s.influencer).map(s => vm.cachedMapPositions[s.influencer.id])
+        let abstainIndexes = this.abstainStances.filter(s => s.influencer).map(s => vm.cachedMapPositions[s.influencer.id])
+
         const board = [];
         for (let c=0; c<this.colsCountPerPage; c++) {
           let col = [];
           for (let r=0; r<this.rowsCountPerPage; r++) {
-            col.push({
-              title: 'nana'
-            })
+            let index = c * this.rowsCountPerPage + r;
+            let item = {}
+            if (yayIndexes.includes(index)) {
+              item = { title: 'yay', color: '#45C299' }
+            } else if (nayIndexes.includes(index)) {
+              item = { title: 'nay', color: '#F03D3D' }
+            } else if (abstainIndexes.includes(index)) {
+              item = { title: 'abstain', color: '#969696' }
+            } else {
+              item = { title: 'not filled', color: '#E8E8E8' }
+            }
+            col.push(item)
           }
           board.push(col)
         }
+
         return board
       },
       recalculateBoard() {
-        this.board = this.createBoard()
+        if (!this.cachedMapPositions) return;
 
+        this.board = this.createBoard()
         this.width = this.colsCountPerPage * 15;
         this.height = this.rowsCountPerPage * 15;
-
-        console.log("Naaa width " + this.width)
-        console.log("Naaa height " + this.height)
-      }
+      },
     },
     watch: {
       rowsCountPerPage(newValue) {
+        this.recalculateBoard()
+      },
+      cachedMapPositions(newValue) {
+        this.recalculateBoard()
+      },
+      cachedMapPositions(newValue) {
+        this.recalculateBoard()
+      },
+      yayStances(newValue) {
+        this.recalculateBoard()
+      },
+      nayStances(newValue) {
+        this.recalculateBoard()
+      },
+      abstainStances(newValue) {
         this.recalculateBoard()
       }
     }

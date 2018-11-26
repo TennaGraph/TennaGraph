@@ -23,7 +23,7 @@ class StanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stance
-        fields = ['id', 'author', 'proof_url', 'choice', 'status', 'eip_id', 'influencer']
+        fields = ['id', 'author', 'proof_url', 'choice', 'status', 'eip_id', 'influencer', 'created_at']
 
     """
     Validators

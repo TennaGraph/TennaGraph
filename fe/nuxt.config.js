@@ -74,6 +74,7 @@ module.exports = {
     '@/plugins/vuetify',
     '@/plugins/axios.js',
     '@/plugins/networkChecker.js',
+    '@/plugins/utils.js',
   ],
 
   /*

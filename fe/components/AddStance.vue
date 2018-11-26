@@ -51,11 +51,13 @@
 <script>
 
   import commonErrorsMixin from "~/mixins/commonErrorsMixin";
+  import successAlertsMixin from "~/mixins/successAlertsMixin";
 
   export default {
     name: "add-stance",
     mixins: [
       commonErrorsMixin,
+      successAlertsMixin,
     ],
     props: {
       eipId: {
@@ -104,6 +106,7 @@
         try {
           await this.$store.dispatch('stance/createStance', data);
           this.$refs.form.reset();
+          this.setSuccessAlerts(["The stance was successfully added on review!"])
         } catch (e) {
           this.setResponseErrors(e, ['author', 'post_url', 'choice']);
         }
