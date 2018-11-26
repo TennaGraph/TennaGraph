@@ -42,7 +42,7 @@
         </v-flex>
 
         <v-flex xs12 sm3 class="px-2 pt-3">
-          <v-btn class="mx-2 mt-3" color="primary" :disabled="isStanceSending" @click="addNewOpinion">Add</v-btn>
+          <v-btn class="mx-2 mt-3" dark color="buttonConfirm" :disabled="isStanceSending" @click="addNewOpinion">Add</v-btn>
         </v-flex>
     </v-layout>
   </v-form>

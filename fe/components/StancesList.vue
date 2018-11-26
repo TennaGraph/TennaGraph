@@ -41,6 +41,8 @@
             <chip-more-stances v-if="abstainStances.length > 4" :stances="abstainStances"></chip-more-stances>
           </v-flex>
         </v-layout>
+
+        <span class="mt-5 mb-0">Something wrong in the stances? DM us at <a href="https://twitter.com/tennagraph" target="_blank">@tennagraph</a> to edit or remove stances</span>
       </v-layout>
 </template>
 

@@ -13,6 +13,7 @@ Vue.use(Vuetify, {
     chip: "#EBEBEB",
     chipTitle: "#6b6b6b",
     chipSubtitle: "#acacac",
+    buttonConfirm: "#3E00A3",
 //         error: localStorage.getItem('themeError'),
 //         red: localStorage.getItem('themeRed'),
 //         light_grey: localStorage.getItem('themeLight_grey'),
