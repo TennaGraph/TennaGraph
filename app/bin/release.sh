@@ -2,7 +2,7 @@
 #set -ex
 
 # docker hub username
-USERNAME=organization-name
+USERNAME=seductive
 # image name
 IMAGE=tennagraph-app
 
