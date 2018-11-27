@@ -69,7 +69,7 @@
         let isCookieNotificationShowed = localStorage.getItem('isCookieNotificationShowed');
         if (isCookieNotificationShowed !== 'true') {
           localStorage.setItem('isCookieNotificationShowed', 'true');
-          this.$store.dispatch("ntf/displayNotifications", [this.$i18n.t('layouts.default.cookie_notification')]);
+          this.$store.dispatch("ntf/displayNotifications", ['We use cookies to provide the best site experience.']);
         }
       }
     },

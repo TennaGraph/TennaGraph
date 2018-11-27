@@ -10,7 +10,7 @@ const commonErrorsMixin = {
     setResponseErrors(resp, keys) {
       if (!resp) { return }
       else if (!resp.response && !this.isOnline) {
-        this.$store.dispatch("ntf/displayNotifications", [this.$i18n.t('common_errors_mixin.offline_mode')]);
+        this.$store.dispatch("ntf/displayNotifications", ['You are in offline mode']);
         return
       } else if (!resp.response) { return }
       this.formErrors = {};
