@@ -29,6 +29,8 @@ services:
       SITE_NAME: 'Eth Signals'
       SITE_URL: 'http://localhost:8080'
       BASE_URL: 'http://localhost:8000'
+      UPDATE_EIPS_PER_SECONDS: 60
+      UPDATE_INFLUENCERS_PER_SECONDS: 60
       # JWT TOKEN
       JWT_EXPIRATION_DELTA_DAYS: 1
       # Git Hub

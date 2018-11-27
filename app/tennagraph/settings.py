@@ -214,16 +214,17 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
-RUN_BEAT_EVERY_5_MINUTES = 300
-RUN_BEAT_EVERY_MINUTE = 60
+UPDATE_EIPS_PER_SECONDS = int(os.environ.get('UPDATE_EIPS_PER_SECONDS'))
+UPDATE_INFLUENCERS_PER_SECONDS = int(os.environ.get('UPDATE_INFLUENCERS_PER_SECONDS'))
+
 CELERY_BEAT_SCHEDULE = {
     'fetch_eips_from_official_repo': {
         'task': 'eip.tasks.fetch_eips_from_official_repo',
-        'schedule': schedule(run_every=RUN_BEAT_EVERY_MINUTE),
+        'schedule': schedule(run_every=UPDATE_EIPS_PER_SECONDS),
     },
     'fetch_influencers_from_hive_one': {
         'task': 'influencer.tasks.fetch_influencers_from_hive_one',
-        'schedule': schedule(run_every=RUN_BEAT_EVERY_MINUTE),
+        'schedule': schedule(run_every=UPDATE_INFLUENCERS_PER_SECONDS),
     },
 }
 
