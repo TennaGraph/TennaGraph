@@ -2,9 +2,9 @@
 #set -ex
 
 # docker hub username
-USERNAME=organization-name
+USERNAME=seductive
 # image name
-IMAGE=eth-signals
+IMAGE=tennagraph-fe
 
 # ensure we're up to date
 git pull
@@ -12,7 +12,7 @@ git pull
 rm -rf ../fe/dist 
 
 # Build front end and moved static to web container
-DOCKER_CMD="docker-compose run -e API_BASE_URL=${API_BASE_URL} -e HEAD_TITLE='${HEAD_TITLE}' -e HEAD_DESCRIPTION='${HEAD_DESCRIPTION}'  fe bash -c 'npm run generate --report'"
+DOCKER_CMD="docker-compose run -e API_BASE_URL='${API_BASE_URL}' -e HEAD_TITLE='${HEAD_TITLE}' -e HEAD_DESCRIPTION='${HEAD_DESCRIPTION}' fe bash -c 'npm run generate --report'"
 #echo ${DOCKER_CMD}
 
 cd .. && eval ${DOCKER_CMD}

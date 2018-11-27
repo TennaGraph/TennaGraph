@@ -10,7 +10,7 @@ IMAGE=tennagraph-fe
 git pull
 
 # Build front end and moved static to web container
-DOCKER_CMD="docker-compose run -e API_BASE_URL=${API_BASE_URL} -e HEAD_TITLE='${HEAD_TITLE}' -e HEAD_DESCRIPTION='${HEAD_DESCRIPTION}' fe bash -c 'npm run build --report'"
+DOCKER_CMD="docker-compose run -e API_BASE_URL='${API_BASE_URL}' -e HEAD_TITLE='${HEAD_TITLE}' -e HEAD_DESCRIPTION='${HEAD_DESCRIPTION}' fe bash -c 'npm run build --report'"
 #echo ${DOCKER_CMD}
 
 rm -rf dist && cd .. && eval ${DOCKER_CMD}
