@@ -9,7 +9,8 @@ IMAGE=tennagraph-fe
 # ensure we're up to date
 git pull
 
-rm -rf ../fe/dist 
+rm -rf ../fe/dist
+rm -rf ../fe/.nuxt
 
 # Build front end and moved static to web container
 DOCKER_CMD="docker-compose run -e API_BASE_URL='${API_BASE_URL}' -e HEAD_TITLE='${HEAD_TITLE}' -e HEAD_DESCRIPTION='${HEAD_DESCRIPTION}' fe bash -c 'npm run generate --report'"
