@@ -168,9 +168,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Base URL for links mapping
-BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000')
-
 # Content chunk splitter settings for splitting text into chunks
 # before sending it for text-to-speach on Amazon Polly
 CHUNK_MAX_LENGTH = 1500
@@ -313,7 +310,6 @@ APP_ENV = os.environ.get('APP_ENV')
 
 # Site name & url
 SITE_NAME = os.environ.get('SITE_NAME')
-SITE_URL = os.environ.get('SITE_URL')
 
 # Hive One API Url
 HIVE_ONE_API_URL = os.environ.get('HIVE_ONE_API_URL')
