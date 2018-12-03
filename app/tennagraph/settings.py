@@ -187,8 +187,6 @@ ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
 
 # Amazon WS settings
 AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION')
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_BUCKET = os.environ.get('AWS_BUCKET')
 AWS_STORAGE_BUCKET_NAME = AWS_BUCKET
 S3_FILEPATH = os.environ.get('S3_FILEPATH')

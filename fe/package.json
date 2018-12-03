@@ -37,8 +37,7 @@
     "eslint-plugin-vue": "^4.7.1",
     "material-design-icons-iconfont": "^3.0.3",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
-    "moment": "^2.21.0"
+    "stylus-loader": "^3.0.2"
   },
   "engines": {
     "node": ">= 6.0.0",
