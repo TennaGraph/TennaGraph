@@ -6,6 +6,8 @@
     "test": "test"
   },
   "dependencies": {
+    "ethereumjs-abi": "^0.6.5",
+    "ethjs-abi": "^0.2.1",
     "openzeppelin-solidity": "2.0.0"
   },
   "devDependencies": {

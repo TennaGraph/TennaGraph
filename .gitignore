@@ -8,6 +8,10 @@ sw.js
 # Test binary, build with `go test -c`
 *.test
 
+# Smart Contracts code coverage
+smart_contracts/coverage/
+smart_contracts/coverage.json
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 

@@ -23,10 +23,9 @@ contract VotingOption {
         vote();
     }
 
-    function vote() internal {
+    function vote() public {
         votingManager.vote(proposalId, optionId, msg.sender);
     }
-
 }
 
 
@@ -47,7 +46,7 @@ contract AuthorizedContracts {
     }
 
     /**
-    * @return true if `msg.sender` is in allowedContracts of the contract.
+    * @return true if `msg.sender` exists in the allowedContracts of the contract.
     */
     function isAuthorized() public view returns(bool) {
         return authorizedContracts[msg.sender];
@@ -74,13 +73,14 @@ contract VotingManager is Ownable, AuthorizedContracts {
 
         VotingOption yay;
         VotingOption nay;
-        VotingOption obstain;
+        VotingOption abstain;
     }
 
     mapping(uint => Proposal) public proposals;
+    uint public proposalsCount;
 
 
-    function addProposal(uint _proposalId, bool _isVotingOpen) onlyOwner public {
+    function addProposal(uint _proposalId, bool _isVotingOpen) public {
         require(proposals[_proposalId].id != _proposalId, 'Proposal already exists');
 
         // create proposal
@@ -91,14 +91,15 @@ contract VotingManager is Ownable, AuthorizedContracts {
         // create contracts to allow voting just with simple transaction to contract address
         proposal.yay = new VotingOption(1, _proposalId, this);
         proposal.nay = new VotingOption(2, _proposalId, this);
-        proposal.obstain = new VotingOption(3, _proposalId, this);
+        proposal.abstain = new VotingOption(3, _proposalId, this);
 
         // authorize contracts
         authorizedContracts[address(proposal.yay)] = true;
         authorizedContracts[address(proposal.nay)] = true;
-        authorizedContracts[address(proposal.obstain)] = true;
+        authorizedContracts[address(proposal.abstain)] = true;
 
         proposals[_proposalId] = proposal;
+        proposalsCount += 1;
     }
 
     function changeProposalStatus(uint _proposalId, bool _isVotingOpen) onlyOwner public {
@@ -120,13 +121,15 @@ contract VotingManager is Ownable, AuthorizedContracts {
         require(proposal.isVotingOpen == true, 'Voting is closed');
         require(voter.selectedOption != _selectedOption, 'Already voted for this option');
 
-        // set voting
-        voter.voted = true;
-        voter.selectedOption = _selectedOption;
+        // save results if it was not voted earlier
+        if (!voter.voted) {
+            voter.voted = true;
 
-        // save results
-        proposals[_proposalId] = proposal;
-        proposal.participants.push(_sender);
+            proposals[_proposalId] = proposal;
+            proposal.participants.push(_sender);
+        }
+
+        voter.selectedOption = _selectedOption;
     }
 
     function votingResults(uint _proposalId) public view returns (uint[] memory) {
@@ -146,14 +149,6 @@ contract VotingManager is Ownable, AuthorizedContracts {
         }
 
         return results;
-    }
-
-    function votingAddresess(uint _proposalId) public view returns (address[3]) {
-        Proposal storage proposal = proposals[_proposalId];
-
-        require(proposal.id == _proposalId, 'Proposal does not exist');
-
-        return [address(proposal.yay), address(proposal.nay), address(proposal.obstain)];
     }
 }
 
