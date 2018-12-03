@@ -3,11 +3,11 @@
 ## Install & Setup
 - create file with name `.env` in `app` directory (TennaGraph/app/) with such info:
 
-`
-GITHUB_USERNAME=Your username on github
-GITHUB_PASSWORD=Your password on github
-SECRET_KEY=IPUWEpSFrXd-nzs4HKENG8G6-sHA9WqPStZpNw97tpY=
-`
+
+GITHUB_USERNAME=Your username on github <br />
+GITHUB_PASSWORD=Your password on github <br />
+SECRET_KEY=IPUWEpSFrXd-nzs4HKENG8G6-sHA9WqPStZpNw97tpY= <br />
+
 
 - install Docker Engine
 - open the project in terminal
