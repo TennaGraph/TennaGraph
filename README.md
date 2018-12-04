@@ -16,6 +16,15 @@ SECRET_KEY=IPUWEpSFrXd-nzs4HKENG8G6-sHA9WqPStZpNw97tpY= <br />
 - in browser go to: http://localhost:8080 to see the user panel 
 - in browser go to: http://localhost:8000/admin to see the django admin panel (login: admin, pass: 123456789)
 
+## Trouble shootings
+if http://localhost:8080 doesn't work:
+- stop containers (press ctrl+c)
+- run `docker-compose run fe bash`
+- run `npm install`
+- open the project in a new terminal window
+- run command in the terminal `docker-compose up`
+- wait several minutes
+ 
 
 ## Run Django app tests
 - open the project in terminal
