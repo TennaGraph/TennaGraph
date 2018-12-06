@@ -39,8 +39,6 @@ services:
       # AWS
       AWS_DEFAULT_REGION: 'eu-west-1'
       AWS_BUCKET: 'eth-signals'
-      # AWS_ACCESS_KEY_ID: ''
-      # AWS_SECRET_ACCESS_KEY: ''
       S3_FILEPATH: ''
       S3_HTTP_PREFIX: 'https://s3-eu-west-1.amazonaws.com/eth-signals'
       # Logstash

@@ -63,6 +63,7 @@ module.exports = {
     '@/plugins/axios.js',
     '@/plugins/networkChecker.js',
     '@/plugins/utils.js',
+    '@/plugins/apexcharts',
   ],
 
   /*
@@ -126,5 +127,6 @@ module.exports = {
     baseUrl: process.env.API_BASE_URL,
     appEnv: process.env.APP_ENV,
     isMainNet: process.env.IS_MAIN_NET,
+    web3ProviderUrl: process.env.WEB3_PROVIDER_URL,
   }
 };

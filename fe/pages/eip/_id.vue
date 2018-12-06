@@ -8,17 +8,19 @@
           </v-card-title>
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
+            <v-card-title class="title mb-4 mt-2 py-0 px-0">
+              Add a stance
+            </v-card-title>
+            <coinvoting :eipId="eipId"></coinvoting>
+          </v-card>
+
+          <div style="background-color: #993333" v-if="w3">
+            Web3 instance
+          </div>
+
+          <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0 primary--text">
               Influencer Stances
-              <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
-              <!--<v-btn-toggle v-model="viewType">-->
-                <!--<v-btn flat value="0">-->
-                  <!--<span>By stance</span>-->
-                <!--</v-btn>-->
-                <!--<v-btn flat value="1">-->
-                  <!--<span>By rank</span>-->
-                <!--</v-btn>-->
-              <!--</v-btn-toggle>-->
             </v-card-title>
             <activity-chart
               v-if="isStancesLoaded"
@@ -60,9 +62,12 @@
   import commonErrorsMixin from "~/mixins/commonErrorsMixin";
   import ActivityChart from "~/components/ActivityChart";
   import StancesList from "~/components/StancesList";
+  import web3Instance from "~/utils/web3Instance.js";
+  import Coinvoting from "~/components/Coinvoting";
 
   export default {
     components: {
+      Coinvoting,
       StancesList,
       ActivityChart,
       AddStance
@@ -142,6 +147,9 @@
       },
       isStancesExists() {
         return this.yayStances.length != 0 || this.nayStances.length != 0 || this.abstainStances.length != 0
+      },
+      w3() {
+        return web3Instance
       }
     },
     watch: {
