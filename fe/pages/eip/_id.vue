@@ -3,8 +3,14 @@
     <v-layout row mt-2>
       <v-flex xs12>
         <v-layout class="d-block" px-2>
+
           <v-card-title v-if="eip" class="headline mb-4 mt-2 py-0 px-0 primary--text">
-            {{ eip.eip_title }}
+            <v-layout align-center>
+              <nuxt-link to="/">
+                <v-icon class="mr-3" medium>arrow_back</v-icon>
+              </nuxt-link>
+              {{ eip.eip_title }}
+            </v-layout>
           </v-card-title>
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
@@ -13,10 +19,6 @@
             </v-card-title>
             <coinvoting :eipId="eipId" :w3="w3"></coinvoting>
           </v-card>
-
-          <!--<div style="background-color: #993333" v-if="w3">-->
-            <!--Web3 instance-->
-          <!--</div>-->
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0 primary--text">
