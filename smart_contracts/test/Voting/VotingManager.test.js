@@ -44,10 +44,16 @@ contract('VotingContract', function ([owner, user1, user2]) {
         proposalNum20[4].should.exist;
     });
 
-     it('should not allow owner of votingManager change voting', async function () {
+    it('should not allow owner of votingManager change voting', async function () {
         const isAuthorized = await this.votingManager.isAuthorized();
 
         isAuthorized.should.equal(false);
+    });
+
+    it('should proposal exists', async function () {
+        const isProposalExists = await this.votingManager.isProposalExists(PROPOSAL_NUM);
+
+        isProposalExists.should.equal(true);
     });
 
     it('should allow creating proposals for anyone', async function () {

@@ -128,5 +128,7 @@ module.exports = {
     appEnv: process.env.APP_ENV,
     isMainNet: process.env.IS_MAIN_NET,
     web3ProviderUrl: process.env.WEB3_PROVIDER_URL,
+    web3NetworkId: process.env.WEB3_NETWORK_ID,
+    etherscanUrl: process.env.ETHERSCAN_URL,
   }
 };

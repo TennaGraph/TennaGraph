@@ -150,5 +150,10 @@ contract VotingManager is Ownable, AuthorizedContracts {
 
         return results;
     }
+
+    function isProposalExists(uint _proposalId) public view returns (bool) {
+        Proposal storage proposal = proposals[_proposalId];
+        return proposal.id == _proposalId;
+    }
 }
 

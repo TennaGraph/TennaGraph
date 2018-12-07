@@ -9,10 +9,10 @@ from web3 import Web3
 def validate_address(value):
     is_address = Web3.isAddress(value)
     if not is_address:
-        raise ValidationError(_("Not valid Eth address. Please check it again"))
+        raise ValidationError("Not valid Eth address. Please check it again")
 
     if not Web3.isChecksumAddress(value):
-        raise ValidationError(_('Address has an invalid EIP checksum'))
+        raise ValidationError('Address has an invalid EIP checksum')
 
 
 class SystemSettings(models.Model):
@@ -20,6 +20,6 @@ class SystemSettings(models.Model):
 
     support_email = models.EmailField(default="test@gmail.com")
 
-    contract_vot_manager_address = models.TextField(max_length=42, validators=[validate_address], null=True, blank=True)
+    contract_vot_manager_address = models.CharField(max_length=42, validators=[validate_address], null=True, blank=True)
 
     last_update_influencers = models.DateTimeField(null=True, blank=True)

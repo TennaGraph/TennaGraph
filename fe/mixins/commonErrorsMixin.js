@@ -30,15 +30,19 @@ const commonErrorsMixin = {
         }
       })
     },
-    setPreRequestErrors(errors, keys) {
+    setErrors(errors, keys) {
       if (!errors) { return }
 
-      if (errors.hasOwnProperty('common')) {
-        this.commonErrors = errors.common;
-        this.$store.dispatch("ntf/displayNotifications", this.commonErrors)
+      if (typeof errors === 'string') {
+        this.$store.dispatch("ntf/displayNotifications", [errors])
+        return
       }
 
-      if (!keys) { return }
+      if (Array.isArray(errors)) {
+        this.$store.dispatch("ntf/displayNotifications", errors)
+        return
+      }
+
       keys.forEach(key => {
         if(errors.hasOwnProperty(key)) {
           this.formErrors[key] = errors[key];

@@ -9,14 +9,14 @@
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0">
-              Add a stance
+              Coinvoting
             </v-card-title>
-            <coinvoting :eipId="eipId"></coinvoting>
+            <coinvoting :eipId="eipId" :w3="w3"></coinvoting>
           </v-card>
 
-          <div style="background-color: #993333" v-if="w3">
-            Web3 instance
-          </div>
+          <!--<div style="background-color: #993333" v-if="w3">-->
+            <!--Web3 instance-->
+          <!--</div>-->
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0 primary--text">

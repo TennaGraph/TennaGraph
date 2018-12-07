@@ -29,3 +29,7 @@ if http://localhost:8080 doesn't work:
 ## Run Django app tests
 - open the project in terminal
 - run `docker-compose run app python manage.py test`
+
+## Smart Contract
+### VotingManager (TestNet Rinkeby)
+address: 0xb662f0418fb5c501d9fbe437640c3856acc14f56

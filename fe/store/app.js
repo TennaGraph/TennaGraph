@@ -10,7 +10,11 @@ export const state = () => ({
   pending: false,
   isOnline: false,
 
-  settings: {},
+  settings: {
+    'isMaintenance': localStorage.getItem('isMaintenance'),
+    'supportEmail': localStorage.getItem('supportEmail'),
+    'contractVotingManagerAddress': localStorage.getItem('contractVotingManagerAddress'),
+  },
 });
 
 export const getters = {
@@ -23,6 +27,15 @@ export const getters = {
   isOnline: state => {
     return state.isOnline;
   },
+  isMaintenance: state => {
+    return state.settings.isMaintenance;
+  },
+  supportEmail: state => {
+    return state.settings.supportEmail;
+  },
+  contractVotingManagerAddress: state => {
+    return state.settings.contractVotingManagerAddress;
+  },
 };
 
 export const mutations = {
@@ -30,6 +43,21 @@ export const mutations = {
     state.pending = true;
   },
   [SETTINGS_LOAD_SUCCESS](state, value) {
+    const isMaintenance = value.is_maintenance;
+    const supportEmail = value.support_email;
+    const contractVotingManagerAddress = value.contract_vot_manager_address;
+
+    // cache vars
+    localStorage.setItem('isMaintenance', isMaintenance);
+    localStorage.setItem('supportEmail', supportEmail);
+    localStorage.setItem('contractVotingManagerAddress', contractVotingManagerAddress);
+
+    state.settings = {
+      isMaintenance: isMaintenance,
+      supportEmail: supportEmail,
+      contractVotingManagerAddress: contractVotingManagerAddress,
+    };
+
     state.isAppSettingsLoaded = true;
     state.pending = false;
   },

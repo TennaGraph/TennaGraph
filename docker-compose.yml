@@ -71,6 +71,8 @@ services:
       HEAD_TITLE: 'Signals Title'
       HEAD_DESCRIPTION: 'Signals Description'
       WEB3_PROVIDER_URL: 'https://rinkeby.infura.io/7a2aaxZR9Iu72CZzQzgt'
+      WEB3_NETWORK_ID: '4'
+      ETHERSCAN_URL: 'https://rinkeby.etherscan.io/'
     command: npm run dev
 #    command: bash -c "npm run build && npm run start"
     ports:
