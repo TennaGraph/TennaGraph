@@ -13,8 +13,9 @@ rm -rf ../fe/dist
 rm -rf ../fe/.nuxt
 
 # Build front end and moved static to web container
-DOCKER_CMD="docker-compose run -e API_BASE_URL='${API_BASE_URL}' -e HEAD_TITLE='${HEAD_TITLE}' -e HEAD_DESCRIPTION='${HEAD_DESCRIPTION}' fe bash -c 'npm run generate --report'"
+DOCKER_CMD="docker-compose run -e API_BASE_URL='${API_BASE_URL}' -e HEAD_TITLE='${HEAD_TITLE}' -e HEAD_DESCRIPTION='${HEAD_DESCRIPTION}' -e WEB3_PROVIDER_URL='${WEB3_PROVIDER_URL}' -e WEB3_NETWORK_ID='${WEB3_NETWORK_ID}' -e ETHERSCAN_URL='${ETHERSCAN_URL}' fe bash -c 'npm run generate --report'"
 #echo ${DOCKER_CMD}
+
 
 cd .. && eval ${DOCKER_CMD}
 rm -rf web/dist && mv -f fe/dist web/dist && cd web
