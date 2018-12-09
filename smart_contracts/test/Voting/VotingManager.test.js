@@ -72,13 +72,15 @@ contract('VotingContract', function ([owner, user1, user2]) {
 
         const propResponseNum = proposalResponse[0];
         const propResponseIsVotingActive = proposalResponse[1];
-        const propResponseYayAddress = proposalResponse[2];
-        const propResponseNayAddress = proposalResponse[3];
-        const propResponseAbstainAddress = proposalResponse[4];
+        const propResponseVotingCreated = proposalResponse[2];
+        const propResponseYayAddress = proposalResponse[3];
+        const propResponseNayAddress = proposalResponse[4];
+        const propResponseAbstainAddress = proposalResponse[5];
 
         // check proposal response
         propResponseNum.should.be.bignumber.equal(proposalNum);
         propResponseIsVotingActive.should.equal(isVotingActive);
+        propResponseVotingCreated.should.exist;
         propResponseYayAddress.should.exist;
         propResponseNayAddress.should.exist;
         propResponseAbstainAddress.should.exist;
@@ -93,9 +95,9 @@ contract('VotingContract', function ([owner, user1, user2]) {
     it('should allow voting when the voting is active', async function () {
         // prepare
         const proposalResponse = await this.votingManager.proposals(PROPOSAL_NUM);
-        const propResponseYay = await VotingOption.at(proposalResponse[2]);
-        const propResponseNay = await VotingOption.at(proposalResponse[3]);
-        const propResponseAbstain = await VotingOption.at(proposalResponse[4]);
+        const propResponseYay = await VotingOption.at(proposalResponse[3]);
+        const propResponseNay = await VotingOption.at(proposalResponse[4]);
+        const propResponseAbstain = await VotingOption.at(proposalResponse[5]);
 
         // action
         await propResponseYay.vote().should.be.fulfilled;
@@ -141,9 +143,9 @@ contract('VotingContract', function ([owner, user1, user2]) {
     it('should deny voting when the voting is not active', async function () {
         // prepare
         const proposalResponse = await this.votingManager.proposals(PROPOSAL_NUM);
-        const propResponseYay = await VotingOption.at(proposalResponse[2]);
-        const propResponseNay = await VotingOption.at(proposalResponse[3]);
-        const propResponseAbstain = await VotingOption.at(proposalResponse[4]);
+        const propResponseYay = await VotingOption.at(proposalResponse[3]);
+        const propResponseNay = await VotingOption.at(proposalResponse[4]);
+        const propResponseAbstain = await VotingOption.at(proposalResponse[5]);
 
         // action
         await this.votingManager.changeProposalStatus(PROPOSAL_NUM, false, {from: owner});
@@ -157,8 +159,8 @@ contract('VotingContract', function ([owner, user1, user2]) {
     it('should allow resubmit voting from yay to nay when the voting is active', async function () {
         // prepare
         const proposalResponse = await this.votingManager.proposals(PROPOSAL_NUM);
-        const propResponseYay = await VotingOption.at(proposalResponse[2]);
-        const propResponseNay = await VotingOption.at(proposalResponse[3]);
+        const propResponseYay = await VotingOption.at(proposalResponse[3]);
+        const propResponseNay = await VotingOption.at(proposalResponse[4]);
 
         // action
         await propResponseYay.vote().should.be.fulfilled;
@@ -180,8 +182,8 @@ contract('VotingContract', function ([owner, user1, user2]) {
     it('should allow resubmit voting from yay to abstain when the voting is active', async function () {
         // prepare
         const proposalResponse = await this.votingManager.proposals(PROPOSAL_NUM);
-        const propResponseYay = await VotingOption.at(proposalResponse[2]);
-        const propResponseAbstain = await VotingOption.at(proposalResponse[4]);
+        const propResponseYay = await VotingOption.at(proposalResponse[3]);
+        const propResponseAbstain = await VotingOption.at(proposalResponse[5]);
 
         // action
         await propResponseYay.vote().should.be.fulfilled;

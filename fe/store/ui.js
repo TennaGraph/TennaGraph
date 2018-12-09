@@ -1,6 +1,7 @@
 const OPEN_USER_MENU = 'OPEN_USER_MENU';
 const CLOSE_ALL_MENUS = 'CLOSE_ALL_MENUS';
-const OPEN_USER_WALLETS_SIDEBAR = 'OPEN_USER_WALLETS_SIDEBAR';
+
+const OPEN_QR_CODE_SIDEBAR = 'OPEN_QR_CODE_SIDEBAR';
 
 
 export const state = () => ({
@@ -9,6 +10,11 @@ export const state = () => ({
 
   isUserWalletsSidebarOpened: false,
   isProfileSidebarOpened: false,
+  isQrCodeSidebarOpened: false,
+  qrCode: {
+    address: undefined,
+    option: "Yay"
+  }
 });
 
 export const getters = {
@@ -16,8 +22,14 @@ export const getters = {
     return state.isUserMenuOpened;
   },
   isSidebarOpened: state => {
-    return  state.isUserMenuOpened;
+    return state.isUserMenuOpened, state.isQrCodeSidebarOpened;
   },
+  isQrCodeSidebarOpened: state => {
+    return state.isQrCodeSidebarOpened;
+  },
+  qrCode: state => {
+    return state.qrCode;
+  }
 };
 
 export const mutations = {
@@ -26,15 +38,20 @@ export const mutations = {
   },
   [CLOSE_ALL_MENUS](state) {
     state.isUserMenuOpened = false;
+    state.isQrCodeSidebarOpened = false;
   },
-  [OPEN_USER_WALLETS_SIDEBAR](state) {
-    state.isUserWalletsSidebarOpened = true;
+  [OPEN_QR_CODE_SIDEBAR](state, payload) {
+    state.qrCode = payload;
+    state.isQrCodeSidebarOpened = true;
   },
 };
 
 export const actions = {
   openUserMenu({commit}) {
     commit(OPEN_USER_MENU);
+  },
+  openQrCodeMenu({commit}, payload) {
+    commit(OPEN_QR_CODE_SIDEBAR, payload);
   },
   closeAllMenus({commit}) {
     commit(CLOSE_ALL_MENUS);

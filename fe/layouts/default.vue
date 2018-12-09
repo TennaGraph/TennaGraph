@@ -3,9 +3,10 @@
 
     <div class="holder" v-cloak>
       <maintenance v-if="isMaintenance"></maintenance>
-      <div class="page column d-flex" v-else>
+      <div class="page column d-flex" v-else v-bind:class="{ 'page--has-sidebar': isSidebarOppened, 'page--has-menu': isProfileSidebarOpened }">
 
         <!--<offline-mode v-bind:class="{ 'pt-0': isSidebarOppened || isProfileSidebarOpened }"></offline-mode>-->
+        <qr-code-sidebar :display="isQrCodeSidebarOpened"></qr-code-sidebar>
         <global-header></global-header>
         <nuxt/>
         <global-footer></global-footer>
@@ -26,17 +27,18 @@
 
 <script>
 
-  import Vue from 'vue';
+  import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
   import Zendesk from '@/components/frameworks/Zendesk.vue';
   import Maintenance from '@/components/Maintenance.vue';
-  import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
   import GlobalFooter from '@/components/footer/GlobalFooter';
   import GlobalHeader from '@/components/header/GlobalHeader';
   import Notification from '@/components/Notification';
   import OfflineMode from "@/components/offline_mode/OfflineMode";
+  import QrCodeSidebar from "@/components/menu/QrCodeSidebar";
 
   export default {
     components: {
+      QrCodeSidebar,
       Zendesk,
       Maintenance,
       PulseLoader,
@@ -88,6 +90,17 @@
       },
       notifications() {
         return this.$store.getters['ntf/notifications'];
+      },
+
+      /* UI Sidebars */
+      isSidebarOppened() {
+        return this.$store.getters['ui/isSidebarOpened'];
+      },
+      isProfileSidebarOpened() {
+        return this.$store.getters['ui/isProfileSidebarOpened'];
+      },
+      isQrCodeSidebarOpened() {
+        return this.$store.getters['ui/isQrCodeSidebarOpened'];
       }
     }
   };

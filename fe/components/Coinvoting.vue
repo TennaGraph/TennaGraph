@@ -36,7 +36,7 @@
                 <v-text-field placeholder="Placeholder" :value="decision.address"></v-text-field>
               </v-flex>
               <v-layout xs1>
-                <v-btn icon>
+                <v-btn icon @click="openQrCode(decision.title, decision.address)">
                   <v-avatar size="18px" tile>
                     <v-img src="/icons/qr_code_mini.svg"></v-img>
                   </v-avatar>
@@ -187,6 +187,13 @@
           this.isAddingProposal = false;
           this.setErrors(e.message)
         }
+      },
+      async openQrCode(option, address) {
+        const data = {
+          address: address,
+          option: option
+        }
+        await this.$store.dispatch("ui/openQrCodeMenu", data)
       },
       etherscanUrl(address) {
         return process.env.etherscanUrl + "address/" + address
