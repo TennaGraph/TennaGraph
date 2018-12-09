@@ -68,7 +68,7 @@ contract VotingManager is Ownable, AuthorizedContracts {
     struct Proposal {
         uint id;
         bool isVotingOpen;
-        uint votingCreated;
+        uint votingCreatedAt;
         address[] participants;
         mapping(address => Voter) voters;
 
@@ -88,7 +88,7 @@ contract VotingManager is Ownable, AuthorizedContracts {
         Proposal storage proposal = proposals[_proposalId];
         proposal.id = _proposalId;
         proposal.isVotingOpen = _isVotingOpen;
-        proposal.votingCreated = now;
+        proposal.votingCreatedAt = now;
 
         // create contracts to allow voting just with simple transaction to contract address
         proposal.yay = new VotingOption(1, _proposalId, this);

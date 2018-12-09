@@ -4,9 +4,8 @@
 - create file with name `.env` in `app` directory (TennaGraph/app/) with such info:
 
 
-GITHUB_USERNAME=Your username on github <br />
-GITHUB_PASSWORD=Your password on github <br />
-SECRET_KEY=IPUWEpSFrXd-nzs4HKENG8G6-sHA9WqPStZpNw97tpY= <br />
+GITHUB_USERNAME=Your username on github<br />
+GITHUB_PASSWORD=Your password on github<br />
 
 
 - install Docker Engine
@@ -32,4 +31,24 @@ if http://localhost:8080 doesn't work:
 
 ## Smart Contract
 ### VotingManager (TestNet Rinkeby)
-address: 0xb662f0418fb5c501d9fbe437640c3856acc14f56
+current address: 0xc82d2f9b1e661d5238907e58bcaf6d8fe964fcc9
+old address: 0xb662f0418fb5c501d9fbe437640c3856acc14f56
+
+
+# Smart-Contracts Suite
+Smart Contracts + Tests
+
+To install all dependencies for smart contracts open TennaGraph/smart_contracts folder in your terminal and run:
+``` bash
+npm install
+```
+
+Then to run tests:
+``` bash
+npm run test
+```
+
+To run code-coverage:
+``` bash
+npm run cov
+```

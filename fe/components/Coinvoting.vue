@@ -16,7 +16,7 @@
     </v-layout>
 
     <v-layout column v-else>
-      <p>Active since date to do</p>
+      <p>Active since date {{ votingCreatedAt | formatDateTime }}</p>
       <v-layout row class="wrapper" wrap>
         <v-flex v-if="!proposalVotingInfo" xs9>
           <pulse-loader></pulse-loader>
@@ -121,12 +121,16 @@
         if (!this.proposalVotingInfo) return undefined;
         return this.proposalVotingInfo[1]
       },
+      votingCreatedAt() {
+        if (!this.proposalVotingInfo) return undefined;
+        return new Date(this.proposalVotingInfo[2] * 1000)
+      },
       votingAddresses() {
         if (!this.proposalVotingInfo) return undefined;
         return {
-          yay: this.proposalVotingInfo[2],
-          nay: this.proposalVotingInfo[3],
-          abstain: this.proposalVotingInfo[4],
+          yay: this.proposalVotingInfo[3],
+          nay: this.proposalVotingInfo[4],
+          abstain: this.proposalVotingInfo[5],
         }
       },
       series() {

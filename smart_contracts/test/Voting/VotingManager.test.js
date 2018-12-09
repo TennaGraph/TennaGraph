@@ -72,7 +72,7 @@ contract('VotingContract', function ([owner, user1, user2]) {
 
         const propResponseNum = proposalResponse[0];
         const propResponseIsVotingActive = proposalResponse[1];
-        const propResponseVotingCreated = proposalResponse[2];
+        const propResponsevotingCreatedAt = proposalResponse[2];
         const propResponseYayAddress = proposalResponse[3];
         const propResponseNayAddress = proposalResponse[4];
         const propResponseAbstainAddress = proposalResponse[5];
@@ -80,7 +80,7 @@ contract('VotingContract', function ([owner, user1, user2]) {
         // check proposal response
         propResponseNum.should.be.bignumber.equal(proposalNum);
         propResponseIsVotingActive.should.equal(isVotingActive);
-        propResponseVotingCreated.should.exist;
+        propResponsevotingCreatedAt.should.exist;
         propResponseYayAddress.should.exist;
         propResponseNayAddress.should.exist;
         propResponseAbstainAddress.should.exist;

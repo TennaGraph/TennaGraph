@@ -3,10 +3,13 @@ from system.models import SystemSettings
 # SITE SETTINGS
 def create_system_settings():
     # Workaround to avoid SystemSettings undefined
+    import os
     from system.models import SystemSettings
 
+    voting_address = os.environ.get('VOTING_MANAGER_CONTRACT_ADDRESS')
+
     seed_info = {
-        'contract_vot_manager_address': '0xb662F0418fB5c501D9fbe437640C3856aCc14f56'
+        'contract_vot_manager_address': voting_address
     }
 
     SystemSettings.objects.create(**seed_info)
