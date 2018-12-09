@@ -135,21 +135,25 @@
           {
             text: 'Title',
             value: 'eip_title',
+            sortable: true,
             class: 'text-xs-left east&#45;&#45;text uppercase py-2',
           },
           {
             text: 'Status',
             value: 'eip_status.key',
+            sortable: false,
             class: 'text-xs-left east&#45;&#45;text uppercase py-2',
           },
           {
             text: 'Type / Category',
             value: 'eip_category.key',
+            sortable: false,
             class: 'text-xs-left east&#45;&#45;text uppercase py-2',
           },
           {
             text: 'Created',
             value: 'eip_created',
+            sortable: false,
             class: 'text-xs-left east&#45;&#45;text uppercase py-2',
           },
         ]
