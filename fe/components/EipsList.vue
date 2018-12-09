@@ -22,18 +22,41 @@
           :loading="isEIPsLoading"
           no-results-text="No any proposal yet"
           :items="EIPsList"
+          :headers="headers"
           :search="search"
           :pagination.sync="pagination"
+          :headers-length="5"
           >
-          <template slot="headers" slot-scope="props">
-            <tr>
-              <th class="text-xs-left east--text uppercase py-2">EIP</th>
-              <th class="text-xs-left east--text uppercase py-2">Title</th>
-              <th class="text-xs-left east--text uppercase py-2">Status</th>
-              <th class="text-xs-left east--text uppercase py-2">Type / Category</th>
-              <th class="text-xs-left east--text uppercase py-2">Created</th>
-            </tr>
-          </template>
+          <!--<template slot="headers" slot-scope="props">-->
+            <!--<tr>-->
+              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">EIP</th>-->
+              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">Title</th>-->
+              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">Status</th>-->
+              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">Type / Category</th>-->
+              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">Created</th>-->
+            <!--</tr>-->
+          <!--</template>-->
+
+          <!--<template slot="headers" slot-scope="props">-->
+            <!--<tr>-->
+              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">EIP</th>&ndash;&gt;-->
+              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">Title</th>&ndash;&gt;-->
+              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">Status</th>&ndash;&gt;-->
+              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">Type / Category</th>&ndash;&gt;-->
+              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">Created</th>&ndash;&gt;-->
+
+              <!--<th-->
+                <!--v-for="header in props.headers"-->
+                <!--:key="header.text"-->
+                <!--:class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"-->
+
+                <!--@click="alert()"-->
+              <!--&gt;-->
+                <!--&lt;!&ndash;<v-icon small>arrow_upward</v-icon>&ndash;&gt;-->
+                <!--{{ header.text }}-->
+              <!--</th>-->
+            <!--</tr>-->
+          <!--</template>-->
 
           <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
           <template slot="items" slot-scope="props">
@@ -101,6 +124,35 @@
         pagination: {
           rowsPerPage: 10
         },
+        headers: [
+          {
+            text: 'EIP',
+            align: 'left',
+            sortable: true,
+            value: 'eip_num',
+            class: 'text-xs-left east&#45;&#45;text uppercase py-2'
+          },
+          {
+            text: 'Title',
+            value: 'eip_title',
+            class: 'text-xs-left east&#45;&#45;text uppercase py-2',
+          },
+          {
+            text: 'Status',
+            value: 'eip_status.key',
+            class: 'text-xs-left east&#45;&#45;text uppercase py-2',
+          },
+          {
+            text: 'Type / Category',
+            value: 'eip_category.key',
+            class: 'text-xs-left east&#45;&#45;text uppercase py-2',
+          },
+          {
+            text: 'Created',
+            value: 'eip_created',
+            class: 'text-xs-left east&#45;&#45;text uppercase py-2',
+          },
+        ]
       }
     },
     created() {

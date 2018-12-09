@@ -153,6 +153,10 @@ class EIP(TimeStampedModel):
     eip_created     = models.CharField(max_length=100)
 
 
+    def __str__(self):
+        return "{}, {}".format(self.eip_num, self.eip_title)
+
+
     def update_with_eip(self, new_eip):
         self.file_name          = new_eip.file_name
         self.file_download_url  = new_eip.file_download_url

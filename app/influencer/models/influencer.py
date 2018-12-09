@@ -17,6 +17,9 @@ class Influencer(TimeStampedModel):
     followers_count     = models.IntegerField()
 
 
+    def __str__(self):
+        return "{}, {}, score: {}".format(self.name, self.screen_name, self.score)
+
     @classmethod
     def create(cls, influencer_raw):
         influencer = cls(twitter_id=influencer_raw['twitterId'],
