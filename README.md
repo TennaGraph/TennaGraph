@@ -16,14 +16,17 @@ GITHUB_PASSWORD=Your password on github<br />
 - in browser go to: http://localhost:8000/admin to see the django admin panel (login: admin, pass: 123456789)
 
 ## Trouble shootings
-if http://localhost:8080 doesn't work:
+### if http://localhost:8080 doesn't work:
 - stop containers (press ctrl+c)
 - run `docker-compose run fe bash`
 - run `npm install`
 - open the project in a new terminal window
 - run command in the terminal `docker-compose up`
 - wait several minutes
- 
+
+###  if workers don't work, and you have the message in the terminal `ERROR: Pidfile (celerybeat.pid) already exists`:
+- delete `celerybeat.pid` file in TennaGraph/app/ folder
+- restart the project
 
 ## Run Django app tests
 - open the project in terminal
@@ -31,9 +34,7 @@ if http://localhost:8080 doesn't work:
 
 ## Smart Contract
 ### VotingManager (TestNet Rinkeby)
-current address: 0xc82d2f9b1e661d5238907e58bcaf6d8fe964fcc9
-old address: 0xb662f0418fb5c501d9fbe437640c3856acc14f56
-
+address: 0xc82d2f9b1e661d5238907e58bcaf6d8fe964fcc9
 
 # Smart-Contracts Suite
 Smart Contracts + Tests
