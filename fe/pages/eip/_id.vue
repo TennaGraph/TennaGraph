@@ -16,13 +16,24 @@
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0">
               Coinvoting
+              <v-tooltip class="mx-2" right>
+                <v-icon color="grey" slot="activator">help</v-icon>
+                <span>Here is some tooltip text about coinvoting</span>
+              </v-tooltip>
             </v-card-title>
             <coinvoting :eipId="eipId" :w3="w3"></coinvoting>
           </v-card>
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0 primary--text">
-              Influencer Stances
+              Influencer Stances by Rank
+              <v-tooltip class="mx-2" right>
+                <v-icon color="grey" slot="activator">help</v-icon>
+                <span>Here is some tooltip text about influencer stances</span>
+              </v-tooltip>
+              <v-spacer></v-spacer>
+              <label class="body-1 chipTitle--text">Ranking stats by <a href="https://hive.one/ethereum" target="_blank">Hive.one</a></label>
+
             </v-card-title>
             <activity-chart
               v-if="isStancesLoaded"

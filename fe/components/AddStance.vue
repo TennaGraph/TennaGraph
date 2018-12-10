@@ -3,12 +3,14 @@
     <v-layout row wrap justify-space-between>
 
         <v-flex xs12 sm3 class="px-2">
-          <label for="" class="label--text body-1 mb-1 d-block">Influencer stance</label>
+          <label for="" class="label--text body-1 mb-1 d-block">Twitter username</label>
           <v-text-field
             v-model="author"
             :rules="authorRules"
             :error-messages="formErrors.author"
-            label="@vbuterin"
+            label="VitalikButerin"
+            placeholder="VitalikButerin"
+            prefix="@"
             single-line
             solo
             required
@@ -21,7 +23,7 @@
             v-model="link"
             :rules="linkRules"
             :error-messages="formErrors.post_url"
-            label="https://..."
+            placeholder="https://..."
             single-line
             solo
             required
@@ -35,7 +37,7 @@
               :items="choiceOptions"
               :rules="choiceRules"
               :error-messages="formErrors.choice"
-              label="Status"
+              placeholder="Status"
               solo
               required
             ></v-select>
@@ -72,7 +74,6 @@
         author: '',
         authorRules: [
           v => !!v || 'Twitter username is required',
-          v => /@.+/.test(v) || 'Twitter username must be valid'
         ],
 
         link: '',
@@ -97,7 +98,7 @@
         if (!this.$refs.form.validate()) { return; }
 
         let data = {
-          'author':    this.author,
+          'author':    '@' + this.author,
           'proof_url': this.link,
           'choice':    this.choice,
           'eip_id':    this.eipId,
@@ -106,7 +107,7 @@
         try {
           await this.$store.dispatch('stance/createStance', data);
           this.$refs.form.reset();
-          this.setSuccessAlerts(["The stance was successfully added on review!"])
+          this.setSuccessAlerts(["Your submission was successfully added for review"])
         } catch (e) {
           this.setResponseErrors(e, ['author', 'post_url', 'choice']);
         }

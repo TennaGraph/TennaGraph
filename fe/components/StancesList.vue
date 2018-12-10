@@ -1,5 +1,6 @@
 <template>
   <v-layout column class="wrapper">
+
     <v-layout row align-center justify-start>
       <v-flex xs2>
         <span class="text-truncate">Yay ({{ yayStances.length }})</span>
@@ -42,7 +43,9 @@
       </v-flex>
     </v-layout>
 
-    <span class="mt-5 mb-0">Something wrong in the stances? DM us at <a href="https://twitter.com/tennagraph" target="_blank">@tennagraph</a> to edit or remove stances</span>
+    <label class="body-1 chipTitle--text mt-4">
+      Something wrong in the stances? DM us at <a href="https://twitter.com/tennagraph" target="_blank">@tennagraph</a> to edit or remove stances
+    </label>
   </v-layout>
 </template>
 

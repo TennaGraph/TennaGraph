@@ -1019,6 +1019,10 @@ aside .tokens {
   font-size: 16px;
 }
 
+.error--text .v-select__slot {
+  font-size: 16px;
+}
+
 .aside--open .v-input:not(.v-input--is-disabled) .v-text-field__slot input {
  -webkit-box-shadow: none !important;
          box-shadow: none !important; }
