@@ -5,7 +5,7 @@
     <!--</v-avatar>-->
     <v-flex column class="mx-2">
       <label class="body-1 chipTitle--text">{{ stance.author }}</label><br/>
-      <label class="caption chipSubtitle--text">{{ stance.created_at | formatDate }}</label>
+      <label class="caption chipSubtitle--text">{{ stance.created_at | relativeDateTime }}</label>
     </v-flex>
     <a :href="stance.proof_url" target="_blank">
       <img src="/icons/chip_link.svg" right/>

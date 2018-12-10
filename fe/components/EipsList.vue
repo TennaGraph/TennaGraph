@@ -27,40 +27,10 @@
           :pagination.sync="pagination"
           :headers-length="5"
           >
-          <!--<template slot="headers" slot-scope="props">-->
-            <!--<tr>-->
-              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">EIP</th>-->
-              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">Title</th>-->
-              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">Status</th>-->
-              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">Type / Category</th>-->
-              <!--<th class="text-xs-left east&#45;&#45;text uppercase py-2">Created</th>-->
-            <!--</tr>-->
-          <!--</template>-->
-
-          <!--<template slot="headers" slot-scope="props">-->
-            <!--<tr>-->
-              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">EIP</th>&ndash;&gt;-->
-              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">Title</th>&ndash;&gt;-->
-              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">Status</th>&ndash;&gt;-->
-              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">Type / Category</th>&ndash;&gt;-->
-              <!--&lt;!&ndash;<th class="text-xs-left east&#45;&#45;text uppercase py-2">Created</th>&ndash;&gt;-->
-
-              <!--<th-->
-                <!--v-for="header in props.headers"-->
-                <!--:key="header.text"-->
-                <!--:class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"-->
-
-                <!--@click="alert()"-->
-              <!--&gt;-->
-                <!--&lt;!&ndash;<v-icon small>arrow_upward</v-icon>&ndash;&gt;-->
-                <!--{{ header.text }}-->
-              <!--</th>-->
-            <!--</tr>-->
-          <!--</template>-->
 
           <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
           <template slot="items" slot-scope="props">
-            <tr @click="$router.push({ path: '/eip/' + props.item.id });">
+            <tr class="eip_tr" @click="$router.push({ path: '/eip/' + props.item.id })">
               <td class="body-1 py-3">{{ props.item.eip_num }}</td>
               <td class="body-1 py-3">{{ props.item.eip_title }}</td>
 
@@ -183,5 +153,9 @@
 </script>
 
 <style scoped>
+
+  .eip_tr {
+    cursor: pointer;
+  }
 
 </style>

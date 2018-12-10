@@ -3,8 +3,8 @@
     <v-layout class="pr-5 mr-5">
       <v-layout class=" align-center justify-between mr-5 wrap">
           <img class="logo mr-auto" src='/theme/site_logo_footer.svg' alt="">
-        <a to="/" target="_blank" class="mr-3 label--text body-1">Proposals</a>
-        <a to="/about" target="_blank" class="mr-3 label--text body-1">About</a>
+        <nuxt-link to="/" class="mr-3 label--text body-1">Proposals</nuxt-link>
+        <nuxt-link to="/about" class="mr-3 label--text body-1">About</nuxt-link>
       </v-layout>
     </v-layout>
   </v-footer>

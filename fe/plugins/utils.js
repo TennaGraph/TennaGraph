@@ -13,3 +13,8 @@ Vue.filter('formatDateTime', function (value) {
   if (!value) return '';
   return moment(String(value)).format('YYYY/MM/DD hh:mm');
 });
+
+Vue.filter('relativeDateTime', function (value) {
+  if (!value) return '';
+  return moment(String(value)).startOf('minute').fromNow();
+});
