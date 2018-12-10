@@ -106,10 +106,11 @@
     },
     created() {
       this.isEIPLoading = true;
+      this.checkNetwork()
       try {
-        this.loadEIP()
-        this.loadInfluencers()
-        this.loadStances()
+        this.loadEIP();
+        this.loadInfluencers();
+        this.loadStances();
       } catch (e) {
         this.setResponseErrors(e);
       }
@@ -151,6 +152,15 @@
           return stance.choice.key === status;
         })
       },
+
+      async checkNetwork() {
+        try {
+          await this.w3.promisify.checkNetwork()
+        } catch (e) {
+
+          this.setErrors(e.message)
+        }
+      }
     },
     computed: {
       isInfluencersLoaded() {

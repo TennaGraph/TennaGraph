@@ -1,9 +1,9 @@
 <template>
   <v-layout>
 
-    <v-layout v-if="!isProposalExistsInVotingManager">
+    <v-layout v-if="!isProposalExistsInVotingManager || !proposalVotingInfo">
 
-      <pulse-loader v-if="isProposalExistsInVotingManager == undefined"></pulse-loader>
+      <pulse-loader v-if="isProposalExistsInVotingManager == undefined || (!proposalVotingInfo && isProposalExistsInVotingManager == true)"></pulse-loader>
       <v-layout v-else-if="isProposalExistsInVotingManager == false" column>
         <v-flex>
           <p class="px-2">Coinvoting has not been enabled for this EIP. Deploy the SmartContract via meta-mask to begin.</p>
@@ -18,10 +18,7 @@
     <v-layout column v-else>
       <p>Active since date {{ votingCreatedAt | formatDateTime }}</p>
       <v-layout row class="wrapper" wrap>
-        <v-flex v-if="!proposalVotingInfo" xs9>
-          <pulse-loader></pulse-loader>
-        </v-flex>
-        <v-flex v-else xs9>
+        <v-flex xs9>
           <v-layout row align-center justify-start v-for="decision in decisions" :key="decision.title">
             <v-flex xs2>
               <span class="text-truncate">
@@ -51,7 +48,7 @@
           </v-layout>
         </v-flex>
         <v-flex xs3>
-          <apexchart type=donut :options="chartOptions" :series="series"/>
+          <apexchart v-if="votingResults.length > 0" type=donut :options="chartOptions" :series="votingResults"/>
         </v-flex>
       </v-layout>
     </v-layout>
@@ -106,7 +103,7 @@
         VotingManagerContract: undefined,
         isProposalExistsInVotingManager: undefined,
         proposalVotingInfo: undefined,
-        votingResults: [0, 0, 0],
+        votingResults: [],
         isAddingProposal: false
       }
     },
@@ -134,7 +131,6 @@
         }
       },
       series() {
-        if (!this.votingResults) return [];
         return this.votingResults.map(value => parseInt(value))
       },
       decisions() {
@@ -173,7 +169,11 @@
 
           if (!this.isProposalExistsInVotingManager) return;
           this.proposalVotingInfo = await instance.proposals.call(this.eipId);
-          this.votingResults = await instance.votingResults.call(this.eipId);
+          const res = await instance.votingResults.call(this.eipId);
+          this.votingResults.length = 0
+          res.forEach(el => {
+            this.votingResults.push(parseInt(el))
+          })
         } catch(e) {
           this.setErrors(e.message)
         }
