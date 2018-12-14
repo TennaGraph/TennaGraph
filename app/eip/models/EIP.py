@@ -132,7 +132,6 @@ class EIP(TimeStampedModel):
         (OTHER, 'other')
     )
 
-
     file_name           = models.CharField(max_length=255)
     file_download_url   = models.URLField()
     file_content        = models.TextField()

@@ -56,7 +56,7 @@ def parse_eip_details(content):
 
         if "type: " in line_lower:
             if 'standards track' in line_lower:
-                eip_type = EIP.CORE
+                eip_type = EIP.STANDARDS_TRACK
             elif 'informational' in line_lower:
                 eip_type = EIP.INFORMATIONAL
             elif 'meta' in line_lower:

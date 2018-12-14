@@ -1,7 +1,6 @@
 <template>
   <v-container class="dashboard pt-0">
     <v-layout column>
-
       <v-layout tennagraph_info align-center justify-center row fill-height class="mb-3">
         <v-card-text class="text-xs-center">
           <label class="headline font-weight-light">Minimum bias ethereum signal aggregator</label><br>

@@ -83,6 +83,29 @@ class EIPsUnitTestCase(APITestCase):
         self.assertEqual(created, "2015-10-27, 2017-02-01")
 
 
+    def test_should_parse_eip_details_standards_track(self):
+        content = "--- \n" \
+                  "eip: 1 \n" \
+                  "title: EIP Purpose and Guidelines \n" \
+                  "status: Active \n" \
+                  "type: Standards Track \n" \
+                  "author: Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others \n" \
+                  "created: 2015-10-27, 2017-02-01 \n" \
+                  "--- \n"
+
+        eip, title, status, eip_type, category, authors, created = parse_eip_details(content)
+
+        self.assertIsNone(category)
+        self.assertEqual(eip, "1")
+        self.assertEqual(title, "EIP Purpose and Guidelines")
+        self.assertEqual(status, EIP.ACTIVE)
+        self.assertEqual(eip_type, EIP.STANDARDS_TRACK)
+        self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
+        self.assertEqual(created, "2015-10-27, 2017-02-01")
+
+        print("eip {}, title {}, status {}, eip_type {}, category {}, authors {}, created {}".format(eip, title, status, eip_type, category, authors, created))
+
+
     def test_should_parse_eip_details_with_other_category(self):
         content = "--- \n" \
                   "eip: 1 \n" \

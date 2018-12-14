@@ -12,9 +12,9 @@ class EIPSerializer(serializers.ModelSerializer):
 
     eip_status = ChoiceDisplayField(choices=EIP.PROPOSAL_STATUSES)
 
-    eip_type = ChoiceDisplayField(choices=EIP.PROPOSAL_STATUSES)
+    eip_type = ChoiceDisplayField(choices=EIP.TYPES)
 
-    eip_category = ChoiceDisplayField(choices=EIP.PROPOSAL_STATUSES)
+    eip_category = ChoiceDisplayField(choices=EIP.CATEGORIES)
 
     class Meta:
         model = EIP

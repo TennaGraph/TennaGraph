@@ -2,10 +2,23 @@ const GET_EIP_LIST_PENDING = 'GET_EIP_LIST_PENDING';
 const GET_EIP_LIST_SUCCESS = 'GET_EIP_LIST_SUCCESS';
 const GET_EIP_LIST_FAILURE = 'GET_EIP_LIST_FAILURE';
 
+const SET_STATUS_FILTER = 'SET_STATUS_FILTER';
+const SET_CATEGORY_FILTER = 'SET_CATEGORY_FILTER';
+
 
 export const state = () => ({
   isEIPsLoading: false,
-  EIPsList: []
+  EIPsList: [],
+  filter: {
+    status: {
+      isEnabled: false,
+      keys: []
+    },
+    category: {
+      isEnabled: false,
+      keys: []
+    }
+  }
 });
 
 export const getters = {
@@ -14,6 +27,12 @@ export const getters = {
   },
   EIPsList: state => {
     return state.EIPsList;
+  },
+  statusFilter: state => {
+    return state.filter.status;
+  },
+  categoryFilter: state => {
+    return state.filter.category;
   },
 };
 
@@ -27,6 +46,13 @@ export const mutations = {
   },
   [GET_EIP_LIST_FAILURE](state, payload) {
     state.isEIPsLoading = false;
+  },
+
+  [SET_STATUS_FILTER](state, payload) {
+    state.filter.status = payload;
+  },
+  [SET_CATEGORY_FILTER](state, payload) {
+    state.filter.category = payload;
   },
 };
 
@@ -54,5 +80,13 @@ export const actions = {
       console.error(e); // 💩
       throw e;
     }
+  },
+
+  setFilterStatuses({commit}, filter) {
+    commit(SET_STATUS_FILTER, filter);
+  },
+
+  setFilterCategories({commit}, filter) {
+    commit(SET_CATEGORY_FILTER, filter);
   },
 };

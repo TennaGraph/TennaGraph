@@ -28,6 +28,43 @@
           :headers-length="5"
           >
 
+          <template slot="headers" slot-scope="props">
+            <tr>
+              <th
+                v-for="(header, index) in props.headers"
+                v-if="index <= 1"
+                :key="header.text"
+                :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                @click="changeSort(header.value)"
+              >
+                <v-icon small>arrow_upward</v-icon>
+                {{ header.text }}
+              </th>
+
+              <th>
+                <v-layout>
+                  <status-filter v-model="statusFilter"></status-filter>
+                </v-layout>
+              </th>
+              <th>
+                <v-layout>
+                  <category-filter v-model="categoryFilter"></category-filter>
+                </v-layout>
+              </th>
+
+              <th
+                v-for="(header, index) in props.headers"
+                v-if="index >= 4"
+                :key="header.text"
+                :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                @click="changeSort(header.value)"
+              >
+                <v-icon small>arrow_upward</v-icon>
+                {{ header.text }}
+              </th>
+            </tr>
+          </template>
+
           <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
           <template slot="items" slot-scope="props">
             <tr class="eip_tr" @click="$router.push({ path: '/eip/' + props.item.id })">
@@ -65,10 +102,10 @@
                 </v-card>
               </td>
 
-              <td class="py-3 text-xs-left text-truncate" v-if="props.item.eip_category">
-                {{ props.item.eip_type.display }} / {{ props.item.eip_category.display }}
+              <td class="py-3 text-xs-left text-truncate text-capitalize" v-if="props.item.eip_type && props.item.eip_category">
+                {{ props.item.eip_type.display }}<br> {{ props.item.eip_category.display }}
               </td>
-              <td class="py-3 text-xs-left text-truncate" v-else>{{ props.item.eip_type.display }}</td>
+              <td class="py-3 text-xs-left text-truncate text-capitalize" v-else>{{ props.item.eip_type.display }}</td>
               <td class="py-3 text-xs-left text-truncate">{{ props.item.eip_created }}</td>
             </tr>
           </template>
@@ -82,9 +119,12 @@
 <script>
 
   import commonErrorsMixin from "~/mixins/commonErrorsMixin";
+  import StatusFilter from "~/components/filtering/eipFilters/StatusFilter";
+  import CategoryFilter from "~/components/filtering/eipFilters/CategoryFilter";
 
   export default {
     name: "eips-list",
+    components: {CategoryFilter, StatusFilter},
     mixins: [
       commonErrorsMixin,
     ],
@@ -92,8 +132,11 @@
       return {
         search: '',
         pagination: {
+          sortBy: 'eip_num',
           rowsPerPage: 10
         },
+        statusFilter: this.$store.getters['eip/statusFilter'],
+        categoryFilter: this.$store.getters['eip/categoryFilter'],
         headers: [
           {
             text: 'EIP',
@@ -126,7 +169,8 @@
             sortable: false,
             class: 'text-xs-left east&#45;&#45;text uppercase py-2',
           },
-        ]
+        ],
+
       }
     },
     created() {
@@ -134,11 +178,27 @@
     },
     computed: {
       EIPsList() {
-        return this.$store.getters['eip/EIPsList']
+        let eips = this.$store.getters['eip/EIPsList'];
+
+        // Filter by status
+        if(this.statusFilter && this.statusFilter.isEnabled) {
+          const filterKeys = this.statusFilter.keys;
+          eips = eips.filter(item => filterKeys.includes(item.eip_status.key))
+        }
+
+        // Filter by type / category
+        if(this.categoryFilter && this.categoryFilter.isEnabled) {
+          const filterKeys = this.categoryFilter.keys;
+          alert("filterKeys: " + JSON.stringify(filterKeys))
+          eips = eips.filter(item => (item.eip_category && filterKeys.includes(item.eip_category.key)) || filterKeys.includes(item.eip_type.key))
+        }
+        return eips
       },
+
       isEIPsLoading() {
         return this.$store.getters['eip/isEIPsLoading']
-      }
+      },
+
     },
     methods: {
       async loadEIPs() {
@@ -147,7 +207,25 @@
         } catch (e) {
           this.setResponseErrors(e);
         }
+      },
+
+      changeSort (column) {
+        if (this.pagination.sortBy === column) {
+          this.pagination.descending = !this.pagination.descending
+        } else {
+          this.pagination.sortBy = column
+          this.pagination.descending = false
+        }
       }
+    },
+    watch: {
+      statusFilter(newValue) {
+        this.$store.dispatch('eip/setFilterStatuses', newValue)
+      },
+
+      categoryFilter(newValue) {
+        this.$store.dispatch('eip/setFilterCategories', newValue)
+      },
     }
   }
 </script>
