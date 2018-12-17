@@ -19,3 +19,4 @@ django-filter==2.0.0
 requests==2.20.1
 iso8601==0.1.12
 web3==4.8.1
+python-twitter==3.5

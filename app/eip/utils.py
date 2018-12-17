@@ -1,5 +1,6 @@
 # Stdlib imports
 import io
+from datetime import datetime
 
 # App imports
 from .models import EIP
@@ -79,6 +80,15 @@ def parse_eip_details(content):
             authors = line.replace('authors: ', '')
 
         if "created: " in line_lower:
-            created = line.replace('created: ', '')
+            created_raw = line.replace('created: ', '')
+            created = parse_created_date(created_raw)
 
-    return eip, title, status, eip_type, category, authors, created
+    return eip, title, status, eip_type, category, authors, created_raw, created
+
+
+def parse_created_date(created_raw):
+    format_str = "%Y-%m-%d"
+    try:
+        return datetime.strptime(created_raw, format_str).date()
+    except Exception as ex:
+        return None

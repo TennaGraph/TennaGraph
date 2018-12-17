@@ -36,16 +36,17 @@ class GitHubEIP:
         file_sha = content_eip_file.sha
         file_content = base64.b64decode(b64_content).decode('utf-8')
 
-        eip, title, status, eip_type, category, authors, created = parse_eip_details(file_content)
+        eip, title, status, eip_type, category, authors, created_raw, created = parse_eip_details(file_content)
 
         eip_dict = {
-            'eip_num':      eip,
-            'eip_title':    title,
-            'eip_status':   status,
-            'eip_type':     eip_type,
-            'eip_category': category,
-            'eip_authors':  authors,
-            'eip_created':  created,
+            'eip_num':          eip,
+            'eip_title':        title,
+            'eip_status':       status,
+            'eip_type':         eip_type,
+            'eip_category':     category,
+            'eip_authors':      authors,
+            'eip_created_raw':  created_raw,
+            'eip_created':      created,
 
             'file_name':            file_name,
             'file_download_url':    file_download_url,

@@ -1,3 +1,6 @@
+# Stdlib imports
+from datetime import date
+
 # Pip imports
 from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
@@ -69,10 +72,10 @@ class EIPsUnitTestCase(APITestCase):
                   "status: Active \n" \
                   "type: Meta \n" \
                   "author: Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others \n" \
-                  "created: 2015-10-27, 2017-02-01 \n" \
+                  "created: 2015-10-27\n" \
                   "--- \n"
 
-        eip, title, status, eip_type, category, authors, created = parse_eip_details(content)
+        eip, title, status, eip_type, category, authors, created_raw, created = parse_eip_details(content)
 
         self.assertIsNone(category)
         self.assertEqual(eip, "1")
@@ -80,7 +83,8 @@ class EIPsUnitTestCase(APITestCase):
         self.assertEqual(status, EIP.ACTIVE)
         self.assertEqual(eip_type, EIP.META)
         self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
-        self.assertEqual(created, "2015-10-27, 2017-02-01")
+        self.assertEqual(created_raw, "2015-10-27")
+        self.assertTrue(isinstance(created, date))
 
 
     def test_should_parse_eip_details_standards_track(self):
@@ -93,7 +97,7 @@ class EIPsUnitTestCase(APITestCase):
                   "created: 2015-10-27, 2017-02-01 \n" \
                   "--- \n"
 
-        eip, title, status, eip_type, category, authors, created = parse_eip_details(content)
+        eip, title, status, eip_type, category, authors, created_raw, created = parse_eip_details(content)
 
         self.assertIsNone(category)
         self.assertEqual(eip, "1")
@@ -101,7 +105,7 @@ class EIPsUnitTestCase(APITestCase):
         self.assertEqual(status, EIP.ACTIVE)
         self.assertEqual(eip_type, EIP.STANDARDS_TRACK)
         self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
-        self.assertEqual(created, "2015-10-27, 2017-02-01")
+        self.assertEqual(created_raw, '2015-10-27, 2017-02-01')
 
         print("eip {}, title {}, status {}, eip_type {}, category {}, authors {}, created {}".format(eip, title, status, eip_type, category, authors, created))
 
@@ -116,7 +120,7 @@ class EIPsUnitTestCase(APITestCase):
                   "created: 2015-10-27, 2017-02-01 \n" \
                   "--- \n"
 
-        eip, title, status, eip_type, category, authors, created = parse_eip_details(content)
+        eip, title, status, eip_type, category, authors, created_raw, created = parse_eip_details(content)
 
         self.assertIsNone(category)
         self.assertEqual(eip, "1")
@@ -124,7 +128,7 @@ class EIPsUnitTestCase(APITestCase):
         self.assertEqual(status, EIP.DRAFT)
         self.assertEqual(eip_type, EIP.OTHER)
         self.assertEqual(authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
-        self.assertEqual(created, "2015-10-27, 2017-02-01")
+        self.assertEqual(created_raw, "2015-10-27, 2017-02-01")
 
     def test_should_load_and_store_first_eip(self):
         eips_list = self.gh.eips_list()
@@ -144,7 +148,7 @@ class EIPsUnitTestCase(APITestCase):
         self.assertEqual(eip.eip_status, EIP.ACTIVE)
         self.assertEqual(eip.eip_type, EIP.META)
         self.assertEqual(eip.eip_authors, "Martin Becze <mb@ethereum.org>, Hudson Jameson <hudson@ethereum.org>, and others")
-        self.assertEqual(eip.eip_created, "2015-10-27, 2017-02-01")
+        self.assertEqual(eip.eip_created, None)
 
     def test_sould_fetch_eips_from_official_repo(self):
         self.assertEqual(EIP.objects.count(), 0)
@@ -171,7 +175,7 @@ class EIPsClientAPITestCase(APITestCase):
             'eip_type': EIP.INFORMATIONAL,
             'eip_category': EIP.ERC,
             'eip_authors': 'Authors here',
-            'eip_created': '12.33.2344',
+            'eip_created': '2015-10-27',
 
             'file_name': 'File name here',
             'file_download_url': 'https://google.com.ua/',
@@ -208,7 +212,8 @@ class EIPsClientAPITestCase(APITestCase):
             'eip_type': EIP.INFORMATIONAL,
             'eip_category': EIP.ERC,
             'eip_authors': 'Authors here',
-            'eip_created': '12.33.2344',
+            'eip_created': '2015-10-27',
+            'eip_created_raw': '2015-10-27',
 
             'file_name': 'File name here',
             'file_download_url': 'https://google.com.ua/',
@@ -226,13 +231,15 @@ class EIPsClientAPITestCase(APITestCase):
 
         eip_response = response.data
 
+        print("::::::::::: eip_response {}".format(eip_response))
+
         self.assertEqual(eip_response['eip_num'],               eip_dict['eip_num'])
         self.assertEqual(eip_response['eip_title'],             eip_dict['eip_title'])
         self.assertEqual(eip_response['eip_status']['key'],     eip_dict['eip_status'])
         self.assertEqual(eip_response['eip_type']['key'],       eip_dict['eip_type'])
         self.assertEqual(eip_response['eip_category']['key'],   eip_dict['eip_category'])
         self.assertEqual(eip_response['eip_authors'],           eip_dict['eip_authors'])
-        self.assertEqual(eip_response['eip_created'],           eip_dict['eip_created'])
+        self.assertEqual(eip_response['eip_created_raw'],       eip_dict['eip_created'])
         self.assertEqual(eip_response['file_name'],             eip_dict['file_name'])
         self.assertEqual(eip_response['file_download_url'],     eip_dict['file_download_url'])
         self.assertEqual(eip_response['file_content'],          eip_dict['file_content'])

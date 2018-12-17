@@ -149,7 +149,9 @@ class EIP(TimeStampedModel):
     eip_authors     = models.CharField(max_length=255)
 
     # Date can be in not correct format, so it is parsed as string
-    eip_created     = models.CharField(max_length=100)
+    eip_created     = models.DateField(null=True, blank=True)
+
+    eip_created_raw = models.CharField(max_length=100, null=True, blank=True)
 
 
     def __str__(self):

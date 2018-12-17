@@ -189,7 +189,6 @@
         // Filter by type / category
         if(this.categoryFilter && this.categoryFilter.isEnabled) {
           const filterKeys = this.categoryFilter.keys;
-          alert("filterKeys: " + JSON.stringify(filterKeys))
           eips = eips.filter(item => (item.eip_category && filterKeys.includes(item.eip_category.key)) || filterKeys.includes(item.eip_type.key))
         }
         return eips
