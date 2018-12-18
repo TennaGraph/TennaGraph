@@ -3,9 +3,9 @@ from rest_framework import serializers
 
 # Project imports
 from base.utils import ChoiceDisplayField
-from eip.models import EIP
 from influencer.models import Influencer
 from influencer.serializers import InfluencerSerializer
+from twitter_client.utils import weather_is_twitter_link
 
 # App imports
 from ..models import Stance
@@ -42,6 +42,9 @@ class StanceSerializer(serializers.ModelSerializer):
         influencers = Influencer.objects.filter(screen_name__icontains=author_twitter_username)
         if influencers.exists():
             attrs['influencer'] = influencers.first()
+
+        if weather_is_twitter_link(attrs['proof_url']):
+            attrs['proof_type'] = Stance.TWITTER
 
         return attrs
 

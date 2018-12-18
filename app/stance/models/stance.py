@@ -41,18 +41,31 @@ class Stance(TimeStampedModel):
     )
 
 
-    author      = models.CharField(max_length=255)
+    TWITTER = 'TWITTER'
+    OTHER = 'OTHER'
+
+    PROOF_CHOICES = (
+        (TWITTER, 'twitter'),
+        (OTHER, 'other'),
+    )
+
+
+    author              = models.CharField(max_length=255)
 
     """ This field filled if the author above is influencer """
-    influencer  = models.ForeignKey(Influencer, on_delete=models.SET_NULL, null=True, blank=True)
+    influencer          = models.ForeignKey(Influencer, on_delete=models.SET_NULL, null=True, blank=True)
 
-    proof_url   = models.URLField()
+    proof_url           = models.URLField()
 
-    choice      = models.CharField(choices=CHOICES, max_length=7)
+    proof_type          = models.CharField(max_length=20, choices=PROOF_CHOICES, default=OTHER)
 
-    status      = models.CharField(choices=STATUSES, max_length=8, default=PENDING)
+    proof_last_check    = models.DateTimeField(null=True, blank=True)
 
-    eip         = models.ForeignKey(EIP, on_delete=models.CASCADE)
+    choice              = models.CharField(choices=CHOICES, max_length=7)
+
+    status              = models.CharField(choices=STATUSES, max_length=8, default=PENDING)
+
+    eip                 = models.ForeignKey(EIP, on_delete=models.CASCADE)
 
 
 

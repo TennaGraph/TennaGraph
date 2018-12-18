@@ -42,7 +42,7 @@ class TwitterClientAPITestCase(APITestCase):
 
         self.assertTrue(is_status_exists)
 
-    def test_should_status_exists(self):
+    def test_should_not_status_exists(self):
         status_id = "1074683558084706305"
 
         is_status_exists = self.twitter.is_status_exists(status_id)

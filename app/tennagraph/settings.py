@@ -215,6 +215,7 @@ CELERY_TIMEZONE = TIME_ZONE
 
 UPDATE_EIPS_PER_SECONDS = int(os.environ.get('UPDATE_EIPS_PER_SECONDS'))
 UPDATE_INFLUENCERS_PER_SECONDS = int(os.environ.get('UPDATE_INFLUENCERS_PER_SECONDS'))
+UPDATE_PROOFS_AVAILABILITY_RER_SECONDS = int(os.environ.get('UPDATE_PROOFS_AVAILABILITY_RER_SECONDS'))
 
 CELERY_BEAT_SCHEDULE = {
     'fetch_eips_from_official_repo': {
@@ -224,6 +225,10 @@ CELERY_BEAT_SCHEDULE = {
     'fetch_influencers_from_hive_one': {
         'task': 'influencer.tasks.fetch_influencers_from_hive_one',
         'schedule': schedule(run_every=UPDATE_INFLUENCERS_PER_SECONDS),
+    },
+    'check_availability_proofs_of_stances': {
+        'task': 'stance.tasks.check_availability_proofs_of_stances',
+        'schedule': schedule(run_every=UPDATE_PROOFS_AVAILABILITY_RER_SECONDS),
     },
 }
 
