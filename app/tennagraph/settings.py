@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'eip',
     'stance',
     'influencer',
+    'twitter_client',
     'corsheaders',
     'django_cleanup',
 ]
@@ -312,4 +313,10 @@ SITE_NAME = os.environ.get('SITE_NAME')
 
 # Hive One API Url
 HIVE_ONE_API_URL = os.environ.get('HIVE_ONE_API_URL')
+
+# Twitter
+TWITTER_CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY')
+TWITTER_CONSUMER_SECRET_KEY = os.environ.get('TWITTER_CONSUMER_SECRET_KEY')
+TWITTER_ACCESS_TOKEN_KEY = os.environ.get('TWITTER_ACCESS_TOKEN_KEY')
+TWITTER_ACCESS_TOKEN_SECRET_KEY = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET_KEY')
 
