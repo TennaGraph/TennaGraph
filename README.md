@@ -16,7 +16,7 @@ https://python-twitter.readthedocs.io/en/latest/getting_started.html
 
 - install Docker Engine
 - open the project in terminal
-- run command in the terminal `docker-compose up`
+- run command in the terminal `docker-compose up --build`
 - wait several minutes
 - in browser go to: http://localhost:8080 to see the user panel 
 - in browser go to: http://localhost:8000/admin to see the django admin panel (login: admin, pass: 123456789)
