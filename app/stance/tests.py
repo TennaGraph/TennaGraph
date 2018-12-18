@@ -28,7 +28,7 @@ class StancesClientAPITestCase(APITestCase):
             'eip_type': EIP.INFORMATIONAL,
             'eip_category': EIP.ERC,
             'eip_authors': 'Authors here',
-            'eip_created': '12.33.2344',
+            'eip_created': '1994-12-23',
 
             'file_name': 'File name here',
             'file_download_url': 'https://google.com.ua/',
@@ -42,7 +42,7 @@ class StancesClientAPITestCase(APITestCase):
             'eip_type': EIP.INFORMATIONAL,
             'eip_category': EIP.ERC,
             'eip_authors': 'Authors here 2',
-            'eip_created': '12.33.2334',
+            'eip_created': '1994-02-06',
 
             'file_name': 'File name here 2',
             'file_download_url': 'https://google.com.ua/2/',

@@ -6,7 +6,13 @@
 
 GITHUB_USERNAME=Your username on github<br />
 GITHUB_PASSWORD=Your password on github<br />
+TWITTER_CONSUMER_KEY=<br />
+TWITTER_CONSUMER_SECRET_KEY=<br />
+TWITTER_ACCESS_TOKEN_KEY=<br />
+TWITTER_ACCESS_TOKEN_SECRET_KEY=<br />
 
+To get credentials for twitter, please, follow the instructions:
+https://python-twitter.readthedocs.io/en/latest/getting_started.html
 
 - install Docker Engine
 - open the project in terminal
