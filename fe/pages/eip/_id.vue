@@ -13,6 +13,10 @@
             </v-layout>
           </v-card-title>
 
+          <v-card class="py-4 px-4">
+            <eip-description v-if="eip" :eipDescription="eip.file_content"></eip-description>
+          </v-card>
+
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0">
               Coinvoting
@@ -78,13 +82,15 @@
   import StancesList from "~/components/StancesList";
   import web3Instance from "~/utils/web3Instance.js";
   import Coinvoting from "~/components/Coinvoting";
+  import EipDescription from "~/components/eip/EipDescription";
 
   export default {
     components: {
       Coinvoting,
       StancesList,
       ActivityChart,
-      AddStance
+      AddStance,
+      EipDescription,
     },
     name: "eip-details",
     mixins: [
