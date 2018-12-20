@@ -19,6 +19,9 @@ module.exports = {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/theme/favicon.png' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
+      { rel: 'script', href: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css' },
+      { rel: 'stylesheet', href: 'https://unpkg.com/katex@0.6.0/dist/katex.min.css' },
     ],
   },
 
@@ -64,6 +67,7 @@ module.exports = {
     '@/plugins/networkChecker.js',
     '@/plugins/utils.js',
     '@/plugins/apexcharts',
+    '@/plugins/markdown',
   ],
 
   /*

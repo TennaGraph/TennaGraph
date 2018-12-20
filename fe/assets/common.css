@@ -196,7 +196,8 @@ body {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   line-height: 1.27;
-  font-size: 16px; }
+  font-size: 16px;
+}
 
 body .application.theme--light {
   background-color: #eeeeee; }

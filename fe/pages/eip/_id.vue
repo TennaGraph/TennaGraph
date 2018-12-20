@@ -13,7 +13,7 @@
             </v-layout>
           </v-card-title>
 
-          <v-card class="py-4 px-4">
+          <v-card v-show="eip" class="py-4 px-4">
             <eip-description v-if="eip" :eipDescription="eip.file_content"></eip-description>
           </v-card>
 

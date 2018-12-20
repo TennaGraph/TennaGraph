@@ -22,6 +22,7 @@
 
       <zendesk v-if="isZendeskExists" :zendeskKey="zendeskKey"></zendesk>
     </div>
+
   </v-app>
 </template>
 
