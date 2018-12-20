@@ -8,8 +8,8 @@ from django.conf import settings
 from github import Github
 
 # App imports
-from ..models import EIP
-from ..utils import parse_eip_details
+from eip.models import EIP
+from github_client.utils import parse_eip_details
 
 
 class GitHubEIP:

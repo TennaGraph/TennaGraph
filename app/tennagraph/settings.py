@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'stance',
     'influencer',
     'twitter_client',
+    'github_client',
     'corsheaders',
     'django_cleanup',
 ]

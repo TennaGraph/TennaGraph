@@ -8,7 +8,7 @@ from django.db import transaction
 from celery import task
 
 # App imports
-from .services import GitHubEIP
+from github_client.services import GitHubEIP
 from .models import EIP
 
 

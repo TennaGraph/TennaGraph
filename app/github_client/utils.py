@@ -3,7 +3,7 @@ import io
 from datetime import datetime
 
 # App imports
-from .models import EIP
+from eip.models import EIP
 
 
 def parse_eip_details(content):

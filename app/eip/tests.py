@@ -7,8 +7,8 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 
 # App imports
-from .services import GitHubEIP
-from .utils import parse_eip_details
+from github_client.services import GitHubEIP
+from github_client.utils import parse_eip_details
 from .models import EIP
 from .tasks import fetch_eips_from_official_repo
 
