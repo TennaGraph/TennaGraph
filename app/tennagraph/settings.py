@@ -204,6 +204,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # Git Hub
 GITHUB_USERNAME = os.environ.get('GITHUB_USERNAME')
 GITHUB_PASSWORD = os.environ.get('GITHUB_PASSWORD')
+GITHUB_DB_REPO = os.environ.get('GITHUB_DB_REPO')
 
 # Celery application definition
 # http://docs.celeryproject.org/en/v4.1.0/userguide/configuration.html

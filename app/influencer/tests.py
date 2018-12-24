@@ -7,6 +7,7 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 
 # Project imports
+from system.models import SystemSettings
 from bin.create_settings_seeds import create_system_settings
 
 # App imports
@@ -21,7 +22,11 @@ class HiveOneServiceTestCase(APITestCase):
 
     def setUp(self):
         self.ho = HiveOne()
-        create_system_settings()
+        self.create_system_settings_if_needed()
+
+    def create_system_settings_if_needed(self):
+        if SystemSettings.objects.count() == 0:
+            create_system_settings()
 
     def test_should_load_influencers(self):
         influencers, ranked_at = self.ho.load_influencers()

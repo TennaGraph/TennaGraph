@@ -1,6 +1,9 @@
 # Stdlib imports
 from decimal import Decimal
 
+# Django imports
+from django.conf import settings
+
 # Pip imports
 from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
@@ -9,6 +12,7 @@ from rest_framework import status
 # Project imports
 from eip.models import EIP
 from influencer.models import Influencer
+from github_client.services import GitHubDB
 
 # App imports
 from .models import Stance
@@ -19,6 +23,7 @@ class StancesClientAPITestCase(APITestCase):
 
     eip = None
     eip2 = None
+    gh = None
 
     def setUp(self):
         eip_dict = {
@@ -60,6 +65,10 @@ class StancesClientAPITestCase(APITestCase):
         self.eip = EIP.objects.create(**eip_dict)
         self.eip2 = EIP.objects.create(**eip2_dict)
         self.influencer = Influencer.objects.create(**influencer)
+        self.gh = GitHubDB()
+
+        # Clear repo before run tests
+        self.gh.delete_repo_content()
 
     def test_should_return_empty_list_of_stances(self):
         url = reverse("stance:stance")
@@ -136,6 +145,8 @@ class StancesClientAPITestCase(APITestCase):
 
         response = self.client.get(url, format='json')
 
+        # print("RESPONSE: {}".format(response.status_code))
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(isinstance(response.data, list))
 
@@ -171,6 +182,29 @@ class StancesClientAPITestCase(APITestCase):
         self.assertEqual(stance_response['choice']['key'], stance_dict['choice'])
         self.assertEqual(stance_response['status']['key'], 'PENDING')
 
+        # should exists on github repo
+        stance = Stance.objects.get(id=stance_response['id'])
+        is_exists = self.gh.is_model_exists(stance)
+        self.assertTrue(is_exists)
+
+    def test_should_raise_git_hub_error(self):
+        correct_git_hub_pass = settings.GITHUB_PASSWORD
+        settings.GITHUB_PASSWORD = 'not right pass'
+        stance_dict = {
+            'author': '@malkevych',
+            'proof_url': 'https://google.com',
+            'choice': Stance.YAY,
+            'eip_id': self.eip.id,
+        }
+
+        url = reverse("stance:stance")
+        response = self.client.post(url, data=stance_dict, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # set back right password
+        settings.GITHUB_PASSWORD = correct_git_hub_pass
+
     def test_should_create_new_stance_with_influencer(self):
         stance_dict = {
             'author': '@maLkEvyCh',
@@ -194,3 +228,8 @@ class StancesClientAPITestCase(APITestCase):
         self.assertEqual(stance_response['proof_url'],                  stance_dict['proof_url'])
         self.assertEqual(stance_response['choice']['key'],              stance_dict['choice'])
         self.assertEqual(stance_response['status']['key'],              'PENDING')
+
+        # should exists on github repo
+        stance = Stance.objects.get(id=stance_response['id'])
+        is_exists = self.gh.is_model_exists(stance)
+        self.assertTrue(is_exists)

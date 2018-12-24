@@ -1,11 +1,16 @@
+# Django imports
+from django.db import transaction
+
 # Pip imports
 from rest_framework import serializers
+from github.GithubException import GithubException
 
 # Project imports
 from base.utils import ChoiceDisplayField
 from influencer.models import Influencer
 from influencer.serializers import InfluencerSerializer
 from twitter_client.utils import weather_is_twitter_link
+from github_client.services import GitHubDB
 
 # App imports
 from ..models import Stance
@@ -28,6 +33,18 @@ class StanceSerializer(serializers.ModelSerializer):
     """
     Validators
     """
+
+    @transaction.atomic
+    def create(self, validated_data):
+        stance = Stance.objects.create(**validated_data)
+        gh_db = GitHubDB()
+
+        try:
+            gh_db.create(stance, "An user of platform")
+        except GithubException as ex:
+            raise serializers.ValidationError("{}".format(ex.data.get('message')))
+
+        return stance
 
     def validate_author(self, author):
         return author.replace('@', '')

@@ -5,9 +5,10 @@ from django.db import models
 from base.models import TimeStampedModel
 from eip.models import EIP
 from influencer.models import Influencer
+from github_client.abstract import GitHubCompatible
 
 
-class Stance(TimeStampedModel):
+class Stance(TimeStampedModel, GitHubCompatible):
 
     YAY     = 'YAY'
     NAY     = 'NAY'
@@ -67,6 +68,20 @@ class Stance(TimeStampedModel):
 
     eip                 = models.ForeignKey(EIP, on_delete=models.CASCADE)
 
+    """
+    
+    """
+
+    def git_options(self):
+        from ..serializers import StanceSerializer
+
+        return {
+            'folder': 'stances',
+            'serializer': StanceSerializer
+        }
+
+    def git_fields(self):
+        pass
 
 
 

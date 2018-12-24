@@ -1,0 +1,1 @@
+from .github_compatible import GitHubCompatible
