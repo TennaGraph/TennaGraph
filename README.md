@@ -4,14 +4,14 @@
 - create file with name `.env` in `app` directory (TennaGraph/app/) with such info:
 
 
-GITHUB_USERNAME=Your username on github<br />
+GITHUB_USERNAME=Your username on github (disable 2FA)<br />
 GITHUB_PASSWORD=Your password on github<br />
-TWITTER_CONSUMER_KEY=<br />
-TWITTER_CONSUMER_SECRET_KEY=<br />
-TWITTER_ACCESS_TOKEN_KEY=<br />
-TWITTER_ACCESS_TOKEN_SECRET_KEY=<br />
+TWITTER_CONSUMER_KEY=See below<br />
+TWITTER_CONSUMER_SECRET_KEY=See below<br />
+TWITTER_ACCESS_TOKEN_KEY=See below<br />
+TWITTER_ACCESS_TOKEN_SECRET_KEY=See below<br />
 
-To get credentials for twitter, please, follow the instructions:
+To get credentials for twitter, please, follow the instructions:<br />
 https://python-twitter.readthedocs.io/en/latest/getting_started.html
 
 - install Docker Engine
