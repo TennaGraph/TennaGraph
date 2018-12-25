@@ -16,6 +16,7 @@ from github_client.services import GitHubDB
 
 # App imports
 from .models import Stance
+from .tasks import check_availability_proofs_of_stances
 
 
 
@@ -233,3 +234,26 @@ class StancesClientAPITestCase(APITestCase):
         stance = Stance.objects.get(id=stance_response['id'])
         is_exists = self.gh.is_model_exists(stance)
         self.assertTrue(is_exists)
+
+    def test_should_delete_stance_if_twitter_status_is_not_exist(self):
+        self.assertFalse(Stance.objects.exists())
+
+        stance_dict = {
+            'author': '@maLkEvyCh',
+            'proof_url': 'https://twitter.com/bomalkevych/status/1077261352585043969',
+            'choice': Stance.YAY,
+            'eip_id': self.eip.id,
+        }
+
+        url = reverse("stance:stance")
+        response = self.client.post(url, data=stance_dict, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(Stance.objects.exists())
+
+        check_availability_proofs_of_stances()
+
+        self.assertFalse(Stance.objects.exists())
+
+
+
