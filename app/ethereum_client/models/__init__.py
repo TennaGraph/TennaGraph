@@ -1,0 +1,1 @@
+from .eth_voter import EthVoter

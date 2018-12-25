@@ -1,6 +1,7 @@
 # Pip imports
 import requests
 
+
 class RequestMaker(object):
 
     base_url = None
