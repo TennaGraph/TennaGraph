@@ -74,15 +74,3 @@ def check_availability_proofs_of_stances():
 
         except Exception as ex:
             logger.error("Can't {} Stance with id '{}', cause the error occurred: '{}'".format(operation, stance.id, ex))
-
-
-
-
-
-
-
-
-
-
-
-
