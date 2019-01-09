@@ -1,12 +1,16 @@
+# Django imports
+from django.conf import settings
+
 # Pip imports
 import requests
+
 
 
 class RequestMaker(object):
 
     base_url = None
 
-    def __init__(self, base_url=''):
+    def __init__(self, base_url=settings.BLOCKSCOUT_BASE_URL):
         self.base_url = base_url
 
     def get(self, payload):
@@ -27,7 +31,7 @@ class BlocksCoutClient(object):
     def __init__(self, request_maker=RequestMaker()):
         self.request_maker = request_maker
 
-    def load_transactions(self, address, start_block, end_block):
+    def load_transactions(self, address, start_block, end_block=None):
         """
         Loads transactions for specific address
 
@@ -41,7 +45,9 @@ class BlocksCoutClient(object):
             'action': 'txlist',
             'address': address,
             'startblock': start_block,
-            'endblock': end_block,
         }
+        if end_block:
+            payload['endblock'] = end_block
+
         return self.request_maker.get(payload)
 

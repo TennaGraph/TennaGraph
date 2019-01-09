@@ -218,7 +218,10 @@ CELERY_TIMEZONE = TIME_ZONE
 
 UPDATE_EIPS_PER_SECONDS = int(os.environ.get('UPDATE_EIPS_PER_SECONDS'))
 UPDATE_INFLUENCERS_PER_SECONDS = int(os.environ.get('UPDATE_INFLUENCERS_PER_SECONDS'))
-UPDATE_PROOFS_AVAILABILITY_RER_SECONDS = int(os.environ.get('UPDATE_PROOFS_AVAILABILITY_RER_SECONDS'))
+UPDATE_PROOFS_AVAILABILITY_PER_SECONDS = int(os.environ.get('UPDATE_PROOFS_AVAILABILITY_PER_SECONDS'))
+FETCH_TRANSACTIONS_PER_SECONDS = int(os.environ.get('FETCH_TRANSACTIONS_PER_SECONDS'))
+LOAD_VOTING_DETAILS_PER_SECONDS = 60
+LOAD_VOTES_PER_SECONDS = 60
 
 CELERY_BEAT_SCHEDULE = {
     'fetch_eips_from_official_repo': {
@@ -231,7 +234,19 @@ CELERY_BEAT_SCHEDULE = {
     },
     'check_availability_proofs_of_stances': {
         'task': 'stance.tasks.check_availability_proofs_of_stances',
-        'schedule': schedule(run_every=UPDATE_PROOFS_AVAILABILITY_RER_SECONDS),
+        'schedule': schedule(run_every=UPDATE_PROOFS_AVAILABILITY_PER_SECONDS),
+    },
+    'gas_voting_fetch_transactions_info': {
+        'task': 'ethereum_client.tasks.fetch_transactions_info',
+        'schedule': schedule(run_every=FETCH_TRANSACTIONS_PER_SECONDS),
+    },
+    'load_voting_details_logs': {
+        'task': 'ethereum_client.tasks.load_voting_details_logs',
+        'schedule': schedule(run_every=LOAD_VOTING_DETAILS_PER_SECONDS),
+    },
+    'load_votes': {
+        'task': 'ethereum_client.tasks.load_votes',
+        'schedule': schedule(run_every=LOAD_VOTES_PER_SECONDS),
     },
 }
 
@@ -328,3 +343,7 @@ TWITTER_CONSUMER_SECRET_KEY = os.environ.get('TWITTER_CONSUMER_SECRET_KEY')
 TWITTER_ACCESS_TOKEN_KEY = os.environ.get('TWITTER_ACCESS_TOKEN_KEY')
 TWITTER_ACCESS_TOKEN_SECRET_KEY = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET_KEY')
 
+# Ethereum
+ETHEREUM_URL_WEB3_PROVIDER = os.environ.get('ETHEREUM_URL_WEB3_PROVIDER')
+BLOCKSCOUT_BASE_URL = os.environ.get('BLOCKSCOUT_BASE_URL')
+VOTING_MANAGER_CONTRACT_ADDRESS = os.environ.get('VOTING_MANAGER_CONTRACT_ADDRESS')

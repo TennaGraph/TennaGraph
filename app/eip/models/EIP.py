@@ -3,6 +3,7 @@ from django.db import models
 
 # Project imports
 from base.models import TimeStampedModel
+from ethereum_client.models import VotingDetailsLog
 
 
 class EIP(TimeStampedModel):
@@ -152,6 +153,9 @@ class EIP(TimeStampedModel):
     eip_created     = models.DateField(null=True, blank=True)
 
     eip_created_raw = models.CharField(max_length=100, null=True, blank=True)
+
+    # Info weather voinvoting and gasvoting is enabled
+    voting_details  = models.ForeignKey(VotingDetailsLog, null=True, blank=True, on_delete=models.SET_NULL)
 
 
     def __str__(self):

@@ -36,7 +36,7 @@ app = Celery('signals')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django app configs.
-app.autodiscover_tasks(['eip', 'influencer', 'stance'])
+app.autodiscover_tasks(['eip', 'influencer', 'stance', 'ethereum_client'])
 
 
 @app.task(bind=True)

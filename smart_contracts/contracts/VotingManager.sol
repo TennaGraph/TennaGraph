@@ -60,6 +60,10 @@ contract AuthorizedContracts {
  */
 contract VotingManager is Ownable, AuthorizedContracts {
 
+    event VotingDetails(uint proposalId, bool isVotingOpen);
+    event Vote(uint proposalId, address indexed voter, uint8 selectedOption);
+
+
     struct Voter {
         bool voted;
         uint8 selectedOption;
@@ -102,6 +106,8 @@ contract VotingManager is Ownable, AuthorizedContracts {
 
         proposals[_proposalId] = proposal;
         proposalsCount += 1;
+
+        emit VotingDetails(_proposalId, _isVotingOpen);
     }
 
     function changeProposalStatus(uint _proposalId, bool _isVotingOpen) onlyOwner public {
@@ -111,6 +117,8 @@ contract VotingManager is Ownable, AuthorizedContracts {
         require(proposal.isVotingOpen != _isVotingOpen, 'Proposal already has this status');
 
         proposal.isVotingOpen = _isVotingOpen;
+
+        emit VotingDetails(_proposalId, _isVotingOpen);
     }
 
     /// Give a single vote to proposal.
@@ -132,6 +140,8 @@ contract VotingManager is Ownable, AuthorizedContracts {
         }
 
         voter.selectedOption = _selectedOption;
+
+        emit Vote(_proposalId, _sender, _selectedOption);
     }
 
     function votingResults(uint _proposalId) public view returns (uint[] memory) {

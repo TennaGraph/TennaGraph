@@ -1,37 +1,35 @@
+# Django imports
+from django.conf import settings
+
 # Pip imports
 from rest_framework.test import APITestCase
 
 # App imports
-from .services import EthereumClient
 from .services import BlocksCoutClient
+from .services import EthereumClient
 from .services.blockscout_client import RequestMaker as BlocksCoutRequestMaker
+from .tasks import fetch_transactions_info
+from .tasks import load_voting_details_logs
+from .tasks import load_votes
+from .models import EthVoter
+from .models import VoteLog
+from .models import VotingDetailsLog
+from .contracts import VotingManagerContract
 
+# Project imports
+from eip.models import EIP
 
-# class EthereumClientTestCase(APITestCase):
-#
-#     eth_client = None
-#
-#     def setUp(self):
-#         self.eth_client = EthereumClient()
-#
-#
-# class EthereumUtilsTestCase(APITestCase):
-#     eth_client = None
-#
-#     def setUp(self):
-#         self.eth_client = EthereumClient()
-#
-#     def test_should_find_nearest_block_with_first_transaction(self):
-#         pass
-#
 
 
 class BlocksCoutClientTestCase(APITestCase):
 
     blockscout_client = None
 
+    blockscout_base_url = 'https://blockscout.com/eth/rinkeby/api'
+
     def setUp(self):
-        request_maker = BlocksCoutRequestMaker(base_url='https://blockscout.com/eth/rinkeby/api')
+        settings.BLOCKSCOUT_BASE_URL = self.blockscout_base_url
+        request_maker = BlocksCoutRequestMaker(base_url=self.blockscout_base_url)
         self.blockscout_client = BlocksCoutClient(request_maker)
 
     def test_should_load_at_least_one_tx(self):
@@ -77,8 +75,122 @@ class BlocksCoutClientTestCase(APITestCase):
         self.assertEqual(oldest_tx['cumulativeGasUsed'],    raw_tx['cumulativeGasUsed'])
         self.assertEqual(oldest_tx['blockHash'],            raw_tx['blockHash'])
 
+    def test_should_load_right_amount_of_gas(self):
+        voter_raw = {
+            'address': '0xc116fBb7453514e1ee545974DFC1796c704E1365',
+        }
+        EthVoter.objects.create(**voter_raw)
+        voters = EthVoter.objects.all()
+        voter = voters[0]
+        self.assertEqual(len(voters), 1)
+        self.assertEqual(voter.used_gas, 0)
+
+        fetch_transactions_info()
+
+        voter = EthVoter.objects.get(id=voter.id)
+        # This is gas of each transactions on https://rinkeby.etherscan.io/address/0xc116fbb7453514e1ee545974dfc1796c704e1365
+        # Last transaction was made on block: 3488294
+        gas_used = 30731 + 25256 + 129833 + 773419 + 129833 + 773419 + 788419 + 1884894 + 1873560 + 21000
+        self.assertGreaterEqual(voter.used_gas, gas_used)
 
 
 
 
+class VotingManagerContractTestCase(APITestCase):
+
+    ethereum_provider_url = 'wss://rinkeby.infura.io/ws'
+
+    voting_manager_address = '0x4B97C18916F288A4b0A6a14ed7732031395b8f7F'
+
+    contract_deploy_block = 3620085
+
+    voting_manager = None
+
+    def setUp(self):
+        self.eth_client = EthereumClient(self.ethereum_provider_url)
+        self.voting_manager = VotingManagerContract(self.eth_client, address=self.voting_manager_address)
+
+    def test_should_load_more_than_0_votes_logs(self):
+
+        events = list(self.voting_manager.load_votes_logs(from_block=self.contract_deploy_block))
+        event = events[0]
+
+        self.assertGreaterEqual(len(events), 1)
+
+        self.assertEqual(event.get('proposal_id'), 20)
+        self.assertEqual(event.get('voter'), '0xc116fBb7453514e1ee545974DFC1796c704E1365')
+        self.assertEqual(event.get('selected_option'), 1)
+
+    def test_should_load_more_than_0_voting_details_logs(self):
+
+        events = list(self.voting_manager.load_voting_details_logs(from_block=self.contract_deploy_block))
+        event = events[0]
+
+        self.assertGreaterEqual(len(events), 1)
+
+        self.assertEqual(event.get('proposal_id'), 20)
+        self.assertIsNotNone(event.get('is_voting_open', None))
+
+    def test_should_load_voting_details_logs(self):
+        eip_dict = {
+            'eip_num': '20',
+            'eip_title': 'Title of EIP',
+            'eip_status': EIP.ACTIVE,
+            'eip_type': EIP.INFORMATIONAL,
+            'eip_category': EIP.ERC,
+            'eip_authors': 'Authors here',
+            'eip_created': '2015-10-27',
+
+            'file_name': 'File name here',
+            'file_download_url': 'https://google.com.ua/',
+            'file_content': 'Here markdown text from md file',
+            'file_sha': '0xjsfidsfseuiui34893hbsfo2i2ifeg',
+        }
+        EIP.objects.create(**eip_dict)
+        logs_count = VotingDetailsLog.objects.count()
+        self.assertEqual(logs_count, 0)
+
+        load_voting_details_logs()
+
+        eip = EIP.objects.get(eip_num=eip_dict['eip_num'])
+        logs_count = VotingDetailsLog.objects.count()
+
+        self.assertGreaterEqual(logs_count, 1)
+        self.assertIsNotNone(eip.voting_details)
+        self.assertGreaterEqual(eip.voting_details.block_number, 3620085)
+        self.assertGreaterEqual(eip.voting_details.block_number, 3620085)
+        self.assertIsNotNone(eip.voting_details.is_voting_open)
+
+    def test_should_load_votes_logs(self):
+        logs_count = VoteLog.objects.count()
+        voters_count = EthVoter.objects.count()
+        self.assertEqual(logs_count, 0)
+        self.assertEqual(voters_count, 0)
+
+        load_votes()
+
+        logs_count = VoteLog.objects.count()
+        voters_count = EthVoter.objects.count()
+        self.assertGreaterEqual(logs_count, 1)
+        self.assertEqual(voters_count, 1)
+
+        # check weather it is not storing duplicates
+        load_votes()
+
+        logs_count2 = VoteLog.objects.count()
+        voters_count2 = EthVoter.objects.count()
+        self.assertEqual(logs_count, logs_count2)
+        self.assertEqual(voters_count, voters_count2)
+
+    def test_should_not_load_logs_from_blocks_less_than_configured(self):
+        eth_client = EthereumClient()
+        voting_manager = VotingManagerContract(client=eth_client)
+
+        from_block = 3620132
+
+        logs = voting_manager.load_votes_logs(from_block=from_block)
+        logs = list(map(lambda l: VoteLog.objects.create(**l), logs))
+
+        for log in logs:
+            self.assertNotEqual(log.block_number, from_block)
 

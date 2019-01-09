@@ -2,7 +2,7 @@
 import logging
 from enum import Enum
 
-from web3 import Web3, HTTPProvider
+from web3 import Web3, HTTPProvider, WebsocketProvider
 from web3.middleware import geth_poa_middleware
 
 # Django imports
@@ -28,9 +28,9 @@ class EthereumClient(object):
     info = None
 
     def __init__(self, http_provider_url=ETHEREUM_URL_WEB3_PROVIDER):
-        self.connection = Web3(HTTPProvider(http_provider_url, request_kwargs={'timeout': 40}))
+        self.connection = Web3(WebsocketProvider(http_provider_url, websocket_timeout=40))
 
-        if settings.APP_ENV == 'production' or settings.APP_ENV == 'testing':
+        if settings.APP_ENV == 'production' or settings.APP_ENV == 'testing' or settings.APP_ENV == 'development':
             # for PoA and Rinkeby we have to add middleware
             self.connection.middleware_stack.inject(geth_poa_middleware, layer=0)
 
@@ -48,8 +48,19 @@ class EthereumClient(object):
 
         return node
 
+    def fetch_contract(self, abi, address):
+        return self.connection.eth.contract(address=address, abi=abi)
+
+    def blocks_count(self):
+        """
+        Returns number of blocks
+        :return: (Int)
+        """
+        return self.connection.eth.blockNumber
+
     def get_block(self, block_number='latest'):
-        """Get block data
+        """
+        Get block data
 
         Args:
             block_number (Optional[int]): block number, uses latest if not specified

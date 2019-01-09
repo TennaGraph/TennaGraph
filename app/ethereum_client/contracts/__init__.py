@@ -1,0 +1,1 @@
+from .voting_manager import VotingManagerContract
