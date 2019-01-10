@@ -49,7 +49,7 @@
         </v-flex>
       </v-layout>
 
-      <v-layout row class="mt-5 mb-0 pb-0" wrap v-if="votingResults.length > 0 && gasvotingResults.length > 0">
+      <v-layout row class="mt-5 mb-0 pb-0" wrap v-if="shouldDisplayCharts">
         <v-flex md3>
           <v-laylout column>
             <v-flex class="mb-3">
@@ -173,6 +173,15 @@
             color: "#DADADA"
           },
         ]
+      },
+      shouldDisplayCharts() {
+        if (this.votingResults.length === 0) return false;
+        for(let i=0; i<this.votingResults.length; i++) {
+          if (this.votingResults[i] !== 0) {
+            return true
+          }
+        }
+        return false
       }
     },
     methods: {

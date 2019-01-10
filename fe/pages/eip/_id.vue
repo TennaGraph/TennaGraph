@@ -19,7 +19,7 @@
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0">
-              Coinvoting
+              Coinvoting | Gasvoting
               <v-tooltip class="mx-2" right>
                 <v-icon color="grey" slot="activator">help</v-icon>
                 <span>Here is some tooltip text about coinvoting</span>
