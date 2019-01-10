@@ -40,7 +40,7 @@ https://python-twitter.readthedocs.io/en/latest/getting_started.html
 
 ## Smart Contract
 ### VotingManager (TestNet Rinkeby)
-address: 0x0abd7265B7166657Bc49F26AA20e5AD2e103BB92
+address: 0x342dF3b4190a6C6eBD0Dc69F4cC3f9deEE928c33
 
 # Smart-Contracts Suite
 Smart Contracts + Tests
