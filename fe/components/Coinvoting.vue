@@ -49,14 +49,14 @@
         </v-flex>
       </v-layout>
 
-      <v-layout row class="mt-5 mb-0 pb-0" wrap>
+      <v-layout row class="mt-5 mb-0 pb-0" wrap v-if="votingResults.length > 0 && gasvotingResults.length > 0">
         <v-flex md3>
           <v-laylout column>
             <v-flex class="mb-3">
               Coinvoting results
             </v-flex>
             <v-flex>
-              <apexchart v-if="votingResults.length > 0" type=donut :options="chartOptions" :series="votingResults"/>
+              <apexchart type=donut :options="chartOptions" :series="votingResults"/>
             </v-flex>
           </v-laylout>
         </v-flex>
@@ -66,7 +66,7 @@
               Gasvoting results
             </v-flex>
             <v-flex >
-              <apexchart v-if="votingResults.length > 0 && gasvotingResults.length > 0" type=donut :options="chartOptions" :series="gasvotingResults"/>
+              <apexchart type=donut :options="chartOptions" :series="gasvotingResults"/>
             </v-flex>
           </v-laylout>
         </v-flex>
