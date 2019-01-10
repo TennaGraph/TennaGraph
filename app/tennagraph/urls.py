@@ -32,5 +32,6 @@ urlpatterns = [
     path('eip/', include('eip.urls', namespace='eip')),
     path('stance/', include('stance.urls', namespace='stance')),
     path('influencer/', include('influencer.urls', namespace='influencer')),
+    path('ethereum/', include('ethereum_client.urls', namespace='ethereum_client')),
 ]
 

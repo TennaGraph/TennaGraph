@@ -82,6 +82,18 @@ export const actions = {
     }
   },
 
+  async loadEIPGasVoting({commit}, id) {
+    try {
+      const endpoint = 'ethereum/gas-voting/' + id + '/';
+      const data = await this.$axios.$get(endpoint);
+
+      return data;
+    } catch (e) {
+      console.error(e); // 💩
+      throw e;
+    }
+  },
+
   setFilterStatuses({commit}, filter) {
     commit(SET_STATUS_FILTER, filter);
   },

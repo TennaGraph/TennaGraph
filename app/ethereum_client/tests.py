@@ -3,6 +3,8 @@ from django.conf import settings
 
 # Pip imports
 from rest_framework.test import APITestCase
+from rest_framework.reverse import reverse
+from rest_framework import status
 
 # App imports
 from .services import BlocksCoutClient
@@ -193,4 +195,78 @@ class VotingManagerContractTestCase(APITestCase):
 
         for log in logs:
             self.assertNotEqual(log.block_number, from_block)
+
+
+
+class VotingResultsTestCase(APITestCase):
+
+
+    def test_should_retrieve_right_results(self):
+        proposal_id = 20
+        yay_address = '0xf883902811f21934ff9d930e18bdbabef7111111'
+        yay_used_gas = 12300
+        vote_yay = {
+            'voter': yay_address,
+            'selected_option': VoteLog.YAY,
+            'proposal_id': proposal_id,
+            'block_number': 399,
+        }
+        eth_voter_yay = {
+            'address': yay_address,
+            'last_block': 25,
+            'last_tx_hash': '0x0',
+            'used_gas': yay_used_gas,
+        }
+        VoteLog.objects.create(**vote_yay)
+        EthVoter.objects.create(**eth_voter_yay)
+
+
+        nay_address = '0xf883902811f21934ff9d930e18bdbabef7222222'
+        nay_used_gas = 3456435
+        vote_nay = {
+            'voter': nay_address,
+            'selected_option': VoteLog.NAY,
+            'proposal_id': proposal_id,
+            'block_number': 399,
+        }
+        eth_voter_nay = {
+            'address': nay_address,
+            'last_block': 25,
+            'last_tx_hash': '0x0',
+            'used_gas': nay_used_gas,
+        }
+        VoteLog.objects.create(**vote_nay)
+        EthVoter.objects.create(**eth_voter_nay)
+
+
+        abstain_address = '0xf883902811f21934ff9d930e18bdbabef7333333'
+        abstain_used_gas = 567734
+        vote_abstain = {
+            'voter': abstain_address,
+            'selected_option': VoteLog.ABSTAIN,
+            'proposal_id': proposal_id,
+            'block_number': 399,
+        }
+        eth_voter_abstain = {
+            'address': abstain_address,
+            'last_block': 25,
+            'last_tx_hash': '0x0',
+            'used_gas': abstain_used_gas,
+        }
+        VoteLog.objects.create(**vote_abstain)
+        EthVoter.objects.create(**eth_voter_abstain)
+
+
+        url = reverse("ethereum_client:gas_voting", kwargs={'proposal_id': proposal_id})
+
+        response = self.client.get(url, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(isinstance(response.data, dict))
+
+        eip_response = response.data
+
+        self.assertEqual(eip_response['yay'],         yay_used_gas)
+        self.assertEqual(eip_response['nay'],         nay_used_gas)
+        self.assertEqual(eip_response['abstain'],     abstain_used_gas)
 

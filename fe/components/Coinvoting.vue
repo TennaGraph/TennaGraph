@@ -18,7 +18,7 @@
     <v-layout column v-else>
       <p>Active since date {{ votingCreatedAt | formatDateTime }}</p>
       <v-layout row class="wrapper" wrap>
-        <v-flex xs9>
+        <v-flex xs12 md9>
           <v-layout row align-center justify-start v-for="decision in decisions" :key="decision.title">
             <v-flex xs2>
               <span class="text-truncate">
@@ -47,8 +47,28 @@
             </v-layout>
           </v-layout>
         </v-flex>
-        <v-flex xs3>
-          <apexchart v-if="votingResults.length > 0" type=donut :options="chartOptions" :series="votingResults"/>
+      </v-layout>
+
+      <v-layout row class="mt-5 mb-0 pb-0" wrap>
+        <v-flex md3>
+          <v-laylout column>
+            <v-flex class="mb-3">
+              Coinvoting results
+            </v-flex>
+            <v-flex>
+              <apexchart v-if="votingResults.length > 0" type=donut :options="chartOptions" :series="votingResults"/>
+            </v-flex>
+          </v-laylout>
+        </v-flex>
+        <v-flex md3>
+          <v-laylout column>
+            <v-flex class="mb-3">
+              Gasvoting results
+            </v-flex>
+            <v-flex >
+              <apexchart v-if="votingResults.length > 0 && gasvotingResults.length > 0" type=donut :options="chartOptions" :series="gasvotingResults"/>
+            </v-flex>
+          </v-laylout>
         </v-flex>
       </v-layout>
     </v-layout>
@@ -104,11 +124,13 @@
         isProposalExistsInVotingManager: undefined,
         proposalVotingInfo: undefined,
         votingResults: [],
-        isAddingProposal: false
+        isAddingProposal: false,
+        gasvotingResults: [],
       }
     },
-    created() {
-      this.initVotingManager()
+    async created() {
+      await this.initVotingManager()
+      await this.loadEIPGasVoting()
     },
     computed: {
       votingManagerAddress() {
@@ -175,6 +197,16 @@
             this.votingResults.push(parseInt(el))
           })
         } catch(e) {
+          this.setErrors(e.message)
+        }
+      },
+      async loadEIPGasVoting() {
+        try {
+          let result = await this.$store.dispatch('eip/loadEIPGasVoting', this.eipId);
+          this.gasvotingResults.push(result.yay);
+          this.gasvotingResults.push(result.nay);
+          this.gasvotingResults.push(result.abstain);
+        } catch (e) {
           this.setErrors(e.message)
         }
       },
