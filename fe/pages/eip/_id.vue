@@ -22,7 +22,7 @@
               Coinvoting | Gasvoting
               <v-tooltip class="mx-2" right>
                 <v-icon color="grey" slot="activator">help</v-icon>
-                <span>Here is some tooltip text about coinvoting</span>
+                <span>You don't have to send ETH to vote. Just make a transaction with 0 ETH.</span>
               </v-tooltip>
             </v-card-title>
             <coinvoting :eipId="eipId" :w3="w3"></coinvoting>
@@ -34,7 +34,7 @@
               Influencer Stances by Rank
               <v-tooltip class="mx-2" right>
                 <v-icon color="grey" slot="activator">help</v-icon>
-                <span>Here is some tooltip text about influencer stances</span>
+                <span>All influencers are sorted from top left to bottom right corner.</span>
               </v-tooltip>
               <v-spacer></v-spacer>
               <label class="body-1 chipTitle--text">Ranking stats by <a href="https://hive.one/ethereum" target="_blank">Hive.one</a></label>
@@ -65,6 +65,11 @@
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0">
               Add a stance
+              <v-tooltip class="mx-2" right>
+                <v-icon color="grey" slot="activator">help</v-icon>
+                <span>Your stance will be added right after passing review. All changes are stored on GitHub</span>
+              </v-tooltip>
+              <v-spacer></v-spacer>
             </v-card-title>
             <add-stance :eipId="eipId"></add-stance>
           </v-card>

@@ -7,7 +7,7 @@
           <v-layout align-center justify-center row fill-height>
           <v-flex lg6 sm8>
           <label class="caption font-weight-thin">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisinuli.
+            <b>Tennagraph</b> represents consensus among stakeholders on EIPs and community issues through the collection of on-chain and off-chain signals.
           </label>
           </v-flex>
           </v-layout>
