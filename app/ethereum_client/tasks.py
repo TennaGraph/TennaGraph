@@ -45,25 +45,23 @@ def fetch_transactions_info():
     for voter in voters:
         from_block = voter.last_block + 1
 
-
-        is_need_load_more = True
-        while is_need_load_more:
+        while True:
             try:
                 transactions = bc_client.load_transactions(voter.address, from_block)
-                is_need_load_more = len(transactions) >= max_transactions_per_request
+
                 if len(transactions) == 0:
-                    continue
+                    break
 
                 # get last transaction
                 last_tx = transactions[-1]
-                if is_need_load_more:
-                    from_block = last_tx.get('blockNumber') + 1
-
                 transactions_gas = list(map(lambda tx: int(tx.get('gasUsed')), transactions))
                 transactions_gas = reduce(operator.add, transactions_gas)
 
                 voter.append_used_gas(transactions_gas, last_tx)
                 voter.save()
+                from_block = voter.last_block
+                logger.error("Current from_block 1: {}".format(from_block))
+
             except Exception as ex:
                 logger.error("Error in bc_client.load_transactions: {}. voter.address: {}, from_block: {}".format(ex, voter.address, from_block))
 
