@@ -59,7 +59,7 @@ def fetch_transactions_info():
 
                 voter.append_used_gas(transactions_gas, last_tx)
                 voter.save()
-                from_block = voter.last_block
+                from_block = voter.last_block + 1
                 logger.error("Current from_block 1: {}".format(from_block))
 
             except Exception as ex:
