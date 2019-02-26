@@ -88,12 +88,16 @@ class BlocksCoutClientTestCase(APITestCase):
         self.assertEqual(voter.used_gas, 0)
 
         fetch_transactions_info()
-
         voter = EthVoter.objects.get(id=voter.id)
+
+        fetch_transactions_info()
+        voter2 = EthVoter.objects.get(id=voter.id)
+
         # This is gas of each transactions on https://rinkeby.etherscan.io/address/0xc116fbb7453514e1ee545974dfc1796c704e1365
         # Last transaction was made on block: 3488294
         gas_used = 30731 + 25256 + 129833 + 773419 + 129833 + 773419 + 788419 + 1884894 + 1873560 + 21000
         self.assertGreaterEqual(voter.used_gas, gas_used)
+        self.assertEqual(voter.used_gas, voter2.used_gas)
 
 
 

@@ -43,22 +43,27 @@ def fetch_transactions_info():
     bc_client = BlocksCoutClient()
 
     for voter in voters:
-        from_block = ++voter.last_block
+        from_block = voter.last_block + 1
+
 
         is_need_load_more = True
         while is_need_load_more:
-            transactions = bc_client.load_transactions(voter.address, from_block)
+            try:
+                transactions = bc_client.load_transactions(voter.address, from_block)
+                is_need_load_more = len(transactions) >= max_transactions_per_request
+                if len(transactions) == 0:
+                    continue
 
-            # get last transaction
-            last_tx = transactions[-1]
-            is_need_load_more = len(transactions) >= max_transactions_per_request
+                # get last transaction
+                last_tx = transactions[-1]
 
-            transactions_gas = list(map(lambda tx: int(tx.get('gasUsed')), transactions))
-            transactions_gas = reduce(operator.add, transactions_gas)
+                transactions_gas = list(map(lambda tx: int(tx.get('gasUsed')), transactions))
+                transactions_gas = reduce(operator.add, transactions_gas)
 
-            voter.append_used_gas(transactions_gas, last_tx)
-            voter.save()
-
+                voter.append_used_gas(transactions_gas, last_tx)
+                voter.save()
+            except Exception as ex:
+                logger.error("Error in bc_client.load_transactions: {}. voter.address: {}, from_block: {}".format(ex, voter.address, from_block))
 
 @task()
 def load_voting_details_logs():

@@ -18,7 +18,7 @@ class GitHubDB:
 
     gh = None
 
-    branch = 'test' #'master'
+    branch = settings.GITHUB_DB_BRANCH
 
     def __init__(self):
         self.gh = Github(settings.GITHUB_USERNAME, settings.GITHUB_PASSWORD)

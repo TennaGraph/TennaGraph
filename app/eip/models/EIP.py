@@ -138,24 +138,26 @@ class EIP(TimeStampedModel):
     file_content        = models.TextField()
     file_sha            = models.CharField(max_length=100)
 
-    eip_num         = models.CharField(max_length=10)
+    eip_num         = models.CharField(max_length=10, unique=True)
     eip_title       = models.CharField(max_length=225)
     eip_status      = models.CharField(max_length=30, choices=PROPOSAL_STATUSES)
     eip_type        = models.CharField(max_length=30, choices=TYPES)
 
     # only required for Standard Track
-    eip_category    = models.CharField(max_length=30, choices=CATEGORIES, null=True, blank=True)
+    eip_category        = models.CharField(max_length=30, choices=CATEGORIES, null=True, blank=True)
 
     # Authors can be in not correct format, so it is parsed as string
-    eip_authors     = models.CharField(max_length=255)
+    eip_authors         = models.CharField(max_length=255)
 
     # Date can be in not correct format, so it is parsed as string
-    eip_created     = models.DateField(null=True, blank=True)
+    eip_created         = models.DateField(null=True, blank=True)
 
-    eip_created_raw = models.CharField(max_length=100, null=True, blank=True)
+    eip_created_raw     = models.CharField(max_length=100, null=True, blank=True)
 
-    # Info weather voinvoting and gasvoting is enabled
-    voting_details  = models.ForeignKey(VotingDetailsLog, null=True, blank=True, on_delete=models.SET_NULL)
+    # Info weather coinvoting and gasvoting is enabled
+    voting_details      = models.ForeignKey(VotingDetailsLog, null=True, blank=True, on_delete=models.SET_NULL)
+
+    is_voting_active    = models.BooleanField(default=False)
 
 
     def __str__(self):

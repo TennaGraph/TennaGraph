@@ -9,7 +9,7 @@ from ..models import EIP
 
 class EIPAPIView(generics.RetrieveAPIView):
 
-    lookup_field = 'pk'
+    lookup_field = 'eip_num'
     permission_classes = [permissions.AllowAny]
     serializer_class = EIPSerializer
     queryset = EIP.objects.all()

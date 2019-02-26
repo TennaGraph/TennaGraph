@@ -27,10 +27,10 @@
       </v-list-tile>
       <v-divider></v-divider>
       <v-list-tile
-        v-for="(item, index) in statusGroups"
+        v-for="item in statusGroups"
         :key="item.text"
       >
-        <v-list-tile-action @click='toggleGroup(index)'>
+        <v-list-tile-action @click='toggleStatus'>
           <v-checkbox
             v-model="item.checkbox"
           >
@@ -49,17 +49,16 @@
     data() {
       return {
         statuses: [
-          {text: 'Draft', key: 'DRAFT', 'checkbox': true, 'isActiveStatus': true},
-          {text: 'Active', key: 'ACTIVE', 'checkbox': true, 'isActiveStatus': true},
-          {text: 'Last call', key: 'LAST_CALL', 'checkbox': true, 'isActiveStatus': true},
-          {text: 'Replaced', key: 'REPLACED', 'checkbox': true, 'isActiveStatus': true},
-          {text: 'Accepted', key: 'ACCEPTED', 'checkbox': true, 'isActiveStatus': true},
-          {text: 'Final', key: 'FINAL', 'checkbox': true, 'isActiveStatus': true},
-          {text: 'Deferred', key: 'DEFERRED', 'checkbox': true, 'isActiveStatus': false},
+          {text: 'Draft', key: 'DRAFT', 'checkbox': true},
+          {text: 'Active', key: 'ACTIVE', 'checkbox': true},
+          {text: 'Last call', key: 'LAST_CALL', 'checkbox': true},
+          {text: 'Replaced', key: 'REPLACED', 'checkbox': true},
+          {text: 'Accepted', key: 'ACCEPTED', 'checkbox': true},
+          {text: 'Final', key: 'FINAL', 'checkbox': true},
+          {text: 'Deferred', key: 'DEFERRED', 'checkbox': true},
         ],
         statusGroups: [
-          {text: 'Active', 'checkbox': true},
-          {text: 'Deferred', 'checkbox': true},
+          {text: 'Only active voting', key: 'ONLY_ACTIVE_VOTING', 'checkbox': false},
         ],
       }
     },
@@ -67,30 +66,13 @@
       this.setFilter()
     },
     computed: {
-      isActiveGroup() {
-        const isActive = (result, curr) => !((curr.isActiveStatus && !curr.checkbox) || !result);
-        return this.statuses.reduce(isActive, true)
-      },
-
-      isDeferredGroup() {
-        const isActive = (result, curr) => !((!curr.isActiveStatus && !curr.checkbox) || !result);
-        return this.statuses.reduce(isActive, true)
-      },
-
       isFilterEnabled() {
-        return !this.isActiveGroup || !this.isDeferredGroup;
+        const isActive = (result, curr) => !((curr.isActiveStatus && !curr.checkbox) || !result);
+
+        return this.statuses.reduce(isActive, true) || this.statusGroups.reduce(isActive, true);
       }
     },
     methods: {
-      toggleGroup(index) {
-        const isActive = index === 0;
-        const newValue = this.statusGroups[index].checkbox;
-
-        this.statuses.filter(item => item.isActiveStatus === isActive).forEach(item => item.checkbox = newValue)
-
-        // update v-model
-        this.$emit('input', this.createVModelStatuses())
-      },
 
       toggleStatus() {
         // update v-model
@@ -98,9 +80,10 @@
       },
 
       createVModelStatuses() {
+        const options = this.statuses.concat(this.statusGroups);
         return {
           isEnabled: this.isFilterEnabled,
-          keys: this.statuses.filter(item => item.checkbox).map(item => item.key),
+          keys: options.filter(item => item.checkbox).map(item => item.key),
         }
       },
 
@@ -111,15 +94,6 @@
         })
       }
     },
-    watch: {
-      isActiveGroup(newValue) {
-        this.statusGroups[0].checkbox = newValue
-      },
-
-      isDeferredGroup(newValue) {
-        this.statusGroups[1].checkbox = newValue
-      },
-    }
   }
 </script>
 

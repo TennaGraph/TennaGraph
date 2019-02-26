@@ -67,7 +67,7 @@
 
           <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
           <template slot="items" slot-scope="props">
-            <tr class="eip_tr" @click="$router.push({ path: '/eip/' + props.item.id })">
+            <tr class="eip_tr" @click="$router.push({ path: '/eip/' + props.item.eip_num })">
               <td class="body-1 py-3">{{ props.item.eip_num }}</td>
               <td class="body-1 py-3">{{ props.item.eip_title }}</td>
 
@@ -183,7 +183,12 @@
         // Filter by status
         if(this.statusFilter && this.statusFilter.isEnabled) {
           const filterKeys = this.statusFilter.keys;
-          eips = eips.filter(item => filterKeys.includes(item.eip_status.key))
+          const keysExceptActiveVoting = filterKeys.filter(item => item !== 'ONLY_ACTIVE_VOTING');
+          if(filterKeys.length > keysExceptActiveVoting.length) {
+            eips = eips.filter(item => item.is_voting_active)
+          }
+
+          eips = eips.filter(item => keysExceptActiveVoting.includes(item.eip_status.key))
         }
 
         // Filter by type / category

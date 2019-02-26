@@ -51,24 +51,24 @@
 
       <v-layout row class="mt-5 mb-0 pb-0" wrap v-if="shouldDisplayCharts">
         <v-flex md3>
-          <v-laylout column>
+          <v-layout column>
             <v-flex class="mb-3">
               Coinvoting results
             </v-flex>
             <v-flex>
               <apexchart type=donut :options="chartOptions" :series="votingResults"/>
             </v-flex>
-          </v-laylout>
+          </v-layout>
         </v-flex>
         <v-flex md3>
-          <v-laylout column>
+          <v-layout column>
             <v-flex class="mb-3">
               Gasvoting results
             </v-flex>
             <v-flex >
               <apexchart type=donut :options="chartOptions" :series="gasvotingResults"/>
             </v-flex>
-          </v-laylout>
+          </v-layout>
         </v-flex>
       </v-layout>
     </v-layout>
@@ -86,7 +86,7 @@
   import truffleContract from 'truffle-contract'
 
   export default {
-    name: "coinvoting",
+    name: "Coinvoting",
     mixins: [
       commonErrorsMixin,
       successAlertsMixin,

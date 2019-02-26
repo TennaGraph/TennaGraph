@@ -43,6 +43,7 @@ services:
       # GITHUB_USERNAME: ''
       # GITHUB_PASSWORD: ''
       GITHUB_DB_REPO: 'TennaGraph/TannaGraphDB_Test'
+      GITHUB_DB_BRANCH: 'test'
       # AWS
       AWS_DEFAULT_REGION: 'eu-west-1'
       AWS_BUCKET: 'eth-signals'

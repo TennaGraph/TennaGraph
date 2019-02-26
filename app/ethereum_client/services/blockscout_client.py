@@ -17,11 +17,19 @@ class RequestMaker(object):
         headers = {'Content-Type': 'application/json'}
         r = requests.get(self.base_url, params=payload, headers=headers)
         response_raw = r.json()
+        if response_raw.get('status') == '1':
+            return response_raw.get('result')
 
-        if not response_raw.get('status') == '1':
-            raise Exception(response_raw.get('message'))
+        if not response_raw.get('status') == '0':
+            message = response_raw.get('message')
+            if message == "No transactions found":
+                return []
+            else:
+              raise Exception(message)
 
-        return response_raw.get('result')
+        return []
+
+
 
 
 class BlocksCoutClient(object):
@@ -49,5 +57,10 @@ class BlocksCoutClient(object):
         if end_block:
             payload['endblock'] = end_block
 
-        return self.request_maker.get(payload)
+        try:
+            return self.request_maker.get(payload)
+        except Exception as ex:
+            print("ex: {}".format(type(ex)))
+            return []
+
 

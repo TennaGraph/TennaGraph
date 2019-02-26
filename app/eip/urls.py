@@ -6,5 +6,5 @@ app_name = 'eip'
 
 urlpatterns = [
     path('', views.EIPsAPIView.as_view(), name='eip'),
-    path('<str:pk>/', views.EIPAPIView.as_view(), name='eip_retrieve')
+    path('<str:eip_num>/', views.EIPAPIView.as_view(), name='eip_retrieve')
 ]
