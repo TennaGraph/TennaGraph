@@ -56,6 +56,8 @@ def fetch_transactions_info():
 
                 # get last transaction
                 last_tx = transactions[-1]
+                if is_need_load_more:
+                    from_block = last_tx.get('blockNumber') + 1
 
                 transactions_gas = list(map(lambda tx: int(tx.get('gasUsed')), transactions))
                 transactions_gas = reduce(operator.add, transactions_gas)
