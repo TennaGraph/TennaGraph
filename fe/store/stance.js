@@ -15,10 +15,10 @@ export const mutations = {
 };
 
 export const actions = {
-  async loadStances({commit}, eipId) {
+  async loadStances({commit}, eipNum) {
     try {
-      const endpoint = 'stance?eip_id='+eipId
-      const data = await this.$axios.$get(endpoint, {eip_id: eipId});
+      const endpoint = 'stance?eip_num='+eipNum
+      const data = await this.$axios.$get(endpoint, {eip_num: eipNum});
       return data;
     } catch (e) {
       console.error(e); // 💩

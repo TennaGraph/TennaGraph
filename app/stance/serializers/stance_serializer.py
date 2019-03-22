@@ -11,6 +11,7 @@ from influencer.models import Influencer
 from influencer.serializers import InfluencerSerializer
 from twitter_client.utils import weather_is_twitter_link
 from github_client.services import GitHubDB
+from eip.models import EIP
 
 # App imports
 from ..models import Stance
@@ -22,13 +23,14 @@ class StanceSerializer(serializers.ModelSerializer):
 
     status = ChoiceDisplayField(Stance.STATUSES, read_only=True)
 
-    eip_id = serializers.IntegerField(write_only=True)
+    eip_num = serializers.IntegerField(write_only=True)
 
     influencer = InfluencerSerializer(read_only=True, required=False)
 
     class Meta:
         model = Stance
-        fields = ['id', 'author', 'proof_url', 'choice', 'status', 'eip_id', 'influencer', 'created_at']
+        fields = ['id', 'author', 'proof_url', 'choice', 'status', 'eip_num', 'influencer', 'created_at']
+        write_only_fields = ['eip_num']
 
     """
     Validators
@@ -52,8 +54,8 @@ class StanceSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         author_twitter_username = attrs.get('author')
         proof_url = attrs.get('proof_url', None)
-        eip_id = attrs.get('eip_id', None)
-        if Stance.objects.filter(eip_id=eip_id, proof_url=proof_url).exists():
+        eip_num = attrs.pop('eip_num', None)
+        if Stance.objects.filter(eip__eip_num=eip_num, proof_url=proof_url).exists():
             raise serializers.ValidationError("This url already submitted")
 
         influencers = Influencer.objects.filter(screen_name__icontains=author_twitter_username)
@@ -62,6 +64,11 @@ class StanceSerializer(serializers.ModelSerializer):
 
         if weather_is_twitter_link(attrs['proof_url']):
             attrs['proof_type'] = Stance.TWITTER
+
+        try:
+            attrs["eip_id"] = EIP.objects.get(eip_num=str(eip_num)).id
+        except EIP.DoesNotExist:
+            raise serializers.ValidationError("EIP not found")
 
         return attrs
 

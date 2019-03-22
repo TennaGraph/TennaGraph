@@ -101,7 +101,7 @@
           'author':    '@' + this.author,
           'proof_url': this.link,
           'choice':    this.choice,
-          'eip_id':    this.eipId,
+          'eip_num':    this.eipId,
         };
         this.isStanceSending = true;
         try {

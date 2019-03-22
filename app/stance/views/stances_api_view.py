@@ -1,7 +1,6 @@
 # Pip imports
 from rest_framework import generics
 from rest_framework import permissions
-from django_filters.rest_framework import DjangoFilterBackend
 
 # App imports
 from ..serializers import StanceSerializer
@@ -13,7 +12,16 @@ class StancesAPIView(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = StanceSerializer
     queryset = Stance.objects.filter(status=Stance.APPROVED)
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('eip_id',)
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = self.queryset
+        eip_num = self.request.query_params.get('eip_num', None)
+        if eip_num is not None:
+            queryset = self.queryset.filter(eip__eip_num=eip_num)
+        return queryset
 
 
