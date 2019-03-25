@@ -14,6 +14,7 @@ TWITTER_ACCESS_TOKEN_SECRET_KEY=See below<br />
 To get credentials for twitter, please, follow the instructions:<br />
 https://python-twitter.readthedocs.io/en/latest/getting_started.html
 
+- create an repo on github to store db with stances into it. In file docker-compose-common.yml near key GITHUB_DB_REPO. Replace value `TennaGraph/TannaGraphDB_Test` to path of repo just created by you. `GITHUB_USERNAME` must be owner of this repo.
 - install Docker Engine
 - open the project in terminal
 - run command in the terminal `docker-compose up --build`
