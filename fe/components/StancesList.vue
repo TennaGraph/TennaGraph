@@ -9,9 +9,9 @@
         <chip-stance v-for="(stance, index) in yayStances"
               v-bind:key="stance.id"
               :stance="stance"
-              v-if="index <4">
+              v-if="index <4 || isDisplayAllYayStances">
         </chip-stance>
-        <chip-more-stances v-if="yayStances.length > 4" :stances="yayStances"></chip-more-stances>
+        <chip-more-stances v-model="isDisplayAllYayStances" v-if="yayStances.length > 4" :stances="yayStances"></chip-more-stances>
       </v-flex>
     </v-layout>
 
@@ -23,9 +23,9 @@
         <chip-stance v-for="(stance, index) in nayStances"
               v-bind:key="stance.id"
               :stance="stance"
-              v-if="index <3">
+              v-if="index <4 || isDisplayAllNayStances">
         </chip-stance>
-        <chip-more-stances v-if="nayStances.length > 4" :stances="nayStances"></chip-more-stances>
+        <chip-more-stances v-model="isDisplayAllNayStances" v-if="nayStances.length > 4" :stances="nayStances"></chip-more-stances>
       </v-flex>
     </v-layout>
 
@@ -37,9 +37,9 @@
         <chip-stance v-for="(stance, index) in abstainStances"
               v-bind:key="stance.id"
               :stance="stance"
-              v-if="index <3">
+              v-if="index <4 || isDisplayAllAbstainStances">
         </chip-stance>
-        <chip-more-stances v-if="abstainStances.length > 4" :stances="abstainStances"></chip-more-stances>
+        <chip-more-stances v-model="isDisplayAllAbstainStances" v-if="abstainStances.length > 4" :stances="abstainStances"></chip-more-stances>
       </v-flex>
     </v-layout>
 
@@ -73,6 +73,13 @@
         required: true
       },
     },
+    data() {
+      return {
+        isDisplayAllYayStances: false,
+        isDisplayAllNayStances: false,
+        isDisplayAllAbstainStances: false,
+      }
+    }
   }
 </script>
 
