@@ -3,7 +3,7 @@
     <v-layout row wrap justify-space-between>
 
         <v-flex xs12 sm3 class="px-2">
-          <label for="" class="label--text body-1 mb-1 d-block">Twitter username</label>
+          <label for="" class="label--text body-1 mb-1 d-block">Peepeth or Twitter username</label>
           <v-text-field
             v-model="author"
             :rules="authorRules"
@@ -73,7 +73,7 @@
         isStanceSending: false,
         author: '',
         authorRules: [
-          v => !!v || 'Twitter username is required',
+          v => !!v || 'Peepeth or Twitter username is required',
         ],
 
         link: '',
@@ -87,7 +87,7 @@
         ],
 
         choiceOptions: [
-          { text: 'Yay',     value: 'YAY'    },
+          { text: 'Yea',     value: 'YAY'    },
           { text: 'Nay',     value: 'NAY'    },
           { text: 'Abstain', value: 'ABSTAIN'},
         ],
