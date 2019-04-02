@@ -108,7 +108,7 @@
       return {
         yayAddress: "0x0ca1328ba92c5ad1d51c81bd6c0c458c8cc8a650",
         chartOptions: {
-          labels: ["Yay", "Nay", "Abstain"],
+          labels: ["Yea", "Nay", "Abstain"],
           colors: ['#45C299', '#F03D3D', '#B1B1B1'],
           legend: {
             show: false,
@@ -158,7 +158,7 @@
       decisions() {
         return [
           {
-            title: "Yay",
+            title: "Yea",
             address: this.votingAddresses.yay,
             color: "#45C299"
           },
