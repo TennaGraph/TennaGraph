@@ -3,7 +3,7 @@
 
     <v-layout row align-center justify-start>
       <v-flex xs2>
-        <span class="text-truncate">Yay ({{ yayStances.length }})</span>
+        <span class="text-truncate">Yea ({{ yayStances.length }})</span>
       </v-flex>
       <v-flex xs10>
         <chip-stance v-for="(stance, index) in yayStances"
@@ -44,7 +44,7 @@
     </v-layout>
 
     <label class="body-1 chipTitle--text mt-4">
-      Something wrong in the stances? DM us at <a href="https://twitter.com/tennagraph" target="_blank">@tennagraph</a> to edit or remove stances
+      Something wrong in the stances? DM us at <a href="https://twitter.com/tennagraph" target="_blank">@tennagraph</a> to request an edit or remove a stance. Also, join <a href="https://riot.tennagraph.com" target="_blank">riot.tennagraph.com</a> or our <a href="https://t.me/tennagraph" target="_blank">telegram group</a> for updates and answers to any questions.
     </label>
   </v-layout>
 </template>
