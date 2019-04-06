@@ -81,6 +81,7 @@ class StancesClientAPITestCase(APITestCase):
     def test_should_return_list_of_stances(self):
         stance_dict = {
             'author': 'malkevych',
+            'author_from_social': Stance.TWITTER,
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
             'eip': self.eip
@@ -93,6 +94,7 @@ class StancesClientAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
+
         stance_response = response.data[0]
 
         self.assertEqual(stance_response['author'],         'malkevych')
@@ -104,6 +106,7 @@ class StancesClientAPITestCase(APITestCase):
     def test_should_retrieve_the_stance(self):
         stance_dict = {
             'author': 'malkevych',
+            'author_from_social': Stance.TWITTER,
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
             'eip': self.eip
@@ -127,12 +130,14 @@ class StancesClientAPITestCase(APITestCase):
     def test_should_retrieve_the_stances_of_eip(self):
         stance_dict = {
             'author': 'malkevych',
+            'author_from_social': Stance.TWITTER,
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
             'eip': self.eip
         }
         stance2_dict = {
             'author': 'malkevych2',
+            'author_from_social': Stance.TWITTER,
             'proof_url': 'https://google.com/2/',
             'choice': Stance.NAY,
             'eip': self.eip2
@@ -142,11 +147,10 @@ class StancesClientAPITestCase(APITestCase):
 
         url = reverse("stance:stance")
 
-        url = url + '?eip_id={}'.format(self.eip.id)
+        url = url + '?eip_num={}'.format(self.eip.eip_num)
 
         response = self.client.get(url, format='json')
 
-        # print("RESPONSE: {}".format(response.status_code))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(isinstance(response.data, list))
@@ -163,9 +167,10 @@ class StancesClientAPITestCase(APITestCase):
     def test_should_create_new_stance(self):
         stance_dict = {
             'author': '@malkevych',
+            'author_from_social': Stance.TWITTER,
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
-            'eip_id': self.eip.id,
+            'eip_num': self.eip.eip_num,
         }
 
         url = reverse("stance:stance")
@@ -193,9 +198,10 @@ class StancesClientAPITestCase(APITestCase):
         settings.GITHUB_PASSWORD = 'not right pass'
         stance_dict = {
             'author': '@malkevych',
+            'author_from_social': Stance.TWITTER,
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
-            'eip_id': self.eip.id,
+            'eip_num': self.eip.eip_num,
         }
 
         url = reverse("stance:stance")
@@ -209,9 +215,10 @@ class StancesClientAPITestCase(APITestCase):
     def test_should_create_new_stance_with_influencer(self):
         stance_dict = {
             'author': '@maLkEvyCh',
+            'author_from_social': Stance.TWITTER,
             'proof_url': 'https://google.com',
             'choice': Stance.YAY,
-            'eip_id': self.eip.id,
+            'eip_num': self.eip.eip_num,
         }
 
         url = reverse("stance:stance")
@@ -240,9 +247,10 @@ class StancesClientAPITestCase(APITestCase):
 
         stance_dict = {
             'author': '@maLkEvyCh',
+            'author_from_social': Stance.TWITTER,
             'proof_url': 'https://twitter.com/bomalkevych/status/1077261352585043969',
             'choice': Stance.YAY,
-            'eip_id': self.eip.id,
+            'eip_num': self.eip.eip_num,
         }
 
         url = reverse("stance:stance")

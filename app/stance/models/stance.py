@@ -50,8 +50,20 @@ class Stance(TimeStampedModel, GitHubCompatible):
         (OTHER, 'other'),
     )
 
+    """
+    Login from social network
+    """
+    TWITTER = 'TWITTER'
+    PEEPETH = 'PEEPETH'
+
+    AUTHOR_SOCIAL_NETWORK_CHOICES = (
+        (TWITTER, 'twitter'),
+        (PEEPETH, 'peepeth'),
+    )
+
 
     author              = models.CharField(max_length=255)
+    author_from_social  = models.CharField(max_length=50, choices=AUTHOR_SOCIAL_NETWORK_CHOICES, default=TWITTER)
 
     """ This field filled if the author above is influencer """
     influencer          = models.ForeignKey(Influencer, on_delete=models.SET_NULL, null=True, blank=True)

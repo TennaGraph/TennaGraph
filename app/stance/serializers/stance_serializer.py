@@ -29,7 +29,7 @@ class StanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stance
-        fields = ['id', 'author', 'proof_url', 'choice', 'status', 'eip_num', 'influencer', 'created_at']
+        fields = ['id', 'author', 'author_from_social', 'proof_url', 'choice', 'status', 'eip_num', 'influencer', 'created_at']
         write_only_fields = ['eip_num']
 
     """
@@ -53,14 +53,16 @@ class StanceSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         author_twitter_username = attrs.get('author')
+        author_from_social = attrs.get('author_from_social')
         proof_url = attrs.get('proof_url', None)
         eip_num = attrs.pop('eip_num', None)
         if Stance.objects.filter(eip__eip_num=eip_num, proof_url=proof_url).exists():
             raise serializers.ValidationError("This url already submitted")
 
-        influencers = Influencer.objects.filter(screen_name__icontains=author_twitter_username)
-        if influencers.exists():
-            attrs['influencer'] = influencers.first()
+        if author_from_social == Stance.TWITTER:
+            influencers = Influencer.objects.filter(screen_name__icontains=author_twitter_username)
+            if influencers.exists():
+                attrs['influencer'] = influencers.first()
 
         if weather_is_twitter_link(attrs['proof_url']):
             attrs['proof_type'] = Stance.TWITTER

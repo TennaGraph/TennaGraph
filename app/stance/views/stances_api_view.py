@@ -22,6 +22,6 @@ class StancesAPIView(generics.ListCreateAPIView):
         eip_num = self.request.query_params.get('eip_num', None)
         if eip_num is not None:
             queryset = self.queryset.filter(eip__eip_num=eip_num)
-        return queryset
+        return queryset.all()
 
 
