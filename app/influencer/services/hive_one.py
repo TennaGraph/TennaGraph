@@ -19,8 +19,9 @@ class HiveOne:
     def __init__(self, hive_one_api_url=HIVE_ONE_API_URL):
         self.hive_one_api_url = hive_one_api_url
 
-    def load_influencers(self, network='eth'):
+    def load_influencers(self, network='ETH', offset=0):
         """
+        Old version of response
         {
           "rankedAt": "2018-11-22T01:53:23.395793+00:00",
           "influencersData": [
@@ -45,18 +46,49 @@ class HiveOne:
           ]
         }
 
+
+        New version of response
+        {
+          "data": {
+            "people": {
+              "edges": [
+                {
+                  "node": {
+                    "id": 295218901,
+                    "rank": 1,
+                    "name": "Vitalik Non-giver of Ether",
+                    "screenName": "VitalikButerin",
+                    "imageUrl": "https://pbs.twimg.com/profile_images/977496875887558661/L86xyLF4.jpg",
+                    "score": 915.448484715576,
+                    "following": 135,
+                    "followers": 852157,
+                    "changeWeek": 0.6222103482880357
+                  }
+                },
+                ...
+                ],
+              "cursor": {
+                "after": 20,
+                "hasNextCursor": true
+              }
+            }
+          }
+        }
+
         """
 
         headers = {'Content-Type': 'application/json'}
-        url = "{}/lists/{}".format(self.hive_one_api_url, network)
+        url = "{}/influencers/people/{}/{}/".format(self.hive_one_api_url, network, offset)
         r = requests.get(url, headers=headers)
         response_raw = r.json()
         if "error" in response_raw:
             raise Exception(response_raw["error"]["message"])
 
-        influencers_raw = response_raw["influencersData"]
-        influencers = [Influencer.create(influencer_raw) for influencer_raw in influencers_raw]
+        people = response_raw.get("data").get("people")
+        edges = people.get("edges")
+        cursor = people.get("cursor")
+        influencers = [Influencer.create(node.get("node")) for node in edges]
 
-        ranked_at = iso8601.parse_date(response_raw["rankedAt"])
+        # ranked_at = iso8601.parse_date(response_raw["rankedAt"])
 
-        return influencers, ranked_at
+        return influencers, cursor

@@ -1,4 +1,5 @@
 from system.models import SystemSettings
+from stance.models import Stance
 
 #CREATE SITE SETTINGS
 def create_system_settings():
@@ -34,3 +35,13 @@ if SystemSettings.objects.count() == 0:
     create_system_settings()
 else:
     update_system_settings()
+
+
+# def import_stances_from_git_hub():
+#     from github_client.services import GitHubDB
+#     gh = GitHubDB()
+#     gh.retrive_from_github(default_eip_num=1057)
+#
+#
+# if Stance.objects.count() == 0:
+#     import_stances_from_git_hub()

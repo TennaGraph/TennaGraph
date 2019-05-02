@@ -14,6 +14,7 @@ from github import InputGitAuthor
 # App imports
 
 
+
 class GitHubDB:
 
     gh = None
@@ -91,15 +92,15 @@ class GitHubDB:
         :param author: The author of the commit
         :return:
         """
-        file_path = self.get_file_path(model)
-
-        contents = self.repo().get_contents(file_path, self.branch)
-
-        self.repo().delete_file(path=contents.path,
-                                message="Create new model ({})".format(type(model)),
-                                sha=contents.sha,
-                                branch=self.branch,
-                                author=self.construct_author(author))
+        # file_path = self.get_file_path(model)
+        #
+        # contents = self.repo().get_contents(file_path, self.branch)
+        #
+        # self.repo().delete_file(path=contents.path,
+        #                         message="Create new model ({})".format(type(model)),
+        #                         sha=contents.sha,
+        #                         branch=self.branch,
+        #                         author=self.construct_author(author))
 
     def delete_repo_content(self, author="Moderator"):
         """
@@ -108,18 +109,69 @@ class GitHubDB:
         :param author: The author of the commit
         :return:
         """
+        # contents = self.repo().get_contents("", self.branch)
+        #
+        # while len(contents) >= 1:
+        #     file_content = contents.pop(0)
+        #     if file_content.type == "dir":
+        #         contents.extend(self.repo().get_contents(file_content.path))
+        #     else:
+        #         self.repo().delete_file(path=file_content.path,
+        #                                 message="Delete repo content ({})".format(type(file_content.path)),
+        #                                 sha=file_content.sha,
+        #                                 branch=self.branch,
+        #                                 author=self.construct_author(author))
+
+    def retrive_from_github(self, default_eip_num=1057):
+        import json
+        from stance.models import Stance
+        from influencer.models import Influencer
+        from eip.models import EIP
+
         contents = self.repo().get_contents("", self.branch)
+
 
         while len(contents) >= 1:
             file_content = contents.pop(0)
             if file_content.type == "dir":
                 contents.extend(self.repo().get_contents(file_content.path))
             else:
-                self.repo().delete_file(path=file_content.path,
-                                        message="Delete repo content ({})".format(type(file_content.path)),
-                                        sha=file_content.sha,
-                                        branch=self.branch,
-                                        author=self.construct_author(author))
+                content = json.loads(base64.b64decode(file_content.content).decode('utf-8'))
+
+                id_obj = content.get("id")
+                author = content.get("author")
+                author_from_social = content.get("author_from_social")
+                proof_url = content.get("proof_url")
+                choice = content.get("choice").get("key")
+                status = content.get("status").get("key")
+                influencer = content.get("influencer")
+                created_at = content.get("created_at")
+
+                eip_num = content.get("eip_num", default_eip_num)
+
+                params = {
+                    "id": id_obj,
+                    "author": author,
+                    "proof_url": proof_url,
+                    "choice": choice,
+                    "status": status,
+                    "created_at": created_at,
+                    "eip": EIP.objects.get(eip_num=eip_num)
+                }
+
+
+                if influencer:
+                    try:
+                        params["influencer"] = Influencer.objects.get(screen_name=influencer.get("screen_name"))
+                    except Influencer.DoesNotExist:
+                        print("Influencer no more exists: {}".format(params))
+
+                if author_from_social:
+                    params["author_from_social"] = author_from_social
+
+                Stance.objects.create(**params)
+
+
 
     """
     Utils / Helpers

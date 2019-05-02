@@ -60,7 +60,7 @@ class StancesClientAPITestCase(APITestCase):
             'score':            Decimal('123.452435400000000000'),
             'name':             'The best influencer on myself =)',
             'screen_name':      'malkevych',
-            'friends_count':    124987,
+            'following_count':    124987,
             'followers_count':  3456,
         }
         self.eip = EIP.objects.create(**eip_dict)

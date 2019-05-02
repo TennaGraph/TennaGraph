@@ -58,7 +58,7 @@ class GitHubClientTestCase(APITestCase):
             'score':            Decimal('123.452435400000000000'),
             'name':             'The best influencer on myself =)',
             'screen_name':      'malkevych',
-            'friends_count':    124987,
+            'following_count':  124987,
             'followers_count':  3456,
         }
         self.influencer = Influencer.objects.create(**influencer)
@@ -73,7 +73,7 @@ class GitHubClientTestCase(APITestCase):
         self.stance_dict = stance_dict
 
         # Clear repo before run tests
-        self.gh.delete_repo_content()
+        # self.gh.delete_repo_content()
 
     def test_should_not_model_exists_on_repo(self):
         stance = Stance.objects.create(**self.stance_dict)
@@ -115,6 +115,15 @@ class GitHubClientTestCase(APITestCase):
 
         self.assertEqual(json_updated, json_from_repo_updated)
         self.assertNotEqual(json, json_updated)
+
+    def test_should_retrieve_all_stances_from_repo(self):
+        count = Stance.objects.count()
+        self.assertEqual(count, 0)
+
+        self.gh.retrive_from_github(default_eip_num=8)
+
+        count = Stance.objects.count()
+        self.assertGreater(count, 0)
 
 
 

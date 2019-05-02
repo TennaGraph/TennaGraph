@@ -82,7 +82,8 @@ class EIPsClientAPITestCase(APITestCase):
             'score':            Decimal('123.452435400000000000'),
             'name':             'The best influencer on myself =)',
             'screen_name':      'malkevych',
-            'friends_count':    124987,
+            'image_url':        'https://pbs.twimg.com/profile_images/543467783179091968/jX2iuyWu.jpeg',
+            'following_count':  124987,
             'followers_count':  3456,
         }
         Influencer.objects.create(**influencer_dict)
@@ -99,5 +100,6 @@ class EIPsClientAPITestCase(APITestCase):
         self.assertEqual(Decimal(eip_response['score']),    influencer_dict['score'])
         self.assertEqual(eip_response['name'],              influencer_dict['name'])
         self.assertEqual(eip_response['screen_name'],       influencer_dict['screen_name'])
-        self.assertEqual(eip_response['friends_count'],     influencer_dict['friends_count'])
+        self.assertEqual(eip_response['image_url'],         influencer_dict['image_url'])
+        self.assertEqual(eip_response['following_count'],   influencer_dict['following_count'])
         self.assertEqual(eip_response['followers_count'],   influencer_dict['followers_count'])
