@@ -20,11 +20,10 @@
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
             <v-card-title class="title mb-4 mt-2 py-0 px-0">
               Coinvoting | Gasvoting
-              <v-tooltip class="mx-2" right>
-                <v-icon color="grey" slot="activator">help</v-icon>
-                <span>You don't have to send ETH to vote. Just make a transaction with 0 ETH. Gas voting is the sum of all gas spent by an address up to the present. With one vote both the coins in that address and gas spent by that address are counted for the submitted side. Once submited it may take a few minutes to show up in the chart. To verify your address has voted click on the address link and check that your address (use ctrl-F) is in the smart contract.</span>
-              </v-tooltip>
             </v-card-title>
+            <p class="px-2">
+              You don't have to send ETH to vote. Just make a transaction with 0 ETH. Gas voting is the sum of all gas spent by an address up to the present. With one vote both the coins in that address and gas spent by that address are counted for the submitted side. Once submited it may take a few minutes to show up in the chart. To verify your address has voted click on the address link and check that your address (use ctrl-F) is in the smart contract.
+            </p>
             <coinvoting :eipId="eipId" :w3="w3"></coinvoting>
           </v-card>
 

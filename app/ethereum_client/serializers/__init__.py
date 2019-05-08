@@ -1,0 +1,1 @@
+from .voting_details_log_serializer import VotingDetailsLogSerializer

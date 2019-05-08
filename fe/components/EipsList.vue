@@ -2,7 +2,7 @@
   <v-layout class="d-block" px-2>
 
       <v-card-title class="title mb-4 mt-2 py-0 px-0 primary--text">
-        Ethereum Improvement Proposals
+        {{ isFilteringEnabled ? "Ethereum Improvement Proposals" : "Recently Voted EIPs" }}
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -72,34 +72,31 @@
               <td class="body-1 py-3">{{ props.item.eip_title }}</td>
 
               <td class="py-3">
-                <v-card flat dark class="text-xs-center"
-                        color="grey"
-                        v-if="props.item.eip_status.key == 'DRAFT' ||
-                              props.item.eip_status.key == 'OTHER'">
-                  <v-card-text class="py-1 px-2 caption white--text text-capitalize">
+                <div class="text-xs-center"
+                     v-if="props.item.eip_status.key == 'DRAFT' ||
+                           props.item.eip_status.key == 'OTHER'">
+                  <v-btn round color="grey" small dark class="text-capitalize">
                     {{ props.item.eip_status.display }}
-                  </v-card-text>
-                </v-card>
+                  </v-btn>
+                </div>
 
-                <v-card flat dark class="text-xs-center"
-                        color="red"
-                        v-if="props.item.eip_status.key == 'DEFERRED' ||
-                              props.item.eip_status.key == 'REPLACED'">
-                  <v-card-text class="py-1 px-2 caption white--text text-capitalize">
+                <div class="text-xs-center"
+                     v-if="props.item.eip_status.key == 'DEFERRED' ||
+                           props.item.eip_status.key == 'REPLACED'">
+                  <v-btn round color="red" small dark class="text-capitalize">
                     {{ props.item.eip_status.display }}
-                  </v-card-text>
-                </v-card>
+                  </v-btn>
+                </div>
 
-                <v-card flat dark class="text-xs-center"
-                        color="breeze"
-                        v-if="props.item.eip_status.key == 'ACTIVE' ||
+                <div class="text-xs-center"
+                     v-if="props.item.eip_status.key == 'ACTIVE' ||
                               props.item.eip_status.key == 'LAST_CALL' ||
                               props.item.eip_status.key == 'FINAL' ||
                               props.item.eip_status.key == 'ACCEPTED'">
-                  <v-card-text class="py-1 px-2 caption white--text text-capitalize">
+                  <v-btn round color="breeze" small dark class="text-capitalize">
                     {{ props.item.eip_status.display }}
-                  </v-card-text>
-                </v-card>
+                  </v-btn>
+                </div>
               </td>
 
               <td class="py-3 text-xs-left text-truncate text-capitalize" v-if="props.item.eip_type && props.item.eip_category">
@@ -196,12 +193,23 @@
           const filterKeys = this.categoryFilter.keys;
           eips = eips.filter(item => (item.eip_category && filterKeys.includes(item.eip_category.key)) || filterKeys.includes(item.eip_type.key))
         }
+
+        // Show only active recent eips
+        if (!this.isFilteringEnabled) {
+          eips = eips.filter(item => item.voting_details && item.voting_details.is_voting_open)
+        }
         return eips
       },
 
       isEIPsLoading() {
         return this.$store.getters['eip/isEIPsLoading']
       },
+
+      isFilteringEnabled() {
+        let isFilteredByStatus = this.statusFilter && this.statusFilter.isEnabled;
+        let isFilteredByCategory = this.categoryFilter && this.categoryFilter.isEnabled;
+        return isFilteredByStatus || isFilteredByCategory || this.search
+      }
 
     },
     methods: {

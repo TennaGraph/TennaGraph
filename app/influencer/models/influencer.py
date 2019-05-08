@@ -36,7 +36,7 @@ class Influencer(TimeStampedModel):
         self.score              = influencer.score
         self.name               = influencer.name
         self.screen_name        = influencer.screen_name
-        self.imageUrl           = influencer.imageUrl
+        self.imageUrl           = influencer.image_url
         self.following_count    = influencer.following_count
         self.followers_count    = influencer.followers_count
 

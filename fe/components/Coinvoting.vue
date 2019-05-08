@@ -16,7 +16,7 @@
     </v-layout>
 
     <v-layout column v-else>
-      <p>Active since date {{ votingCreatedAt | formatDateTime }}</p>
+      <p class="mt-3">Active since date: {{ votingCreatedAt | formatDateTime }}</p>
       <v-layout row class="wrapper" wrap>
         <v-flex xs12 md9>
           <v-layout row align-center justify-start v-for="decision in decisions" :key="decision.title">
@@ -50,7 +50,7 @@
       </v-layout>
 
       <v-layout row class="mt-5 mb-0 pb-0" wrap v-if="shouldDisplayCharts">
-        <v-flex md3>
+        <v-flex xs12 sm4 md3>
           <v-layout column>
             <v-flex class="mb-3">
               Coinvoting results
@@ -60,12 +60,12 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex md3>
-          <v-layout column>
+        <v-flex xs12 sm4 md3>
+          <v-layout column fill-height>
             <v-flex class="mb-3">
               Gasvoting results
             </v-flex>
-            <v-flex >
+            <v-flex>
               <apexchart type=donut :options="chartOptions" :series="gasvotingResults"/>
             </v-flex>
           </v-layout>
@@ -153,7 +153,7 @@
         }
       },
       series() {
-        return this.votingResults.map(value => parseInt(value))
+        return this.votingResults.map(value => (parseInt(value)))
       },
       decisions() {
         return [
@@ -203,7 +203,8 @@
           const res = await instance.votingResults.call(this.eipId);
           this.votingResults.length = 0
           res.forEach(el => {
-            this.votingResults.push(parseInt(el))
+            // from wai to ether
+            this.votingResults.push(parseFloat(el) / parseFloat(1000000000000000000))
           })
         } catch(e) {
           this.setErrors(e.message)

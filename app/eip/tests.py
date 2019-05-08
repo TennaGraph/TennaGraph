@@ -6,6 +6,9 @@ from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
 from rest_framework import status
 
+# Project imports
+from ethereum_client.models import VotingDetailsLog
+
 # App imports
 from github_client.services import GitHubEIP
 from github_client.utils import parse_eip_details
@@ -168,6 +171,13 @@ class EIPsClientAPITestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_should_return_list_of_eips(self):
+        voting_details_log = {
+            "proposal_id": 12,
+            "is_voting_open": True,
+            "block_number": 900000,
+        }
+        VotingDetailsLog.objects.create(**voting_details_log)
+
         eip_dict = {
             'eip_num': '12',
             'eip_title': 'Title of EIP',
@@ -203,6 +213,13 @@ class EIPsClientAPITestCase(APITestCase):
         self.assertEqual(eip_response['file_download_url'],     eip_dict['file_download_url'])
         self.assertEqual(eip_response['file_content'],          eip_dict['file_content'])
         self.assertEqual(eip_response['file_sha'],              eip_dict['file_sha'])
+
+        # Voting details log
+        self.assertEqual(eip_response['voting_details']['proposal_id'], voting_details_log['proposal_id'])
+        self.assertEqual(eip_response['voting_details']['is_voting_open'], voting_details_log['is_voting_open'])
+        self.assertEqual(eip_response['voting_details']['block_number'], voting_details_log['block_number'])
+        self.assertIsNotNone(eip_response['voting_details']['created_at'])
+        self.assertIsNotNone(eip_response['voting_details']['updated_at'])
 
     def test_should_retrieve_the_eip(self):
         eip_dict = {
