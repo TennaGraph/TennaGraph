@@ -68,6 +68,7 @@ module.exports = {
     '@/plugins/utils.js',
     '@/plugins/apexcharts',
     '@/plugins/markdown',
+    '@/plugins/googleAnalytics',
   ],
 
   /*
@@ -134,5 +135,6 @@ module.exports = {
     web3ProviderUrl: process.env.WEB3_PROVIDER_URL,
     web3NetworkId: process.env.WEB3_NETWORK_ID,
     etherscanUrl: process.env.ETHERSCAN_URL,
+    googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
   }
 };

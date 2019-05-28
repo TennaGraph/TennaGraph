@@ -26,6 +26,7 @@
     "nuxt": "^2.2.0",
     "nuxt-material-design-icons": "^1.0.4",
     "truffle-contract": "^3.0.6",
+    "vue-analytics": "^5.16.4",
     "vue-apexcharts": "^1.2.2",
     "vue-markdown": "^2.2.4",
     "vue-material-design-icons": "^1.6.0",

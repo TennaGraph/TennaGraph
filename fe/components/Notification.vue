@@ -39,7 +39,7 @@
     },
     data: function () {
         return {
-          snackbar: true
+          snackbar: true,
         }
     },
     created: function () {

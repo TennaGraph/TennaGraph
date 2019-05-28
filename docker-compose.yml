@@ -73,6 +73,7 @@ services:
       WEB3_PROVIDER_URL: 'https://rinkeby.infura.io/7a2aaxZR9Iu72CZzQzgt'
       WEB3_NETWORK_ID: '4'
       ETHERSCAN_URL: 'https://rinkeby.etherscan.io/'
+      GOOGLE_ANALYTICS_ID: "UA-140828207-1"
     command: npm run dev
 #    command: bash -c "npm run build && npm run start"
     ports:
