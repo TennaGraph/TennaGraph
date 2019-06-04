@@ -18,7 +18,7 @@
     <v-layout column v-else>
       <p class="mt-3">Active since date: {{ votingCreatedAt | formatDateTime }}</p>
       <v-layout row class="wrapper" wrap>
-        <v-flex xs12 md9>
+        <v-flex xs12 md11>
           <v-layout row align-center justify-start v-for="decision in decisions" :key="decision.title">
             <v-flex xs2>
               <span class="text-truncate">
@@ -29,10 +29,10 @@
               </span>
             </v-flex>
             <v-layout align-center fill-height wrap>
-              <v-flex xs8>
+              <v-flex xs12 sm9 md6>
                 <v-text-field placeholder="Placeholder" :value="decision.address"></v-text-field>
               </v-flex>
-              <v-layout xs1>
+              <v-layout xs4 md2>
                 <v-btn icon @click="openQrCode(decision.title, decision.address)">
                   <v-avatar size="18px" tile>
                     <v-img src="/icons/qr_code_mini.svg"></v-img>
@@ -42,6 +42,9 @@
                   <v-avatar size="18px" tile>
                     <v-img src="/icons/chip_link.svg"></v-img>
                   </v-avatar>
+                </v-btn>
+                <v-btn class="grey" dark @click="vote(decision.address)" small>
+                  Vote
                 </v-btn>
               </v-layout>
             </v-layout>
@@ -83,6 +86,7 @@
   import PulseLoader from '@/components/PulseLoader.vue';
 
   import votingManagerABI from "~/contracts/VotingManager.json";
+  import votingOptionABI from "~/contracts/VotingOption.json";
   import truffleContract from 'truffle-contract'
 
   export default {
@@ -121,6 +125,7 @@
           },
         },
         VotingManagerContract: undefined,
+        VotingOptionContract: undefined,
         isProposalExistsInVotingManager: undefined,
         proposalVotingInfo: undefined,
         votingResults: [],
@@ -193,6 +198,11 @@
 
         this.loadEIPCoinVotingInfo()
       },
+      initVotingOptions() {
+        const contract = truffleContract(votingOptionABI);
+        contract.setProvider(this.w3.currentProvider);
+        this.VotingOptionContract = contract;
+      },
       async loadEIPCoinVotingInfo() {
         try {
           const instance = await this.VotingManagerContract.at(this.votingManagerAddress);
@@ -234,6 +244,20 @@
           this.setErrors(e.message)
         }
       },
+      async vote(votingAddresses) {
+        try {
+          const instance = await this.VotingOptionContract.at(votingAddresses);
+          const transactionInfo = await this.w3.promisify.transactionInfo();
+          // this.isAddingProposal = true;
+          await instance.vote(transactionInfo);
+
+          await this.loadEIPCoinVotingInfo();
+          // this.isAddingProposal = false;
+        } catch(e) {
+          // this.isAddingProposal = false;
+          this.setErrors(e.message)
+        }
+      },
       async openQrCode(option, address) {
         const data = {
           address: address,
@@ -251,6 +275,9 @@
       },
       votingManagerAddress(newValue) {
         this.initVotingManager(newValue)
+      },
+      votingAddresses() {
+        this.initVotingOptions()
       }
     }
   }

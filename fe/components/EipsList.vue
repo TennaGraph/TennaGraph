@@ -31,25 +31,22 @@
           <template slot="headers" slot-scope="props">
             <tr>
               <th
+                class="text-xs-left"
                 v-for="(header, index) in props.headers"
                 v-if="index <= 1"
                 :key="header.text"
                 :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
                 @click="changeSort(header.value)"
               >
-                <v-icon small>arrow_upward</v-icon>
                 {{ header.text }}
+                <v-icon small>arrow_upward</v-icon>
               </th>
 
               <th>
-                <v-layout>
-                  <status-filter v-model="statusFilter"></status-filter>
-                </v-layout>
+                <status-filter v-model="statusFilter"></status-filter>
               </th>
               <th>
-                <v-layout>
-                  <category-filter v-model="categoryFilter"></category-filter>
-                </v-layout>
+                <category-filter v-model="categoryFilter"></category-filter>
               </th>
 
               <th
@@ -59,8 +56,8 @@
                 :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
                 @click="changeSort(header.value)"
               >
-                <v-icon small>arrow_upward</v-icon>
                 {{ header.text }}
+                <v-icon small>arrow_upward</v-icon>
               </th>
             </tr>
           </template>
@@ -72,7 +69,7 @@
               <td class="body-1 py-3">{{ props.item.eip_title }}</td>
 
               <td class="py-3">
-                <div class="text-xs-center"
+                <div class="text-xs-left"
                      v-if="props.item.eip_status.key == 'DRAFT' ||
                            props.item.eip_status.key == 'OTHER'">
                   <v-btn round color="grey" small dark class="text-capitalize">
@@ -80,7 +77,7 @@
                   </v-btn>
                 </div>
 
-                <div class="text-xs-center"
+                <div class="text-xs-left"
                      v-if="props.item.eip_status.key == 'DEFERRED' ||
                            props.item.eip_status.key == 'REPLACED'">
                   <v-btn round color="red" small dark class="text-capitalize">
@@ -88,7 +85,7 @@
                   </v-btn>
                 </div>
 
-                <div class="text-xs-center"
+                <div class="text-xs-left"
                      v-if="props.item.eip_status.key == 'ACTIVE' ||
                               props.item.eip_status.key == 'LAST_CALL' ||
                               props.item.eip_status.key == 'FINAL' ||

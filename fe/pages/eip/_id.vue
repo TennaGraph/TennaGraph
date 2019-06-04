@@ -10,11 +10,13 @@
                 <v-icon class="mr-3" medium>arrow_back</v-icon>
               </nuxt-link>
               {{ eip.eip_title }}
+              <v-chip v-if="eip.eip_status" class="ml-4" disabled>{{ eip.eip_status.display }}</v-chip>
+              <v-chip v-if="eip.eip_category" disabled>{{ eip.eip_category.display }}</v-chip>
             </v-layout>
           </v-card-title>
 
           <v-card v-show="eip" class="py-4 px-4">
-            <eip-description v-if="eip" :eipDescription="eip.file_content"></eip-description>
+            <eip-description v-if="eip" :eipDescription="eip.file_content" :fileName="eip.file_name"></eip-description>
           </v-card>
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">

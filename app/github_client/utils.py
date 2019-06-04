@@ -9,6 +9,7 @@ from eip.models import EIP
 def parse_eip_details(content):
     is_start_found = False
     is_finish_found = False
+    finish_index = 0
     eip_type = EIP.OTHER
     status = EIP.OTHER
     eip = category = title = authors = created = None
@@ -18,9 +19,14 @@ def parse_eip_details(content):
 
     while buff.readable() and not is_finish_found:
         line = buff.readline()
+
+        if not is_finish_found:
+            finish_index += len(line)
+
         line_lower = line.lower()
         line = line.replace(' \n', '')
         line = line.replace('\n', '')
+
 
         if line == '' or not line:
             raise Exception("Not found variables but the end of the content was reached")
@@ -31,7 +37,6 @@ def parse_eip_details(content):
 
         if is_start_found and '---' in line:
             is_finish_found = True
-
 
         if "eip: " in line_lower:
             eip = line.replace('eip: ', '')
@@ -46,7 +51,7 @@ def parse_eip_details(content):
                 status = EIP.ACTIVE
             elif 'last call' in line_lower:
                 status = EIP.LAST_CALL
-            elif 'replaced' or 'superseded' in line_lower:
+            elif 'replaced' in line_lower or 'superseded' in line_lower:
                 status = EIP.REPLACED
             elif 'accepted' in line_lower:
                 status = EIP.ACCEPTED
@@ -83,7 +88,7 @@ def parse_eip_details(content):
             created_raw = line.replace('created: ', '')
             created = parse_created_date(created_raw)
 
-    return eip, title, status, eip_type, category, authors, created_raw, created
+    return eip, title, status, eip_type, category, authors, created_raw, created, content[finish_index:]
 
 
 def parse_created_date(created_raw):

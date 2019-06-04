@@ -5,7 +5,10 @@
     :close-on-content-click="false"
   >
     <span slot="activator">
-      Type / Categories <!--<v-img src="/icons/filter.svg" height="40"></v-img>-->
+      <v-layout align-center>
+        <span>Type / Categories</span>
+        <v-img src="/icons/filter.png" class="ml-2" width="50" />
+      </v-layout>
     </span>
     <v-list>
       <v-list-tile>

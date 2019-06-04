@@ -3,8 +3,21 @@
     <v-layout row mt-2>
       <v-flex xs12>
         <v-layout class="d-block" px-2>
+          <v-card-title class="title mb-4 mt-2 py-0 px-0">About</v-card-title>
 
           <v-card class="pt-4 pb-5 px-4 primary--text secondary_light mt-4 br-5">
+            <v-card-title class="title mb-4 mt-2 py-0 px-0">
+              Social Networks
+            </v-card-title>
+
+            <v-card-text class="text-xs-center">
+              <label class="headline font-weight-light"><a href="https://t.me/tennagraph" target="_blank">Telegram</a></label><br>
+            </v-card-text>
+            <v-card-text class="text-xs-center">
+              <label class="headline font-weight-light"><a href="https://twitter.com/tennagraph" target="_blank">Twitter</a></label><br>
+            </v-card-text>
+
+
             <v-card-title class="title mb-4 mt-2 py-0 px-0">
               Core Team
             </v-card-title>

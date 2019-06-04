@@ -38,9 +38,10 @@ def fetch_eips_from_official_repo():
                 logger.error("Can't parse EIP with file name: '{}', error occurred: '{}'".format(file_name, ex))
 
         # check weather EIP was updated
-        elif not EIP.objects.filter(file_name=file_name, file_sha=file_sha).exists():
-            eip_to_update = EIP.objects.filter(file_name=file_name).first()
+        elif EIP.objects.filter(file_name=file_name, file_sha=file_sha).exists():
+            eip_to_update = EIP.objects.filter(file_name=file_name, file_sha=file_sha).first()
             eip_to_update.update_with_eip(gh.load_eip(eip)).save()
+
 
 
 

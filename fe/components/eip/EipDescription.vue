@@ -6,6 +6,10 @@
     </v-flex>
     <v-flex class="mt-3">
       <v-btn dark color="grey" @click="isCollapsed = !isCollapsed">{{ isCollapsed ? 'EXPAND' : 'SHOW LESS' }}</v-btn>
+      <v-btn dark color="grey" @click="openOnGithub">
+        Open on GitHub
+        <v-icon right dark>arrow_upward</v-icon>
+      </v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -22,12 +26,21 @@
       eipDescription: {
         type: String,
         required: true
+      },
+      fileName: {
+        type: String,
+        required: true
       }
     },
     data() {
       return {
         isCollapsed: true,
         collapsedStyles: {height: '250px', overflow: 'hidden'}
+      }
+    },
+    methods: {
+      openOnGithub() {
+        window.open("https://github.com/ethereum/EIPs/blob/master/EIPS/" + this.fileName, "_blank");
       }
     }
   }

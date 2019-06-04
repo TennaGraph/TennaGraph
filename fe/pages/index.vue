@@ -25,7 +25,6 @@
           </v-layout>
         </v-flex>
       </v-layout>
-
       <v-flex xs12 class="mt-3">
         <eips-list></eips-list>
       </v-flex>
