@@ -7,56 +7,76 @@
       </svg>
       <span class="vr-header__logo-text">tennagraph</span>
     </div>
-    <div class="vr-body" v-if="votingResults.length && gasvotingStats.length">
-      <div class="vr-chart-box">
-        <div class="vr-chart-box__pie">
-          <apexchart height="150" type="donut" :options="chartOptions" :series="votingResults"></apexchart>
-        </div>
-        <section>
-          <div class="vr-chart-box__name">Coinvote</div>
-          <div :class="coninvotingStatsMax.class">{{ coninvotingStatsMax.percentage | toFixed2 }}%</div>
-          <div class="vr-chart-box__info">
-            <div>{{ votingResults.reduce((v, c) => v + c, 0) | toFixed2 }} ETH</div>
-            <!--<div>3% of all ETH</div>-->
+
+    <v-layout v-if="!isProposalExistsInVotingManager || !proposalVotingInfo">
+
+      <pulse-loader v-if="isProposalExistsInVotingManager == undefined || (!proposalVotingInfo && isProposalExistsInVotingManager == true)"></pulse-loader>
+      <v-layout v-else-if="isProposalExistsInVotingManager == false" column>
+        <v-flex>
+          <p class="px-2">Coinvoting has not been enabled for this EIP. Deploy the SmartContract via meta-mask to begin.</p>
+          <p>{{ proposalVotingInfo }}</p>
+        </v-flex>
+        <v-flex>
+          <v-btn dark color="breeze" :loading="isAddingProposal"  @click="addProposalToVotingManager">START COINVOTING</v-btn>
+        </v-flex>
+      </v-layout>
+    </v-layout>
+
+    <div v-else-if="votingResults.length && gasvotingStats.length">
+      <div class="vr-body">
+        <div class="vr-chart-box">
+          <div class="vr-chart-box__pie">
+            <apexchart height="150" type="donut" :options="chartOptions" :series="votingResults"></apexchart>
           </div>
-        </section>
-      </div>
-      <div class="vr-chart-box">
-        <div class="vr-chart-box__pie">
-          <apexchart height="150" type="donut" :options="chartOptions" :series="gasvotingResults"></apexchart>
+          <section>
+            <div class="vr-chart-box__name">Coinvote</div>
+            <div :class="coninvotingStatsMax.class">{{ coninvotingStatsMax.percentage | toFixed2 }}%</div>
+            <div class="vr-chart-box__info">
+              <div>{{ votingResults.reduce((v, c) => v + c, 0) | toFixed2 }} ETH</div>
+              <!--<div>3% of all ETH</div>-->
+            </div>
+          </section>
         </div>
-        <section>
-          <div class="vr-chart-box__name">Gasvote</div>
-          <div :class="gasvotingStatsMax.class">{{ gasvotingStatsMax.percentage | toFixed2 }}%</div>
-          <div class="vr-chart-box__info">
-            <div>{{ gasvotingResults.reduce((v, c) => v + c, 0) }} UNITS</div>
-            <!--<div>120 Devs voted</div>-->
+        <div class="vr-chart-box">
+          <div class="vr-chart-box__pie">
+            <apexchart height="150" type="donut" :options="chartOptions" :series="gasvotingResults"></apexchart>
           </div>
-        </section>
-      </div>
-      <div class="vr-chart-box">
-        <div class="vr-chart-box__pie">
-          <apexchart height="150" type="donut" :options="chartOptions" :series="stancesResults"></apexchart>
+          <section>
+            <div class="vr-chart-box__name">Gasvote</div>
+            <div :class="gasvotingStatsMax.class">{{ gasvotingStatsMax.percentage | toFixed2 }}%</div>
+            <div class="vr-chart-box__info">
+              <div>{{ gasvotingResults.reduce((v, c) => v + c, 0) }} UNITS</div>
+              <!--<div>120 Devs voted</div>-->
+            </div>
+          </section>
         </div>
-        <section>
-          <div class="vr-chart-box__name">Influencers</div>
-          <div :class="stancesStatsMax.class">{{ stancesStatsMax.percentage | toFixed2 }}%</div>
-          <div class="vr-chart-box__info">
-            <div>{{ stancesResults.reduce((v, c) => v+c, 0) }} influencer / s</div>
+        <div class="vr-chart-box">
+          <div class="vr-chart-box__pie">
+            <apexchart height="150" type="donut" :options="chartOptions" :series="stancesResults"></apexchart>
           </div>
-        </section>
+          <section>
+            <div class="vr-chart-box__name">Influencers</div>
+            <div :class="stancesStatsMax.class">{{ stancesStatsMax.percentage | toFixed2 }}%</div>
+            <div class="vr-chart-box__info">
+              <div>{{ stancesResults.reduce((v, c) => v+c, 0) }} influencer / s</div>
+            </div>
+          </section>
+        </div>
       </div>
-    </div>
-    <div class="vr-footer">
-      <div class="vr-footer__left">
-        <img class="vr-fox" src="/icons/vr-fox.png" alt="">
-        <span>Signal your stance</span>
-      </div>
-      <div class="vr-footer__right">
-        <div class="vr-buttons">
-          <button class="vr-btn vr-btn--success" :disabled="!votingAddresses" @click="vote(votingAddresses.yay)">Yea</button>
-          <button class="vr-btn vr-btn--danger" :disabled="!votingAddresses" @click="vote(votingAddresses.nay)">Nay</button>
-          <button class="vr-btn vr-btn--default" :disabled="!votingAddresses" @click="vote(votingAddresses.abstain)">Abstain</button>
+      <div class="vr-footer">
+        <div class="vr-footer__left">
+          <img class="vr-fox" src="/icons/vr-fox.png" alt="">
+          <span>Signal your stance</span>
+        </div>
+        <div class="vr-footer__right">
+          <div v-if="isAddingVote" class="vr-loading">
+            <pulse-loader></pulse-loader>
+          </div>
+          <div v-else class="vr-buttons">
+            <button class="vr-btn vr-btn--success" :disabled="!votingAddresses" @click="vote(votingAddresses.yay)">Yea</button>
+            <button class="vr-btn vr-btn--danger" :disabled="!votingAddresses" @click="vote(votingAddresses.nay)">Nay</button>
+            <button class="vr-btn vr-btn--default" :disabled="!votingAddresses" @click="vote(votingAddresses.abstain)">Abstain</button>
+          </div>
         </div>
       </div>
     </div>
@@ -71,12 +91,14 @@
   import votingOptionABI from "~/contracts/VotingOption.json";
   import truffleContract from 'truffle-contract'
   import web3Instance from "~/utils/web3Instance.js";
+  import PulseLoader from '@/components/PulseLoader.vue';
 
 
   export default {
     layout: 'clear',
     components: {
-      apexchart
+      apexchart,
+      PulseLoader,
     },
     mixins: [
       commonErrorsMixin,
@@ -94,6 +116,7 @@
         proposalVotingInfo: undefined,
         votingResults: [],
         isAddingProposal: false,
+        isAddingVote: false,
         gasvotingResults: [],
         stancesResults: [0, 0, 0],
         stancesStatsMax: {},
@@ -287,28 +310,47 @@
         this.isStancesLoading = false;
       },
       async vote(votingAddresses) {
+        this.isAddingVote = true;
         try {
           const instance = await this.VotingOptionContract.at(votingAddresses);
           const transactionInfo = await this.w3.promisify.transactionInfo();
-          // this.isAddingProposal = true;
           await instance.vote(transactionInfo);
 
-          await this.loadEIPCoinVotingInfo();
-          // this.isAddingProposal = false;
+          setTimeout(async () => {
+            await this.loadEIPCoinVotingInfo();
+            this.isAddingVote = false;
+          }, 9000);
+
         } catch(e) {
-          // this.isAddingProposal = false;
           this.setErrors(e.message)
         }
       },
       classByIndex: (i) => {
-          if(i === 0) {
-            return "vr-chart-box__result"
-          } else if (i === 1) {
-            return "vr-chart-box__result vr-chart-box__result--red"
-          } else if (i === 2) {
-            return "vr-chart-box__result vr-chart-box__result--grey"
-          }
+        if(i === 0) {
+          return "vr-chart-box__result"
+        } else if (i === 1) {
+          return "vr-chart-box__result vr-chart-box__result--red"
+        } else if (i === 2) {
+          return "vr-chart-box__result vr-chart-box__result--grey"
         }
+      },
+      async addProposalToVotingManager() {
+        try {
+          const instance = await this.VotingManagerContract.at(this.votingManagerAddress);
+          const transactionInfo = await this.w3.promisify.transactionInfo()
+          this.isAddingProposal = true;
+          await instance.addProposal(this.eipId, true, transactionInfo);
+
+          setTimeout(async () => {
+            await this.loadEIPCoinVotingInfo()
+            this.isAddingProposal = false;
+          }, 9000);
+
+        } catch(e) {
+          this.isAddingProposal = false;
+          this.setErrors(e.message)
+        }
+      },
     },
 
     watch: {
@@ -321,18 +363,16 @@
       votingAddresses() {
         this.initVotingOptions()
       },
-      votingResults(newValue) {
-        console.log("votingResults" + JSON.stringify(newValue))
-      },
-      gasvotingResults(newValue) {
-        console.log("gasvotingResults: " + JSON.stringify(newValue))
-      },
     }
   }
 </script>
 
 
 <style>
+  .application--wrap {
+    background-color: #fff;
+  }
+
    .voting-results {
      background-color: #fff;
      padding: 20px 40px;
@@ -430,6 +470,7 @@
   }
 
   .vr-buttons {width: 100%;display: flex;justify-content: space-between;}
+  .vr-loading {width: 100%;display: flex;justify-content: center; align-items: end;}
 
   .vr-buttons button + button {
     margin-left: 1px;

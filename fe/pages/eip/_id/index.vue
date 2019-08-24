@@ -172,7 +172,22 @@
 
           this.setErrors(e.message)
         }
-      }
+      },
+
+      async addProposalToVotingManager() {
+        try {
+          const instance = await this.VotingManagerContract.at(this.votingManagerAddress);
+          const transactionInfo = await this.w3.promisify.transactionInfo()
+          this.isAddingProposal = true;
+          await instance.addProposal(this.eipId, true, transactionInfo);
+
+          await this.loadEIPCoinVotingInfo()
+          this.isAddingProposal = false;
+        } catch(e) {
+          this.isAddingProposal = false;
+          this.setErrors(e.message)
+        }
+      },
     },
     computed: {
       isInfluencersLoaded() {
