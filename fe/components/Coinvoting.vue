@@ -110,7 +110,6 @@
     },
     data() {
       return {
-        yayAddress: "0x0ca1328ba92c5ad1d51c81bd6c0c458c8cc8a650",
         chartOptions: {
           labels: ["Yea", "Nay", "Abstain"],
           colors: ['#45C299', '#F03D3D', '#B1B1B1'],
@@ -157,9 +156,9 @@
           abstain: this.proposalVotingInfo[5],
         }
       },
-      series() {
-        return this.votingResults.map(value => (parseInt(value)))
-      },
+      // series() {
+      //   return this.votingResults.map(value => (parseInt(value)))
+      // },
       decisions() {
         return [
           {

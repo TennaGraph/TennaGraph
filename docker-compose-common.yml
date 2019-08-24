@@ -35,7 +35,7 @@ services:
       FETCH_TRANSACTIONS_PER_SECONDS: 60
       VOTING_MANAGER_CONTRACT_ADDRESS: '0x4B97C18916F288A4b0A6a14ed7732031395b8f7F'
       # Ethereum
-      ETHEREUM_URL_WEB3_PROVIDER: 'wss://rinkeby.infura.io/ws'
+      ETHEREUM_URL_WEB3_PROVIDER: 'wss://mainnet.infura.io/ws/v3/8c6dc7381b34452d9677cdcb900fb8fd'
       BLOCKSCOUT_BASE_URL: 'https://blockscout.com/eth/rinkeby/api'
       # JWT TOKEN
       JWT_EXPIRATION_DELTA_DAYS: 1

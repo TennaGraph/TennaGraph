@@ -18,3 +18,8 @@ Vue.filter('relativeDateTime', function (value) {
   if (!value) return '';
   return moment(String(value)).startOf('minute').fromNow();
 });
+
+Vue.filter('toFixed2', function (value) {
+  if (!value) return '0';
+  return `${value.toFixed(2)}`;
+});
