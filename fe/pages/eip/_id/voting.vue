@@ -286,6 +286,7 @@
           })
           const stancesResults = [stancesStats.yay, stancesStats.nay, stancesStats.abstain]
           const volume = this.stancesResults.reduce((v,c)=>v+c, 0)
+          this.stancesResults = stancesResults;
 
           if(stancesStats[0] > stancesStats[1] > stancesStats[2]) {
             this.stancesStatsMax = {
