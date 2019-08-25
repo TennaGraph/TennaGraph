@@ -120,6 +120,7 @@
         gasvotingResults: [],
         stancesResults: [0, 0, 0],
         stancesStatsMax: {},
+        isStancesLoading: false,
 
         chartOptions: {
           labels: ["Yea", "Nay", "Abstain"],
@@ -139,10 +140,10 @@
 
     async created() {
       this.isEIPLoading = true;
+      await this.loadStances();
       this.checkNetwork();
       try {
         await this.loadEIP();
-        await this.loadStances();
         await this.initVotingManager();
         await this.loadEIPGasVoting();
 
@@ -271,19 +272,24 @@
         this.isStancesLoading = true;
         try {
           const stances = await this.$store.dispatch('stance/loadStances', this.eipId)
-          const stancesStats = stances.reduce((v, c) => {
-            if (v.choice === "YAY") {
-              c['yay'] += 1;
-            } else if (v.choice === "NAY") {
-              c['nay'] += 1;
-            } else if (v.choice === "ABSTAIN") {
-              c['abstain'] += 1;
+          const stancesStats = stances.reduce((c, v) => {
+            const copyC = {...c};
+            const choice = v.choice.key;
+
+            if (choice === "YAY") {
+              copyC['yay'] += 1;
+            } else if (choice === "NAY") {
+              copyC['nay'] += 1;
+            } else if (choice === "ABSTAIN") {
+              copyC['abstain'] += 1;
             }
+            return copyC;
           }, {
             yay: 0,
             nay: 0,
             abstain: 0,
           })
+
           const stancesResults = [stancesStats.yay, stancesStats.nay, stancesStats.abstain]
           const volume = this.stancesResults.reduce((v,c)=>v+c, 0)
           this.stancesResults = stancesResults;

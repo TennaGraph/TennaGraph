@@ -28,7 +28,7 @@ services:
       # General
       SITE_NAME: 'Eth Signals'
       SITE_URL: 'http://localhost:8080'
-      BASE_URL: 'http://localhost:8000'
+      BASE_URL: 'https://api.tennagraph.com'
       UPDATE_EIPS_PER_SECONDS: 60
       UPDATE_INFLUENCERS_PER_SECONDS: 60
       UPDATE_PROOFS_AVAILABILITY_PER_SECONDS: 60
