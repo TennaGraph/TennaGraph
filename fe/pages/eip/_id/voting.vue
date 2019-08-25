@@ -291,15 +291,16 @@
           })
 
           const stancesResults = [stancesStats.yay, stancesStats.nay, stancesStats.abstain]
-          const volume = this.stancesResults.reduce((v,c)=>v+c, 0)
+          const volume = stancesResults.reduce((v,c)=> v + c, 0)
           this.stancesResults = stancesResults;
 
-          if(stancesResults[0] > stancesResults[1] > stancesResults[2]) {
+          if(stancesResults[0] > stancesResults[1] && stancesResults[0] > stancesResults[2]) {
             this.stancesStatsMax = {
               "class": this.classByIndex(0),
               "percentage": volume ? stancesResults[0] / volume : 0
             }
-          } else if(stancesResults[1] > stancesResults[0] > stancesResults[1]) {
+
+          } else if(stancesResults[1] > stancesResults[0] && stancesResults[1] > stancesResults[2]) {
             this.stancesStatsMax = {
               "class": this.classByIndex(1),
               "percentage": volume ? stancesResults[1] / volume : 0
@@ -310,6 +311,8 @@
               "percentage": volume ? stancesResults[2] / volume : 0
             }
           }
+
+          this.stancesStatsMax.percentage = this.stancesStatsMax.percentage * 100;
 
         } catch (e) {
           this.setResponseErrors(e);
