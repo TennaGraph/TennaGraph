@@ -140,9 +140,9 @@
 
     async created() {
       this.isEIPLoading = true;
-      await this.loadStances();
       this.checkNetwork();
       try {
+        await this.loadStances();
         await this.loadEIP();
         await this.initVotingManager();
         await this.loadEIPGasVoting();
@@ -294,20 +294,20 @@
           const volume = this.stancesResults.reduce((v,c)=>v+c, 0)
           this.stancesResults = stancesResults;
 
-          if(stancesStats[0] > stancesStats[1] > stancesStats[2]) {
+          if(stancesResults[0] > stancesResults[1] > stancesResults[2]) {
             this.stancesStatsMax = {
               "class": this.classByIndex(0),
-              "percentage": volume ? stancesStats[0] / volume : 0
+              "percentage": volume ? stancesResults[0] / volume : 0
             }
-          } else if(stancesStats[1] > stancesStats[0] > stancesStats[1]) {
+          } else if(stancesResults[1] > stancesResults[0] > stancesResults[1]) {
             this.stancesStatsMax = {
               "class": this.classByIndex(1),
-              "percentage": volume ? stancesStats[1] / volume : 0
+              "percentage": volume ? stancesResults[1] / volume : 0
             }
           } else {
             this.stancesStatsMax = {
               "class": this.classByIndex(2),
-              "percentage": volume ? stancesStats[2] / volume : 0
+              "percentage": volume ? stancesResults[2] / volume : 0
             }
           }
 
