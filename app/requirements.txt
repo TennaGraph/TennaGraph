@@ -3,7 +3,7 @@ botocore==1.10.2
 celery==4.2.1
 Django==2.1.7
 django-cors-headers==2.2.0
-djangorestframework==3.9.2
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 gunicorn==19.7.1
 django-prometheus==1.0.11
